@@ -1,0 +1,23 @@
+{
+  "name": "Geurts.GameForge.Documentation.Editor.Tests",
+  "rootNamespace": "Geurts.GameForge.Documentation.Tests",
+  "references": [
+    "Geurts.GameForge.Documentation.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_EDITOR_WIN"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

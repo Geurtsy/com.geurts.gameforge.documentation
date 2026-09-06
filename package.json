@@ -1,6 +1,6 @@
 {
   "name": "com.geurts.gameforge.documentation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Geurts Game Forge Documentation",
   "description": "Keeps the project-local Geurts Game Forge documentation and its declared AI routes current from the authoritative repository.",
   "unity": "2022.3",

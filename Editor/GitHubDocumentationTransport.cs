@@ -31,7 +31,7 @@ namespace Geurts.GameForge.Documentation
                 Timeout = TimeSpan.FromSeconds(90)
             };
             client.DefaultRequestHeaders.UserAgent.ParseAdd(
-                DocumentationPackageConstants.PackageName + "/0.1.0");
+                DocumentationPackageConstants.PackageName + "/0.1.1");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
         }
 

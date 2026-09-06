@@ -6,3 +6,4 @@
 - Added a Unity Editor window with one confirmed documentation update action.
 - Added direct replacement of the managed documentation folder and the four contract-declared AI routes.
 - Added package and Editor tests for the managed boundary and failure preservation.
+- Use GitHub's compact branch-reference metadata endpoint for bounded startup and Update checks.

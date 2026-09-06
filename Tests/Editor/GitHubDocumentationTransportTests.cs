@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 using NUnit.Framework;
 
 namespace Geurts.GameForge.Documentation.Tests
@@ -22,6 +23,22 @@ namespace Geurts.GameForge.Documentation.Tests
         public void TearDown()
         {
             DocumentationFileOperations.DeleteDirectoryBestEffort(temporaryRoot);
+        }
+
+        [Test]
+        public void CompactGitReferenceMetadataYieldsTheMainCommitIdentity()
+        {
+            string commit = new string('a', 40);
+            byte[] metadata = Encoding.UTF8.GetBytes(
+                "{\"ref\":\"refs/heads/main\",\"object\":{\"sha\":\"" + commit +
+                "\",\"type\":\"commit\"}}");
+
+            Assert.That(
+                GitHubDocumentationTransport.ParseHeadCommitMetadata(metadata),
+                Is.EqualTo(commit));
+            Assert.That(
+                DocumentationPackageConstants.HeadCommitApiUrl,
+                Does.EndWith("/git/ref/heads/main"));
         }
 
         [Test]

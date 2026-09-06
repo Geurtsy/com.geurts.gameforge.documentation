@@ -50,15 +50,7 @@ namespace Geurts.GameForge.Documentation
                     response,
                     DocumentationPackageConstants.MetadataLimitBytes,
                     cancellationToken);
-                CommitResponse payload = JsonUtility.FromJson<CommitResponse>(Encoding.UTF8.GetString(bytes));
-                if (payload == null ||
-                    string.IsNullOrWhiteSpace(payload.sha) ||
-                    !Regex.IsMatch(payload.sha, "^[0-9a-fA-F]{40}$", RegexOptions.CultureInvariant))
-                {
-                    throw new InvalidDataException("GitHub did not return a valid main commit identity.");
-                }
-
-                return payload.sha.ToLowerInvariant();
+                return ParseHeadCommitMetadata(bytes);
             }
         }
 
@@ -119,6 +111,27 @@ namespace Geurts.GameForge.Documentation
         public void Dispose()
         {
             client.Dispose();
+        }
+
+        internal static string ParseHeadCommitMetadata(byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
+
+            ReferenceResponse payload = JsonUtility.FromJson<ReferenceResponse>(
+                Encoding.UTF8.GetString(bytes));
+            string sha = payload != null && payload.@object != null
+                ? payload.@object.sha
+                : null;
+            if (string.IsNullOrWhiteSpace(sha) ||
+                !Regex.IsMatch(sha, "^[0-9a-fA-F]{40}$", RegexOptions.CultureInvariant))
+            {
+                throw new InvalidDataException("GitHub did not return a valid main commit identity.");
+            }
+
+            return sha.ToLowerInvariant();
         }
 
         private static async Task<byte[]> ReadBoundedAsync(
@@ -263,7 +276,13 @@ namespace Geurts.GameForge.Documentation
         }
 
         [Serializable]
-        private sealed class CommitResponse
+        private sealed class ReferenceResponse
+        {
+            public ReferenceObject @object;
+        }
+
+        [Serializable]
+        private sealed class ReferenceObject
         {
             public string sha;
         }

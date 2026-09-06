@@ -10,7 +10,7 @@ namespace Geurts.GameForge.Documentation
         internal const string DisplayName = "Geurts Game Forge Documentation";
         internal const string RepositoryUrl = "https://github.com/Geurtsy/GeurtsGameForge_Documentation.git";
         internal const string RepositoryBranch = "main";
-        internal const string HeadCommitApiUrl = "https://api.github.com/repos/Geurtsy/GeurtsGameForge_Documentation/commits/main";
+        internal const string HeadCommitApiUrl = "https://api.github.com/repos/Geurtsy/GeurtsGameForge_Documentation/git/ref/heads/main";
         internal const string ArchiveUrlFormat = "https://codeload.github.com/Geurtsy/GeurtsGameForge_Documentation/zip/{0}";
         internal const string ContractRelativePath = "GeurtsTechniques/GeurtsDocumentationCompanionContract.json";
         internal const string ManagedDocumentationDirectory = "GeurtsGameForgeDocumentation";

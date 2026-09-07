@@ -1,8 +1,8 @@
 {
   "name": "com.geurts.gameforge.documentation",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "displayName": "Geurts Game Forge Documentation",
-  "description": "An Odin Inspector dashboard for updating Geurts Game Forge documentation and AI routes, and installing the documentation-owned .gitignore after confirmation. Requires a separately installed copy of Odin Inspector for the dashboard.",
+  "description": "An Odin Inspector dashboard for updating this package from Git, updating Geurts Game Forge documentation and AI routes, and installing the documentation-owned .gitignore after confirmation. Odin Inspector is required and installed separately.",
   "unity": "2022.3",
   "author": {
     "name": "Geurts Game Forge",

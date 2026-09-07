@@ -16,7 +16,7 @@ namespace Geurts.GameForge.Documentation
         [MenuItem(MenuPath, false, 101)]
         internal static void ConfirmAndInstall()
         {
-            if (DocumentationUpdaterController.IsBusy)
+            if (!CanInstall())
             {
                 return;
             }
@@ -44,7 +44,8 @@ namespace Geurts.GameForge.Documentation
         [MenuItem(MenuPath, true)]
         private static bool CanInstall()
         {
-            return !DocumentationUpdaterController.IsBusy;
+            return DocumentationDependencies.OdinInstalled && !DocumentationUpdaterController.IsBusy && !PackageSelfUpdater.instance.IsBusy &&
+                   !PackageSelfUpdater.EditorBusy;
         }
 
         internal static bool InstallWithConfirmation(string projectRoot, Func<string, bool> confirm)

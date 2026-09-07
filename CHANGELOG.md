@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 - 2026-09-08
+
+- Added Update package from Git inside the dashboard, with installed version, configured source, progress, success, and failure feedback.
+- Refresh the package's existing Git reference through Unity's package client, preserving branches and pins without opening Package Manager or replacing local development checkouts.
+- Retain the active package request across script reloads and block overlapping documentation operations.
+- Added a Dependencies area with mandatory Odin Inspector status and installation guidance. Missing Odin blocks documentation tools, including the standalone .gitignore action.
+
 ## 0.3.0 - 2026-09-08
 
 - Rebuilt the documentation dashboard with Odin Inspector, a clear status card, grouped actions, and collapsible source and managed-file details.

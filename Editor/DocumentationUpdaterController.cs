@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +31,7 @@ namespace Geurts.GameForge.Documentation
 
         internal static async Task CheckForUpdatesAsync(bool showWindowWhenAvailable)
         {
-            if (isBusy)
+            if (isBusy || PackageSelfUpdater.instance.IsBusy)
             {
                 return;
             }
@@ -68,7 +70,7 @@ namespace Geurts.GameForge.Documentation
 
         internal static void ConfirmAndUpdate()
         {
-            if (isBusy)
+            if (!DocumentationDependencies.OdinInstalled || isBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy)
             {
                 return;
             }
@@ -78,7 +80,7 @@ namespace Geurts.GameForge.Documentation
 
         internal static async void BeginConfirmedUpdate()
         {
-            if (isBusy)
+            if (!DocumentationDependencies.OdinInstalled || isBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy)
             {
                 return;
             }

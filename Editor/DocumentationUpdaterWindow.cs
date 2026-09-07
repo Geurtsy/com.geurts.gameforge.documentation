@@ -36,7 +36,8 @@ namespace Geurts.GameForge.Documentation
         private GUIStyle _eyebrowStyle;
         private GUIStyle _statusTitleStyle;
 
-        private bool IsBusy => DocumentationUpdaterController.IsBusy;
+        private bool IsBusy => DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy;
+        private bool CanUpdatePackage => PackageSelfUpdater.instance.CanUpdate;
 
         protected override void OnEnable()
         {
@@ -45,11 +46,14 @@ namespace Geurts.GameForge.Documentation
             // Removing first also makes subscription safe across repeated enable calls.
             DocumentationUpdaterController.Changed -= Repaint;
             DocumentationUpdaterController.Changed += Repaint;
+            PackageSelfUpdater.Changed -= Repaint;
+            PackageSelfUpdater.Changed += Repaint;
         }
 
         protected override void OnDisable()
         {
             DocumentationUpdaterController.Changed -= Repaint;
+            PackageSelfUpdater.Changed -= Repaint;
             base.OnDisable();
         }
 
@@ -63,7 +67,7 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Label("Shared guidance for your project and AI tools.", _bodyStyle);
             GUILayout.Space(18f);
 
-            Color accent = IsBusy
+            Color accent = DocumentationUpdaterController.IsBusy
                 ? new Color(0.35f, 0.68f, 1f)
                 : DocumentationUpdaterController.Availability == DocumentationAvailability.Current
                     ? new Color(0.35f, 0.76f, 0.57f)
@@ -91,7 +95,7 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(16f);
         }
 
-        private string StatusTitle => IsBusy
+        private string StatusTitle => DocumentationUpdaterController.IsBusy
             ? "Working on documentation..."
             : DocumentationUpdaterController.Availability == DocumentationAvailability.Current
                 ? "Source unchanged since your last update"
@@ -126,8 +130,60 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(12f);
         }
 
+        // Package maintenance is separate from the documentation-content replacement action above.
+        [BoxGroup("Package update", order: 10), OnInspectorGUI, PropertyOrder(0)]
+        private void DrawPackageDescription()
+        {
+            EnsureStyles();
+            GUILayout.Label("Installed package: " + PackageSelfUpdater.instance.InstalledVersion, EditorStyles.boldLabel);
+            GUILayout.Label("Update this editor package from Git without opening Package Manager. Unity may recompile scripts.", _bodyStyle);
+            GUILayout.Space(4f);
+            GUILayout.Label(PackageSelfUpdater.instance.SourceDescription, _bodyStyle);
+            if (PackageSelfUpdater.instance.GitReference != null)
+            {
+                GUILayout.Label("Uses the configured Git reference. A pinned commit stays pinned.", _bodyStyle);
+                EditorGUILayout.HelpBox(PackageSelfUpdater.instance.StatusMessage,
+                    PackageSelfUpdater.instance.Failed ? MessageType.Error : MessageType.Info);
+            }
+        }
+
+        [BoxGroup("Package update"), PropertyOrder(1)]
+        [Button(PackageSelfUpdater.ActionLabel, ButtonSizes.Large), EnableIf(nameof(CanUpdatePackage))]
+        private void UpdatePackage()
+        {
+            PackageSelfUpdater.instance.BeginUpdate();
+        }
+
+        [OnInspectorGUI, PropertyOrder(15)]
+        private void DrawDependencySpacing()
+        {
+            GUILayout.Space(12f);
+        }
+
+        // Required dependency status stays visible even when there is nothing to install.
+        [BoxGroup("Dependencies", order: 20), OnInspectorGUI, PropertyOrder(0)]
+        private void DrawDependencies()
+        {
+            EnsureStyles();
+            GUILayout.Label(DocumentationDependencies.OdinStatus, EditorStyles.boldLabel);
+            GUILayout.Label(DocumentationDependencies.OdinDescription, _bodyStyle);
+        }
+
+        [BoxGroup("Dependencies"), PropertyOrder(1)]
+        [Button("Odin Inspector installation guide", ButtonSizes.Medium)]
+        private void OpenOdinGuide()
+        {
+            Application.OpenURL(DocumentationDependencies.OdinGuideUrl);
+        }
+
+        [OnInspectorGUI, PropertyOrder(25)]
+        private void DrawGitIgnoreSpacing()
+        {
+            GUILayout.Space(12f);
+        }
+
         // Secondary action card: installing ignore rules is independent of documentation Update.
-        [BoxGroup("Git ignore rules", order: 10), OnInspectorGUI, PropertyOrder(0)]
+        [BoxGroup("Git ignore rules", order: 30), OnInspectorGUI, PropertyOrder(0)]
         private void DrawGitIgnoreDescription()
         {
             EnsureStyles();
@@ -144,14 +200,14 @@ namespace Geurts.GameForge.Documentation
             GitIgnoreInstaller.ConfirmAndInstall();
         }
 
-        [OnInspectorGUI, PropertyOrder(15)]
+        [OnInspectorGUI, PropertyOrder(35)]
         private void DrawDetailsSpacing()
         {
             GUILayout.Space(12f);
         }
 
         // Advanced details are collapsed by default and derived from the supported contract constants.
-        [FoldoutGroup("Source and managed files", expanded: false, order: 20)]
+        [FoldoutGroup("Source and managed files", expanded: false, order: 40)]
         [OnInspectorGUI]
         private void DrawSourceDetails()
         {
@@ -175,7 +231,7 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Label("AI tools must support these instruction files or be told to read AGENTS.md.", _bodyStyle);
         }
 
-        [OnInspectorGUI, PropertyOrder(30)]
+        [OnInspectorGUI, PropertyOrder(50)]
         private void DrawFooter()
         {
             EnsureStyles();
@@ -215,14 +271,14 @@ namespace Geurts.GameForge.Documentation
             root.style.paddingTop = root.style.paddingBottom = 20f;
             root.Add(new Label("GEURTS GAME FORGE") { style = { fontSize = 10 } });
             root.Add(new Label("Documentation") { style = { fontSize = 26, marginBottom = 16f } });
-            root.Add(new HelpBox("Odin Inspector is required for the documentation dashboard.", HelpBoxMessageType.Info));
-            root.Add(new Label(
-                "Import your licensed Odin Inspector installation into this Unity project, then reopen this window. " +
-                "Odin supplies the ODIN_INSPECTOR scripting symbol automatically.")
+            root.Add(new Label("Dependencies") { style = { fontSize = 16, marginBottom = 8f } });
+            root.Add(new Label(DocumentationDependencies.OdinStatus) { name = "odin-status", style = { marginBottom = 8f } });
+            root.Add(new HelpBox(DocumentationDependencies.OdinDescription, HelpBoxMessageType.Error));
+            root.Add(new Label("All documentation tools require Odin Inspector. Odin supplies the ODIN_INSPECTOR scripting symbol automatically.")
             {
                 style = { whiteSpace = WhiteSpace.Normal, marginTop = 12f, marginBottom = 12f }
             });
-            root.Add(new Button(() => Application.OpenURL("https://odininspector.com/tutorials/getting-started/installing-odin-inspector"))
+            root.Add(new Button(() => Application.OpenURL(DocumentationDependencies.OdinGuideUrl))
             {
                 text = "Odin Inspector installation guide",
                 style = { height = 32f }

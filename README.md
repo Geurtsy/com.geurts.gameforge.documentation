@@ -18,7 +18,17 @@ Unity 2022.3 or newer on Windows is required. Import your licensed **Odin Inspec
 
 The window uses `OdinEditorWindow` with grouped actions, a prominent source-status card, a large documentation Update button, and a separate secondary .gitignore card. **Source and managed files** expands to show the repository, full copyable commit identifiers, and all five documentation-update targets. Content scrolls in small or docked windows, and actions are disabled during an update. Colours and text distinguish the state without claiming that a matching commit verifies local files.
 
-Without Odin, the package still compiles and the Documentation menu displays installation guidance. The existing startup metadata check and standalone .gitignore menu remain available. The dashboard becomes available when Odin defines `ODIN_INSPECTOR`; keep Odin's assemblies enabled and auto-referenced as in its standard installation.
+**Dependencies** shows whether the mandatory Odin Inspector dependency is installed and explains the UI improvements it provides. Without Odin, the package still compiles and the Documentation menu displays installation guidance, but documentation, package-update, and .gitignore actions are unavailable. Startup can still perform its metadata-only documentation check. The tools become available when Odin defines `ODIN_INSPECTOR`; keep Odin's assemblies enabled and auto-referenced as in its standard installation.
+
+## Update the editor package from Git
+
+In **Tools > Geurts Game Forge > Documentation**, use **Package update > Update package from Git**. The card shows the installed package version, its configured source, and the update result. This refreshes the Unity package code; the separate **Documentation update** action replaces the shared documentation and AI instructions.
+
+The button uses Unity's `Client.Add` API with this package's existing Git URL, so the Package Manager window does not need to open. Unity resolves the latest commit for that same reference and manages its package cache, manifest, and lock file. A chosen branch or tag is retained; a pinned commit remains pinned. An unchanged source is reported separately from an update. Git and any credentials needed by the configured source must already work in Unity.
+
+Package updates run only when you press the button. Unity may recompile scripts; the active request and its result are retained across script reloads for the Editor session, and closing the dashboard does not cancel the request. Other documentation actions are disabled during a package update. Errors appear in the package card and allow another attempt. Updates are disabled during compilation, import, and Play mode. A local, embedded, or indirect installation is identified in the UI and is not converted or overwritten; maintain that installation through its source checkout or install the package directly from Git.
+
+This package-maintenance action is an explicitly requested extension to the original companion scope. It does not run the documentation-content update or the .gitignore installer, and it does not directly rewrite Unity's package files.
 
 ## Install the project .gitignore
 

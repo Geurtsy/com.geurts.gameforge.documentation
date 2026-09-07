@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +14,7 @@ namespace Geurts.GameForge.Documentation
         {
             DocumentationUpdaterWindow window = GetWindow<DocumentationUpdaterWindow>();
             window.titleContent = new GUIContent("Geurts Documentation");
-            window.minSize = new Vector2(560f, 300f);
+            window.minSize = new Vector2(560f, 370f);
             window.Show();
         }
 
@@ -47,7 +49,7 @@ namespace Geurts.GameForge.Documentation
             EditorGUILayout.Space(8f);
             EditorGUILayout.LabelField("Managed targets", EditorStyles.boldLabel);
             EditorGUILayout.LabelField("GeurtsGameForgeDocumentation/ and four declared AI route files.");
-            EditorGUILayout.LabelField("Docs/GameDesign and every unlisted path are outside this package's boundary.");
+            EditorGUILayout.LabelField("Docs/GameDesign and every unlisted path are outside the documentation update.");
 
             GUILayout.FlexibleSpace();
             using (new EditorGUI.DisabledScope(DocumentationUpdaterController.IsBusy))
@@ -57,6 +59,16 @@ namespace Geurts.GameForge.Documentation
                         GUILayout.Height(30f)))
                 {
                     DocumentationUpdaterController.ConfirmAndUpdate();
+                }
+
+                EditorGUILayout.Space(8f);
+                EditorGUILayout.HelpBox(
+                    "Install the .gitignore template from GeurtsGameForgeDocumentation. " +
+                    "Your project-root .gitignore will be overwritten after confirmation.",
+                    MessageType.Warning);
+                if (GUILayout.Button(GitIgnoreInstaller.ActionLabel, GUILayout.Height(28f)))
+                {
+                    GitIgnoreInstaller.ConfirmAndInstall();
                 }
             }
 

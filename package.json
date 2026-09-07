@@ -1,8 +1,8 @@
 {
   "name": "com.geurts.gameforge.documentation",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "displayName": "Geurts Game Forge Documentation",
-  "description": "Keeps the project-local Geurts Game Forge documentation and its declared AI routes current from the authoritative repository.",
+  "description": "Updates the project-local Geurts Game Forge documentation and AI routes, and installs the documentation-owned .gitignore after overwrite confirmation.",
   "unity": "2022.3",
   "author": {
     "name": "Geurts Game Forge",

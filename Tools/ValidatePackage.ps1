@@ -10,6 +10,9 @@ param(
     [string]$PackageReference,
 
     [Parameter()]
+    [string]$DocumentationPath,
+
+    [Parameter()]
     [switch]$StaticOnly
 )
 
@@ -102,6 +105,17 @@ $manifest = [ordered]@{
     testables = @("com.geurts.gameforge.documentation")
 }
 $manifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $ProjectPath "Packages\manifest.json") -Encoding UTF8
+
+# Use real documentation as an external integration fixture, never as a bundled template.
+if (-not [string]::IsNullOrWhiteSpace($DocumentationPath)) {
+    $fixtureRoot = Join-Path $ProjectPath "GeurtsGameForgeDocumentation"
+    foreach ($relativePath in @("GeurtsTechniqueManifest.md", "GeurtsTechniques/GeurtsGitIgnoreTechnique.md")) {
+        $sourcePath = Join-Path $DocumentationPath $relativePath
+        $fixturePath = Join-Path $fixtureRoot $relativePath
+        New-Item -ItemType Directory -Path (Split-Path -Parent $fixturePath) -Force | Out-Null
+        Copy-Item -LiteralPath $sourcePath -Destination $fixturePath
+    }
+}
 @"
 m_EditorVersion: 6000.3.11f1
 m_EditorVersionWithRevision: 6000.3.11f1 (3000ef702840)
@@ -135,7 +149,8 @@ if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) {
 
 [xml]$results = Get-Content -LiteralPath $resultPath -Raw
 $testRun = $results.'test-run'
-if ($null -eq $testRun -or [int]$testRun.failed -ne 0 -or [int]$testRun.passed -lt 1) {
+if ($null -eq $testRun -or [int]$testRun.failed -ne 0 -or [int]$testRun.passed -lt 1 -or
+    (-not [string]::IsNullOrWhiteSpace($DocumentationPath) -and [int]$testRun.skipped -ne 0)) {
     throw "Unity EditMode tests did not pass."
 }
 
@@ -151,6 +166,7 @@ if ($log -match '(?m)\berror CS\d+' -or $log -match '(?m)\bwarning CS\d+' -or $l
     Unity = "6000.3.11f1"
     Passed = [int]$testRun.passed
     Failed = [int]$testRun.failed
+    Skipped = [int]$testRun.skipped
     ResultPath = $resultPath
     LogPath = $logPath
 }

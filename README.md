@@ -12,7 +12,13 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Unity 2022.3 or newer on Windows is required. The repository is public, so the Git URL does not require package-specific credentials.
+Unity 2022.3 or newer on Windows is required. Import your licensed **Odin Inspector** installation into the Unity project to use the dashboard. Odin is distributed separately and is not bundled or downloaded by this package. The repository is public, so the Git URL does not require package-specific credentials.
+
+## Odin documentation dashboard
+
+The window uses `OdinEditorWindow` with grouped actions, a prominent source-status card, a large documentation Update button, and a separate secondary .gitignore card. **Source and managed files** expands to show the repository, full copyable commit identifiers, and all five documentation-update targets. Content scrolls in small or docked windows, and actions are disabled during an update. Colours and text distinguish the state without claiming that a matching commit verifies local files.
+
+Without Odin, the package still compiles and the Documentation menu displays installation guidance. The existing startup metadata check and standalone .gitignore menu remain available. The dashboard becomes available when Odin defines `ODIN_INSPECTOR`; keep Odin's assemblies enabled and auto-referenced as in its standard installation.
 
 ## Install the project .gitignore
 
@@ -38,8 +44,10 @@ The destination and four-route list are pinned by schema 1.0.0 of `GeurtsTechniq
 
 ## Scope
 
-This package is Windows-only and Editor-only, and has no dependency on Geurts Game Forge God, Brick Manager, Odin Inspector, Quantum Console, GameForgeIntelligence, or another optional Unity package. It does not provide preview, backup, rollback, journaling, migration, recovery, or local-drift preservation.
+This package is Windows-only and Editor-only. Its dashboard requires Odin Inspector; it has no dependency on Geurts Game Forge God, Brick Manager, Quantum Console, or GameForgeIntelligence. The Odin dashboard is an explicitly requested change to the original companion's no-Odin requirement. It does not change the documentation replacement contract or copy generic Geurts guidance into this package. It does not provide preview, backup, rollback, journaling, migration, recovery, or local-drift preservation.
 
 ## Validation
 
 Run `Tools/ValidatePackage.ps1 -DocumentationPath <path-to-GeurtsGameForgeDocumentation>` to run Editor tests in a disposable project. The documentation path supplies only the manifest and Git Ignore Technique as an external integration fixture; the source is not changed or bundled with the package. Without this parameter, tests requiring the real template are reported as skipped. `-StaticOnly` checks package structure without launching Unity.
+
+Run again with `-OdinPath <path-to-Assets/Plugins/Sirenix> -ProjectPath <package-root>/work~/UnityValidationOdin` to compile and test the Odin dashboard against your installed copy. Omit `-OdinPath` to test the missing-Odin screen. The validation copy stays under the ignored `work~/` directory and must not be committed or distributed.

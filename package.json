@@ -1,8 +1,8 @@
 {
   "name": "com.geurts.gameforge.documentation",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "Geurts Game Forge Documentation",
-  "description": "Updates the project-local Geurts Game Forge documentation and AI routes, and installs the documentation-owned .gitignore after overwrite confirmation.",
+  "description": "An Odin Inspector dashboard for updating Geurts Game Forge documentation and AI routes, and installing the documentation-owned .gitignore after confirmation. Requires a separately installed copy of Odin Inspector for the dashboard.",
   "unity": "2022.3",
   "author": {
     "name": "Geurts Game Forge",

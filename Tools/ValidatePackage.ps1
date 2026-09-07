@@ -13,6 +13,9 @@ param(
     [string]$DocumentationPath,
 
     [Parameter()]
+    [string]$OdinPath,
+
+    [Parameter()]
     [switch]$StaticOnly
 )
 
@@ -61,7 +64,7 @@ if (Test-Path -LiteralPath (Join-Path $repositoryRoot "GeurtsGameForgeDocumentat
     throw "The Unity package must not embed an installed documentation copy."
 }
 
-$forbiddenDependencyPattern = '(?i)com\.gameforge\.intelligence|odin|quantum|brick.?manager|gameforge.?god'
+$forbiddenDependencyPattern = '(?i)com\.gameforge\.intelligence|quantum|brick.?manager|gameforge.?god'
 $dependencyFiles = @(
     (Join-Path $repositoryRoot "package.json"),
     (Join-Path $repositoryRoot "Editor\Geurts.GameForge.Documentation.Editor.asmdef")
@@ -106,6 +109,27 @@ $manifest = [ordered]@{
 }
 $manifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $ProjectPath "Packages\manifest.json") -Encoding UTF8
 
+# Use a locally licensed Odin installation only in the disposable test project.
+if (-not [string]::IsNullOrWhiteSpace($OdinPath)) {
+    if (-not (Test-Path -LiteralPath (Join-Path $OdinPath "Assemblies\Sirenix.OdinInspector.Editor.dll") -PathType Leaf)) {
+        throw "OdinPath must point to the Sirenix folder of an installed Odin Inspector copy."
+    }
+    $odinDestination = Join-Path $ProjectPath "Assets\Plugins\Sirenix"
+    New-Item -ItemType Directory -Path $odinDestination -Force | Out-Null
+    # Do not import project-specific optional modules (for example Unity.Mathematics).
+    foreach ($entry in @("Assemblies", "Odin Inspector/Assets", "Odin Inspector/Config")) {
+        $entryDestination = Join-Path $odinDestination $entry
+        New-Item -ItemType Directory -Path (Split-Path -Parent $entryDestination) -Force | Out-Null
+        Copy-Item -LiteralPath (Join-Path $OdinPath $entry) -Destination $entryDestination -Recurse
+        $metaPath = Join-Path $OdinPath ($entry + ".meta")
+        if (Test-Path -LiteralPath $metaPath) {
+            Copy-Item -LiteralPath $metaPath -Destination ($entryDestination + ".meta")
+        }
+    }
+    # The first batch compile must see Odin before its interactive installer has run.
+    '-define:ODIN_INSPECTOR' | Set-Content -LiteralPath (Join-Path $ProjectPath "Assets\csc.rsp") -Encoding ASCII
+}
+
 # Use real documentation as an external integration fixture, never as a bundled template.
 if (-not [string]::IsNullOrWhiteSpace($DocumentationPath)) {
     $fixtureRoot = Join-Path $ProjectPath "GeurtsGameForgeDocumentation"
@@ -126,7 +150,6 @@ $logPath = Join-Path $ProjectPath "UnityValidation.log"
 $arguments = @(
     "-runTests",
     "-batchmode",
-    "-nographics",
     "-projectPath", $ProjectPath,
     "-testPlatform", "EditMode",
     "-testResults", $resultPath,
@@ -163,6 +186,7 @@ if ($log -match '(?m)\berror CS\d+' -or $log -match '(?m)\bwarning CS\d+' -or $l
     Package = $package.name
     PackageVersion = $package.version
     PackageReference = $PackageReference
+    Odin = -not [string]::IsNullOrWhiteSpace($OdinPath)
     Unity = "6000.3.11f1"
     Passed = [int]$testRun.passed
     Failed = [int]$testRun.failed

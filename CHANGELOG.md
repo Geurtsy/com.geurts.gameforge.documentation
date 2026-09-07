@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 - 2026-09-08
+
+- Rebuilt the documentation dashboard with Odin Inspector, a clear status card, grouped actions, and collapsible source and managed-file details.
+- Added missing-Odin installation guidance while preserving package compilation and the existing confirmation flows.
+- Added validation against a locally installed Odin copy; Odin remains separately licensed and is never bundled.
+
 ## 0.2.0 - 2026-09-08
 
 - Added Install Geurts .gitignore to the Tools menu and documentation window.

@@ -1,6 +1,8 @@
 // IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -27,19 +29,25 @@ namespace Geurts.GameForge.Documentation
         private string _message = "Ready to refresh the package from its configured Git source.";
         [SerializeField, Tooltip("Whether the last package update failed.")]
         private bool _failed;
+        [SerializeField, Tooltip("Whether this session has a package installation result to display.")]
+        private bool _hasUpdateResult;
 
         private PackageInfo _installed;
+        private UpdateStatus _status;
 
         internal static event Action Changed;
-        internal bool IsBusy => _pending;
+        internal UpdateStatus Status => _status ?? (_status = new UpdateStatus { InstalledVersion = InstalledVersion });
+        internal bool IsInstalling => _pending;
+        internal bool IsBusy => _pending || Status.IsChecking;
         internal string StatusMessage => _message;
         internal bool Failed => _failed;
+        internal bool HasUpdateResult => _hasUpdateResult;
         internal PackageInfo Installed => _installed ?? (_installed = PackageInfo.FindForAssembly(typeof(PackageSelfUpdater).Assembly));
         internal string InstalledVersion => Installed?.version ?? "Unknown";
         internal string GitReference => GetGitReference(Installed?.name, Installed?.source ?? PackageSource.Unknown,
             Installed != null && Installed.isDirectDependency, Installed?.packageId);
         internal bool CanUpdate => DocumentationDependencies.OdinInstalled && !EditorBusy &&
-                                   !DocumentationUpdaterController.IsBusy && !_pending && GitReference != null;
+                                   !DocumentationUpdaterController.IsBusy && !IsBusy && GitReference != null;
         internal static bool EditorBusy => EditorApplication.isCompiling || EditorApplication.isUpdating ||
                                            EditorApplication.isPlayingOrWillChangePlaymode;
 
@@ -56,6 +64,34 @@ namespace Geurts.GameForge.Documentation
             };
         }
 
+        internal async Task CheckForUpdatesAsync()
+        {
+            if (IsBusy || DocumentationUpdaterController.IsInstalling) return;
+            Status.InstalledVersion = InstalledVersion;
+            Status.InstalledCommit = Installed?.git?.hash;
+            Status.BeginCheck();
+            Changed?.Invoke();
+            try
+            {
+                // A local checkout can display the official release version, but has no installed Git hash.
+                string reference = Installed?.source == PackageSource.Git
+                    ? GetGitReference(Installed.name, Installed.source, true, Installed.packageId)
+                    : GitVersionMetadata.OfficialPackageUrl;
+                if (reference == null) throw new InvalidOperationException("The installed Git source could not be identified.");
+                using (var metadata = new GitVersionMetadata())
+                {
+                    GitPackageVersion result = await metadata.ReadPackageAsync(reference, CancellationToken.None,
+                        progress => { Status.Progress = progress; Status.Message = progress.Message; Changed?.Invoke(); });
+                    Status.CompleteCheck(result.Version, result.Commit, Installed?.source == PackageSource.Git);
+                }
+            }
+            catch (Exception exception)
+            {
+                Status.FailCheck("Package check failed: " + exception.Message);
+            }
+            finally { Changed?.Invoke(); }
+        }
+
         internal void BeginUpdate()
         {
             if (!CanUpdate)
@@ -66,8 +102,12 @@ namespace Geurts.GameForge.Documentation
             string reference = GitReference;
             _previousHash = Installed.git?.hash;
             _failed = false;
+            _hasUpdateResult = false;
+            Status.Failed = false;
             _message = "Updating the editor package from Git. Unity may recompile scripts...";
             _pending = true;
+            Status.Message = _message;
+            Status.Progress = new UpdateProgress("Unity is resolving, downloading and installing the package. Script reloads may briefly interrupt this display.");
             Changed?.Invoke();
             try
             {
@@ -87,6 +127,7 @@ namespace Geurts.GameForge.Documentation
             EditorApplication.update -= Poll;
             if (_pending)
             {
+                Status.Progress = new UpdateProgress("Waiting for Unity to finish resolving and installing the package. Scripts may reload...");
                 EditorApplication.update += Poll;
             }
         }
@@ -132,7 +173,21 @@ namespace Geurts.GameForge.Documentation
             _request = null;
             _message = message;
             _failed = failed;
+            _hasUpdateResult = true;
+            Status.Failed = failed;
+            Status.InstalledVersion = InstalledVersion;
+            Status.InstalledCommit = Installed?.git?.hash;
+            Status.Progress = null;
+            Status.Message = message;
+            Status.Availability = failed ? DocumentationAvailability.Unknown :
+                UpdateStatus.Compare(Status.InstalledCommit, Status.RemoteCommit, Installed?.source == PackageSource.Git);
             Changed?.Invoke();
+            if (!failed) RefreshAfterInstall();
+        }
+
+        private async void RefreshAfterInstall()
+        {
+            await DocumentationUpdateChecks.CheckAllAsync();
         }
 
         // PackageInfo.packageId retains the configured Git URL, including any path and revision selector.

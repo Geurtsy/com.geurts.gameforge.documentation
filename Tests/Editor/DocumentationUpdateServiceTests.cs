@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -162,10 +164,36 @@ namespace Geurts.GameForge.Documentation.Tests
             DocumentationCheckResult result = await service.CheckForUpdateAsync(CancellationToken.None);
 
             Assert.That(result.Availability, Is.EqualTo(DocumentationAvailability.Current));
+            Assert.That(result.InstalledVersion, Is.EqualTo("0.11.0"));
+            Assert.That(result.AvailableVersion, Is.EqualTo("0.11.0"));
+            Assert.That(transport.VersionCommit, Is.EqualTo(result.RemoteCommit));
             Assert.That(transport.ResolveCalls, Is.EqualTo(1));
             Assert.That(transport.DownloadCalls, Is.EqualTo(0));
             Assert.That(File.ReadAllText(installedGuide), Is.EqualTo("local drift remains uninspected"));
             Assert.That(File.Exists(installedAgents), Is.False);
+        }
+
+        [Test]
+        public async Task DocumentationVersionsCanDifferAndMetadataFailureDoesNotInstall()
+        {
+            await InstallAsync(service);
+            string manifest = Path.Combine(projectRoot, DocumentationPackageConstants.ManagedDocumentationDirectory,
+                GitVersionMetadata.ManifestPath);
+            File.WriteAllText(manifest, "# Manifest\n**Version:** 0.10.0\n");
+            Assert.That((await service.CheckForUpdateAsync(CancellationToken.None)).Availability,
+                Is.EqualTo(DocumentationAvailability.UpdateAvailable), "A manifest version mismatch must not appear current.");
+            transport.HeadCommit = Commit('b');
+            transport.ResetCounts();
+            DocumentationCheckResult result = await service.CheckForUpdateAsync(CancellationToken.None);
+            Assert.That(result.InstalledVersion, Is.EqualTo("0.10.0"));
+            Assert.That(result.AvailableVersion, Is.EqualTo("0.11.0"));
+            Assert.That(result.Availability, Is.EqualTo(DocumentationAvailability.UpdateAvailable));
+            Assert.That(transport.VersionCommit, Is.EqualTo(Commit('b')));
+            transport.VersionFailure = new IOException("offline version metadata");
+            Assert.ThrowsAsync<IOException>(async () => await service.CheckForUpdateAsync(CancellationToken.None));
+            Assert.That(transport.DownloadCalls, Is.Zero);
+            Assert.That(ReadInstalledCommit(), Is.EqualTo(Commit('a')));
+            Assert.That(File.ReadAllText(manifest), Does.Contain("0.10.0"));
         }
 
         [Test]
@@ -513,6 +541,8 @@ namespace Geurts.GameForge.Documentation.Tests
             internal string HeadCommit { get; set; }
             internal Exception ResolveFailure { get; set; }
             internal Exception DownloadFailure { get; set; }
+            internal Exception VersionFailure { get; set; }
+            internal string VersionCommit { get; private set; }
             internal int ResolveCalls { get; private set; }
             internal int DownloadCalls { get; private set; }
 
@@ -530,7 +560,7 @@ namespace Geurts.GameForge.Documentation.Tests
             public Task<DocumentationDownload> DownloadCommitAsync(
                 string commit,
                 string workingDirectory,
-                CancellationToken cancellationToken)
+                CancellationToken cancellationToken, Action<UpdateProgress> progress = null)
             {
                 DownloadCalls++;
                 if (DownloadFailure != null)
@@ -541,6 +571,14 @@ namespace Geurts.GameForge.Documentation.Tests
                 string candidate = Path.Combine(workingDirectory, "extracted");
                 DocumentationFileOperations.CopyDirectory(templateRoot, candidate);
                 return Task.FromResult(new DocumentationDownload(workingDirectory, candidate));
+            }
+
+            public Task<string> ReadVersionAsync(string commit, CancellationToken cancellationToken)
+            {
+                VersionCommit = commit;
+                if (VersionFailure != null) throw VersionFailure;
+                return Task.FromResult(GitVersionMetadata.ParseDocumentationVersion(
+                    File.ReadAllText(Path.Combine(templateRoot, GitVersionMetadata.ManifestPath))));
             }
 
             internal void ResetCounts()

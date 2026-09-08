@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -14,10 +16,12 @@ namespace Geurts.GameForge.Documentation
     {
         Task<string> ResolveHeadCommitAsync(CancellationToken cancellationToken);
 
+        Task<string> ReadVersionAsync(string commit, CancellationToken cancellationToken);
+
         Task<DocumentationDownload> DownloadCommitAsync(
             string commit,
             string workingDirectory,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken, Action<UpdateProgress> progress = null);
     }
 
     internal sealed class GitHubDocumentationTransport : IDocumentationTransport, IDisposable
@@ -33,6 +37,7 @@ namespace Geurts.GameForge.Documentation
             client.DefaultRequestHeaders.UserAgent.ParseAdd(
                 DocumentationPackageConstants.PackageName + "/0.1.1");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
+            client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue { NoCache = true };
         }
 
         public async Task<string> ResolveHeadCommitAsync(CancellationToken cancellationToken)
@@ -54,10 +59,22 @@ namespace Geurts.GameForge.Documentation
             }
         }
 
+        /// <summary>Reads only the documentation version from the manifest at the resolved commit.</summary>
+        public async Task<string> ReadVersionAsync(string commit, CancellationToken cancellationToken)
+        {
+            using (var metadata = new GitVersionMetadata())
+            {
+                string manifest = await metadata.ReadTextAsync(
+                    "https://raw.githubusercontent.com/Geurtsy/GeurtsGameForge_Documentation/" +
+                    Uri.EscapeDataString(commit) + "/" + GitVersionMetadata.ManifestPath, cancellationToken);
+                return GitVersionMetadata.ParseDocumentationVersion(manifest);
+            }
+        }
+
         public async Task<DocumentationDownload> DownloadCommitAsync(
             string commit,
             string workingDirectory,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, Action<UpdateProgress> progress = null)
         {
             if (string.IsNullOrWhiteSpace(commit) ||
                 !Regex.IsMatch(commit, "^[0-9a-f]{40}$", RegexOptions.CultureInvariant))
@@ -100,10 +117,19 @@ namespace Geurts.GameForge.Documentation
                         input,
                         output,
                         DocumentationPackageConstants.ArchiveLimitBytes,
-                        cancellationToken);
+                        cancellationToken,
+                        total =>
+                        {
+                            long? length = response.Content.Headers.ContentLength;
+                            string amount = (total / 1048576f).ToString("0.0") + " MB";
+                            string expected = length.HasValue ? " of " + (length.Value / 1048576f).ToString("0.0") + " MB" : " (total size not supplied)";
+                            progress?.Invoke(new UpdateProgress("Downloading documentation: " + amount + expected,
+                                length.GetValueOrDefault() > 0 ? (float)total / length.Value : -1f));
+                        });
                 }
             }
 
+            progress?.Invoke(new UpdateProgress("Extracting the downloaded documentation archive..."));
             string candidateRoot = ExtractCommitArchive(archivePath, extractionRoot, commit);
             return new DocumentationDownload(workingDirectory, candidateRoot);
         }
@@ -134,7 +160,7 @@ namespace Geurts.GameForge.Documentation
             return sha.ToLowerInvariant();
         }
 
-        private static async Task<byte[]> ReadBoundedAsync(
+        internal static async Task<byte[]> ReadBoundedAsync(
             HttpResponseMessage response,
             long limit,
             CancellationToken cancellationToken)
@@ -157,7 +183,7 @@ namespace Geurts.GameForge.Documentation
             Stream input,
             Stream output,
             long limit,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, Action<long> progress = null)
         {
             byte[] buffer = new byte[81920];
             long total = 0;
@@ -176,6 +202,7 @@ namespace Geurts.GameForge.Documentation
                 }
 
                 await output.WriteAsync(buffer, 0, read, cancellationToken);
+                progress?.Invoke(total);
             }
         }
 

@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using UnityEditor;
 using UnityEngine;
 
@@ -37,7 +39,10 @@ namespace Geurts.GameForge.Documentation
 
         private static async void RunStartupCheck()
         {
-            await DocumentationUpdaterController.CheckForUpdatesAsync(true);
+            await DocumentationUpdateChecks.CheckAllAsync();
+            if (DocumentationUpdaterController.Availability == DocumentationAvailability.UpdateAvailable ||
+                PackageSelfUpdater.instance.Status.Availability == DocumentationAvailability.UpdateAvailable)
+                DocumentationUpdaterWindow.ShowAfterCheck();
         }
     }
 }

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0 - 2026-09-08
+
+- Give Odin Inspector and Quantum Console dependency cards the same green ready, orange missing, blue checking and red error palette as package/documentation update cards, in the dashboard and Unity Package Manager extension.
+- Add owned-asset download/import access through Unity's My Assets view and interactive import of a locally downloaded licensed .unitypackage. Unity retains its ownership checks, import review and download/import progress.
+- Report blocked and failed installation actions clearly; defer both actions until UI drawing finishes. Readiness refreshes during Unity import/compilation and after script reload; it does not claim vendor-version currency or ownership.
+
+## 0.5.3 - 2026-09-08
+
+- Label Odin Inspector and Quantum Console as required external dependencies in Unity Package Manager's package details.
+- Show green dependency boxes marked Installed and ready when the required tool types are loaded and Unity has no script compilation errors. Refresh status during compilation/import and show missing or unavailable tools without a green box.
+- Include the same explicit requirements in the package description so they remain readable before package scripts compile. Commercial assets remain separate imports, with no invented registry dependencies.
+
 ## 0.5.2 - 2026-09-08
 
 - Fix the dashboard confirmation path: defer actions until Odin has finished drawing, collect confirmation in a UI Toolkit dialog, then start the approved documentation update after the modal window closes.

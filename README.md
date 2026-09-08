@@ -12,7 +12,11 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Version 0.5.1 is available on main and targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled or downloaded by this package. The repository is public, so the Git URL does not require package-specific credentials.
+Package version 0.6.0 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
+
+Select **Geurts Game Forge Documentation** in Unity Package Manager to see **Required external dependencies**, with separate **Required** labels for Odin Inspector and Quantum Console. The package description also includes these labels before the scripts compile. These are separately imported assets, so the native resolver's Dependencies list remains reserved for Unity package dependencies.
+
+Each dependency box turns green and shows **Installed and ready** when its required tool types are loaded and Unity has no script compilation errors. Boxes show **Checking** during compilation/import, or a missing/unavailable status when readiness cannot be confirmed. This checks Editor availability; it does not test scene-specific console setup or every tool feature.
 
 ## Odin documentation dashboard
 
@@ -20,7 +24,7 @@ The `OdinEditorWindow` dashboard automatically checks **both the editor package 
 
 Checking and installation each show an animated activity bar and detailed status. Documentation downloads show bytes received and a percentage when the server supplies a total size; unknown-duration steps use activity animation without inventing a percentage. The package bar stays active while Unity resolves, installs, and recompiles. **Source and managed files** contains copyable source URLs, both package/documentation commit identifiers, and the five documentation-update targets. Content scrolls in small or docked windows.
 
-**Dependencies** explains Odin's dashboard integration. The assembly references require both Odin Inspector and Quantum Console; missing commercial assemblies must be installed before this package compiles. Keep Odin's standard `ODIN_INSPECTOR` define enabled. `GeurtsGameForge.Documentation.Status` exposes the existing dashboard status through Quantum Console as a read-only Editor command. This tool requirement supersedes older optional or no-tool compilation guidance; Documentation remains independent of God.
+**Dependencies** shows both required tools using the update-card palette: green for installed and ready, orange for missing, blue while Unity compiles/imports, red for script or installation-action errors, and grey for unverified tools. The dashboard animates an activity bar during compilation/import; Unity owns download/import progress in its native windows. Green verifies loaded tool assemblies, not ownership or the latest vendor version. The assembly references require both Odin Inspector and Quantum Console; missing commercial assemblies must be installed before this package compiles. Keep Odin's standard `ODIN_INSPECTOR` define enabled. `GeurtsGameForge.Documentation.Status` exposes the existing dashboard status through Quantum Console as a read-only Editor command. This tool requirement supersedes older optional or no-tool compilation guidance; Documentation remains independent of God.
 
 ## Update the editor package from Git
 
@@ -73,3 +77,11 @@ This package is Windows-only and Editor-only. Its dashboard requires Odin Inspec
 Run `Tools/ValidatePackage.ps1 -DocumentationPath <path-to-GeurtsGameForgeDocumentation>` to run Editor tests in a disposable project. The documentation path supplies only the manifest and Git Ignore Technique as an external integration fixture; the source is not changed or bundled with the package. Without this parameter, tests requiring the real template are reported as skipped. `-StaticOnly` checks package structure without launching Unity.
 
 Provide `-OdinPath <path-to-Assets/Plugins/Sirenix> -QuantumConsolePath <path-to-Assets/Plugins/QFSW/Quantum Console> -ProjectPath <package-root>/work~/UnityValidationOdin` to compile and test against your installed licensed tools. Both paths are required for the integration tests. The validation copy stays under the ignored `work~/` directory and must not be committed or distributed. `-StaticOnly` checks the manifest and assembly contract without importing tools.
+
+## Install owned dependencies inside the Editor
+
+Each dependency card in the Documentation dashboard and Unity Package Manager includes **Download / import owned copy in My Assets**. This opens Unity''s My Assets view: sign in to the account that owns the tool, search for its name, choose **Download**, then **Import**. Ownership and download progress remain in Unity''s native view; opening it does not claim installation has begun.
+
+Alternatively choose **Import licensed .unitypackage…**, select the file from your licensed source, and review Unity''s asset selection before importing. Reimporting can replace existing vendor files. Cancelling the file picker imports nothing. Both actions are disabled while Unity or a documentation/package operation is busy, and launch failures are shown on the affected card. Readiness refreshes after scripts compile.
+
+For a first installation where required assemblies are missing and this package cannot compile, use Unity''s built-in **Window > Package Management > My Assets** to import Odin Inspector and Quantum Console first; the custom cards become available after compilation succeeds.

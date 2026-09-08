@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="88" result="Passed" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.5680095">
+  <test-suite type="TestSuite" id="1000" name="UnityValidation" fullname="UnityValidation" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.568010" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1109" name="Geurts.GameForge.Documentation.Editor.Tests.dll" fullname="C:/Users/david_3oqzree/Documents/GitHub/DocumentationDependencyCards/work~/UnityValidation/Library/ScriptAssemblies/Geurts.GameForge.Documentation.Editor.Tests.dll" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.557867" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="54532" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1110" name="Geurts" fullname="Geurts" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.557292" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1111" name="GameForge" fullname="Geurts.GameForge" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.557091" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1112" name="Documentation" fullname="Geurts.GameForge.Documentation" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.556900" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1113" name="Tests" fullname="Geurts.GameForge.Documentation.Tests" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:16Z" duration="11.556451" total="88" passed="88" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1001" name="DependencyInstallationTests" fullname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" classname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:06Z" duration="1.946794" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1002" name="CancelledFileSelectionDoesNotImportOrClaimSuccess" fullname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests.CancelledFileSelectionDoesNotImportOrClaimSuccess" methodname="CancelledFileSelectionDoesNotImportOrClaimSuccess" classname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" runstate="Runnable" seed="1592598308" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:04Z" duration="0.036180" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1004" name="InvalidFileAndNativeActionFailureAreVisibleAndRetryClearsFailure" fullname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests.InvalidFileAndNativeActionFailureAreVisibleAndRetryClearsFailure" methodname="InvalidFileAndNativeActionFailureAreVisibleAndRetryClearsFailure" classname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" runstate="Runnable" seed="285167830" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:04Z" duration="0.007255" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1003" name="LicensedFileImportAlwaysRequestsUnityReviewAndExplainsReplacement" fullname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests.LicensedFileImportAlwaysRequestsUnityReviewAndExplainsReplacement" methodname="LicensedFileImportAlwaysRequestsUnityReviewAndExplainsReplacement" classname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" runstate="Runnable" seed="1069575680" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:04Z" duration="0.010920" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1006" name="OwnedAssetsActionOpensUnitysRealPackageManager" fullname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests.OwnedAssetsActionOpensUnitysRealPackageManager" methodname="OwnedAssetsActionOpensUnitysRealPackageManager" classname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" runstate="Runnable" seed="713932713" result="Passed" start-time="2026-09-08 06:42:04Z" end-time="2026-09-08 06:42:06Z" duration="1.866921" asserts="0">
+                  <properties>
+                    <property name="_JOINTYPE" value="UnityCombinatorial" />
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1005" name="PackageManagerCardsShareReadyPaletteAndHideForUnrelatedSelections" fullname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests.PackageManagerCardsShareReadyPaletteAndHideForUnrelatedSelections" methodname="PackageManagerCardsShareReadyPaletteAndHideForUnrelatedSelections" classname="Geurts.GameForge.Documentation.Tests.DependencyInstallationTests" runstate="Runnable" seed="830464857" result="Passed" start-time="2026-09-08 06:42:06Z" end-time="2026-09-08 06:42:06Z" duration="0.008514" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1007" name="DocumentationConfirmationTests" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-08 06:42:06Z" end-time="2026-09-08 06:42:08Z" duration="2.500061" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1008" name="DashboardClickAcceptInstallsOnceAndThenReportsCurrent" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DashboardClickAcceptInstallsOnceAndThenReportsCurrent" methodname="DashboardClickAcceptInstallsOnceAndThenReportsCurrent" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" seed="722154297" result="Passed" start-time="2026-09-08 06:42:06Z" end-time="2026-09-08 06:42:08Z" duration="1.890859" asserts="0">
+                  <properties>
+                    <property name="_JOINTYPE" value="UnityCombinatorial" />
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[[Geurts Documentation] Update completed at commit bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.
+]]></output>
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="1014" name="DecliningTheRealConfirmationDoesNotApproveAnUpdate" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DecliningTheRealConfirmationDoesNotApproveAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:08Z" duration="0.607224" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1009" name="DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;cancel&quot;)" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;cancel&quot;)" methodname="DecliningTheRealConfirmationDoesNotApproveAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" seed="1765657479" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:08Z" duration="0.125639" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1010" name="DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;close&quot;)" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;close&quot;)" methodname="DecliningTheRealConfirmationDoesNotApproveAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" seed="77044586" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:08Z" duration="0.121969" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1011" name="DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;Return&quot;)" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;Return&quot;)" methodname="DecliningTheRealConfirmationDoesNotApproveAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" seed="1622898641" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:08Z" duration="0.122567" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1012" name="DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;KeypadEnter&quot;)" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;KeypadEnter&quot;)" methodname="DecliningTheRealConfirmationDoesNotApproveAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" seed="162676857" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:08Z" duration="0.117939" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1013" name="DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;Escape&quot;)" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests.DecliningTheRealConfirmationDoesNotApproveAnUpdate(&quot;Escape&quot;)" methodname="DecliningTheRealConfirmationDoesNotApproveAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConfirmationTests" runstate="Runnable" seed="2011702262" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:08Z" duration="0.116169" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+              </test-suite>
+              <test-suite type="TestFixture" id="1015" name="DocumentationConsoleCommandsTests" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConsoleCommandsTests" classname="Geurts.GameForge.Documentation.Tests.DocumentationConsoleCommandsTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-08 06:42:08Z" end-time="2026-09-08 06:42:09Z" duration="0.742487" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1016" name="QuantumConsoleStatusReadsTheExistingDashboardWithoutStartingAnUpdate" fullname="Geurts.GameForge.Documentation.Tests.DocumentationConsoleCommandsTests.QuantumConsoleStatusReadsTheExistingDashboardWithoutStartingAnUpdate" methodname="QuantumConsoleStatusReadsTheExistingDashboardWithoutStartingAnUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationConsoleCommandsTests" runstate="Runnable" seed="1975493096" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:09Z" duration="0.734772" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1017" name="DocumentationPackageTests" fullname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests" classname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:09Z" duration="0.131591" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1019" name="ConfirmationListsTheCompleteClosedManagedBoundary" fullname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests.ConfirmationListsTheCompleteClosedManagedBoundary" methodname="ConfirmationListsTheCompleteClosedManagedBoundary" classname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests" runstate="Runnable" seed="2070349911" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:09Z" duration="0.001934" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1018" name="PackageIsIndependentAndContainsNoGenericDocumentationPayload" fullname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests.PackageIsIndependentAndContainsNoGenericDocumentationPayload" methodname="PackageIsIndependentAndContainsNoGenericDocumentationPayload" classname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests" runstate="Runnable" seed="682104295" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:09Z" duration="0.119603" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1020" name="StartupCheckIsGatedOncePerInteractiveEditorSession" fullname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests.StartupCheckIsGatedOncePerInteractiveEditorSession" methodname="StartupCheckIsGatedOncePerInteractiveEditorSession" classname="Geurts.GameForge.Documentation.Tests.DocumentationPackageTests" runstate="Runnable" seed="623278186" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:09Z" duration="0.001020" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1042" name="DocumentationUpdaterWindowTests" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdaterWindowTests" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdaterWindowTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:10Z" duration="0.262771" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1043" name="DashboardOpensAndReopensWithTheInstalledInspector" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdaterWindowTests.DashboardOpensAndReopensWithTheInstalledInspector" methodname="DashboardOpensAndReopensWithTheInstalledInspector" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdaterWindowTests" runstate="Runnable" seed="1261056726" result="Passed" start-time="2026-09-08 06:42:09Z" end-time="2026-09-08 06:42:10Z" duration="0.255440" asserts="0">
+                  <properties>
+                    <property name="_JOINTYPE" value="UnityCombinatorial" />
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1021" name="DocumentationUpdateServiceTests" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-08 06:42:10Z" end-time="2026-09-08 06:42:15Z" duration="5.039667" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1039" name="BackslashValidationPathFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.BackslashValidationPathFailsBeforeAnyProjectMutation" methodname="BackslashValidationPathFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1540768249" result="Passed" start-time="2026-09-08 06:42:10Z" end-time="2026-09-08 06:42:10Z" duration="0.126100" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1022" name="BareProjectInstallCreatesDocumentationAndEveryDeclaredRoute" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.BareProjectInstallCreatesDocumentationAndEveryDeclaredRoute" methodname="BareProjectInstallCreatesDocumentationAndEveryDeclaredRoute" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1172569142" result="Passed" start-time="2026-09-08 06:42:10Z" end-time="2026-09-08 06:42:10Z" duration="0.313214" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1034" name="CommitPreferenceFailureDoesNotFailOrUndoVerifiedContentUpdate" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.CommitPreferenceFailureDoesNotFailOrUndoVerifiedContentUpdate" methodname="CommitPreferenceFailureDoesNotFailOrUndoVerifiedContentUpdate" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="92855824" result="Passed" start-time="2026-09-08 06:42:10Z" end-time="2026-09-08 06:42:10Z" duration="0.297811" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1023" name="ConfirmedUpdateReplacesOnlyDocumentationAndDeclaredAiRoutes" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.ConfirmedUpdateReplacesOnlyDocumentationAndDeclaredAiRoutes" methodname="ConfirmedUpdateReplacesOnlyDocumentationAndDeclaredAiRoutes" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="357979324" result="Passed" start-time="2026-09-08 06:42:10Z" end-time="2026-09-08 06:42:11Z" duration="0.418342" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1033" name="ContractAndManifestVersionMismatchFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.ContractAndManifestVersionMismatchFailsBeforeAnyProjectMutation" methodname="ContractAndManifestVersionMismatchFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1002520344" result="Passed" start-time="2026-09-08 06:42:11Z" end-time="2026-09-08 06:42:11Z" duration="0.120274" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1027" name="DocumentationVersionsCanDifferAndMetadataFailureDoesNotInstall" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.DocumentationVersionsCanDifferAndMetadataFailureDoesNotInstall" methodname="DocumentationVersionsCanDifferAndMetadataFailureDoesNotInstall" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1406949187" result="Passed" start-time="2026-09-08 06:42:11Z" end-time="2026-09-08 06:42:11Z" duration="0.295406" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1024" name="ExistingRootAgentsIsReplacedAndMissingRootAgentsIsCreated" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.ExistingRootAgentsIsReplacedAndMissingRootAgentsIsCreated" methodname="ExistingRootAgentsIsReplacedAndMissingRootAgentsIsCreated" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1740803496" result="Passed" start-time="2026-09-08 06:42:11Z" end-time="2026-09-08 06:42:12Z" duration="0.492981" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1040" name="GitMetadataFileFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.GitMetadataFileFailsBeforeAnyProjectMutation" methodname="GitMetadataFileFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1107728896" result="Passed" start-time="2026-09-08 06:42:12Z" end-time="2026-09-08 06:42:12Z" duration="0.121542" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1030" name="InvalidContractFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.InvalidContractFailsBeforeAnyProjectMutation" methodname="InvalidContractFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="433782837" result="Passed" start-time="2026-09-08 06:42:12Z" end-time="2026-09-08 06:42:12Z" duration="0.131178" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1028" name="LastSuccessfulCommitSignalIsScopedPerUnityProject" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.LastSuccessfulCommitSignalIsScopedPerUnityProject" methodname="LastSuccessfulCommitSignalIsScopedPerUnityProject" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="298035163" result="Passed" start-time="2026-09-08 06:42:12Z" end-time="2026-09-08 06:42:12Z" duration="0.292133" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1037" name="LaterValidationListMayReplaceAnInitialReleaseEntry" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.LaterValidationListMayReplaceAnInitialReleaseEntry" methodname="LaterValidationListMayReplaceAnInitialReleaseEntry" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="920479931" result="Passed" start-time="2026-09-08 06:42:12Z" end-time="2026-09-08 06:42:13Z" duration="0.301149" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1041" name="ManagedHardLinkCannotRedirectAWriteOutsideTheProject" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.ManagedHardLinkCannotRedirectAWriteOutsideTheProject" methodname="ManagedHardLinkCannotRedirectAWriteOutsideTheProject" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="814510424" result="Passed" start-time="2026-09-08 06:42:13Z" end-time="2026-09-08 06:42:13Z" duration="0.329412" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1026" name="MatchingInstalledCommitNeedsNoArchiveRequest" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.MatchingInstalledCommitNeedsNoArchiveRequest" methodname="MatchingInstalledCommitNeedsNoArchiveRequest" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1732531562" result="Passed" start-time="2026-09-08 06:42:13Z" end-time="2026-09-08 06:42:13Z" duration="0.302093" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1036" name="NewerPackageVersionAndAdditionalValidationEntryRemainSupported" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.NewerPackageVersionAndAdditionalValidationEntryRemainSupported" methodname="NewerPackageVersionAndAdditionalValidationEntryRemainSupported" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="326606542" result="Passed" start-time="2026-09-08 06:42:13Z" end-time="2026-09-08 06:42:13Z" duration="0.308823" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1035" name="ReadOnlyManagedAiFileIsDirectlyReplacedAfterConfirmation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.ReadOnlyManagedAiFileIsDirectlyReplacedAfterConfirmation" methodname="ReadOnlyManagedAiFileIsDirectlyReplacedAfterConfirmation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1223702034" result="Passed" start-time="2026-09-08 06:42:13Z" end-time="2026-09-08 06:42:14Z" duration="0.311155" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1029" name="RemoteAcquisitionFailurePreservesAllManagedTargetsAndInstallSignal" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.RemoteAcquisitionFailurePreservesAllManagedTargetsAndInstallSignal" methodname="RemoteAcquisitionFailurePreservesAllManagedTargetsAndInstallSignal" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1899640670" result="Passed" start-time="2026-09-08 06:42:14Z" end-time="2026-09-08 06:42:14Z" duration="0.335029" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1032" name="RemoteConfirmationTargetMismatchFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.RemoteConfirmationTargetMismatchFailsBeforeAnyProjectMutation" methodname="RemoteConfirmationTargetMismatchFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1645303921" result="Passed" start-time="2026-09-08 06:42:14Z" end-time="2026-09-08 06:42:14Z" duration="0.120334" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1031" name="RemoteManagedTargetMismatchFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.RemoteManagedTargetMismatchFailsBeforeAnyProjectMutation" methodname="RemoteManagedTargetMismatchFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="920033028" result="Passed" start-time="2026-09-08 06:42:14Z" end-time="2026-09-08 06:42:14Z" duration="0.145300" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1025" name="StartupMetadataCheckDoesNotDownloadOrMutateProjectFiles" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.StartupMetadataCheckDoesNotDownloadOrMutateProjectFiles" methodname="StartupMetadataCheckDoesNotDownloadOrMutateProjectFiles" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="1017997807" result="Passed" start-time="2026-09-08 06:42:14Z" end-time="2026-09-08 06:42:15Z" duration="0.100000" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1038" name="UnknownContractFieldFailsBeforeAnyProjectMutation" fullname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests.UnknownContractFieldFailsBeforeAnyProjectMutation" methodname="UnknownContractFieldFailsBeforeAnyProjectMutation" classname="Geurts.GameForge.Documentation.Tests.DocumentationUpdateServiceTests" runstate="Runnable" seed="910137760" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.155766" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1044" name="GitHubDocumentationTransportTests" fullname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests" classname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.092866" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1045" name="CompactGitReferenceMetadataYieldsTheMainCommitIdentity" fullname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests.CompactGitReferenceMetadataYieldsTheMainCommitIdentity" methodname="CompactGitReferenceMetadataYieldsTheMainCommitIdentity" classname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests" runstate="Runnable" seed="601766844" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.007764" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1046" name="ExtractCommitArchiveAcceptsGitHubDirectoryEntries" fullname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests.ExtractCommitArchiveAcceptsGitHubDirectoryEntries" methodname="ExtractCommitArchiveAcceptsGitHubDirectoryEntries" classname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests" runstate="Runnable" seed="867970041" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.064334" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1047" name="ExtractCommitArchiveRejectsTraversalBeforeWritingOutsideExtractionRoot" fullname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests.ExtractCommitArchiveRejectsTraversalBeforeWritingOutsideExtractionRoot" methodname="ExtractCommitArchiveRejectsTraversalBeforeWritingOutsideExtractionRoot" classname="Geurts.GameForge.Documentation.Tests.GitHubDocumentationTransportTests" runstate="Runnable" seed="1559148643" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.017551" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1048" name="GitIgnoreInstallerTests" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:16Z" duration="0.758097" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1050" name="CancelDoesNotRequireDocumentationOrCreateAMissingTarget" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.CancelDoesNotRequireDocumentationOrCreateAMissingTarget" methodname="CancelDoesNotRequireDocumentationOrCreateAMissingTarget" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="301923583" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.006711" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1049" name="CancelWarnsAboutTheExactTargetAndPreservesExistingBytesAndTimestamp" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.CancelWarnsAboutTheExactTargetAndPreservesExistingBytesAndTimestamp" methodname="CancelWarnsAboutTheExactTargetAndPreservesExistingBytesAndTimestamp" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1644428215" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.012989" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="1058" name="ConfirmedInstallUsesTheActualDocumentationPayload" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.ConfirmedInstallUsesTheActualDocumentationPayload" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.458376" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1054" name="ConfirmedInstallUsesTheActualDocumentationPayload(False,False)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.ConfirmedInstallUsesTheActualDocumentationPayload(False,False)" methodname="ConfirmedInstallUsesTheActualDocumentationPayload" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1968787156" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.124145" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1055" name="ConfirmedInstallUsesTheActualDocumentationPayload(False,True)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.ConfirmedInstallUsesTheActualDocumentationPayload(False,True)" methodname="ConfirmedInstallUsesTheActualDocumentationPayload" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="909276176" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.118642" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1056" name="ConfirmedInstallUsesTheActualDocumentationPayload(True,False)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.ConfirmedInstallUsesTheActualDocumentationPayload(True,False)" methodname="ConfirmedInstallUsesTheActualDocumentationPayload" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="270016030" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.114051" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1057" name="ConfirmedInstallUsesTheActualDocumentationPayload(True,True)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.ConfirmedInstallUsesTheActualDocumentationPayload(True,True)" methodname="ConfirmedInstallUsesTheActualDocumentationPayload" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1268499460" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.099220" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-case id="1066" name="DirectoryAtTargetIsPreserved" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.DirectoryAtTargetIsPreserved" methodname="DirectoryAtTargetIsPreserved" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="361112291" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.030716" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="1065" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.181674" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1059" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;payload&quot;)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;payload&quot;)" methodname="InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1788393131" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.031367" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1060" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;duplicate-marker&quot;)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;duplicate-marker&quot;)" methodname="InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="516051088" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.029800" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1061" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;fence&quot;)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;fence&quot;)" methodname="InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1223511934" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.029370" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1062" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;manifest-version&quot;)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;manifest-version&quot;)" methodname="InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1299563785" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.031948" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1063" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;technique-version&quot;)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;technique-version&quot;)" methodname="InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="92690663" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.028714" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1064" name="InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;invalid-utf8&quot;)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.InvalidDocumentationPreservesExistingTargetBeforeReplacement(&quot;invalid-utf8&quot;)" methodname="InvalidDocumentationPreservesExistingTargetBeforeReplacement" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1402543115" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.027384" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-suite type="ParameterizedMethod" id="1053" name="MissingDocumentationDoesNotCreateOrOverwriteTarget" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.MissingDocumentationDoesNotCreateOrOverwriteTarget" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.027651" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1051" name="MissingDocumentationDoesNotCreateOrOverwriteTarget(False)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.MissingDocumentationDoesNotCreateOrOverwriteTarget(False)" methodname="MissingDocumentationDoesNotCreateOrOverwriteTarget" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1686258260" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.009660" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1052" name="MissingDocumentationDoesNotCreateOrOverwriteTarget(True)" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.MissingDocumentationDoesNotCreateOrOverwriteTarget(True)" methodname="MissingDocumentationDoesNotCreateOrOverwriteTarget" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="1056350110" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:15Z" duration="0.011304" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-case id="1067" name="ReplacingHardLinkedTargetPreservesTheOtherFile" fullname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests.ReplacingHardLinkedTargetPreservesTheOtherFile" methodname="ReplacingHardLinkedTargetPreservesTheOtherFile" classname="Geurts.GameForge.Documentation.Tests.GitIgnoreInstallerTests" runstate="Runnable" seed="770452650" result="Passed" start-time="2026-09-08 06:42:15Z" end-time="2026-09-08 06:42:16Z" duration="0.034377" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1068" name="PackageSelfUpdaterTests" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.009149" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1087" name="CompletionDistinguishesUnchangedCommitsFromSuccessfulUpdates" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.CompletionDistinguishesUnchangedCommitsFromSuccessfulUpdates" methodname="CompletionDistinguishesUnchangedCommitsFromSuccessfulUpdates" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="770071717" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000451" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1082" name="IndirectOrDifferentPackagesAreNotChanged" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.IndirectOrDifferentPackagesAreNotChanged" methodname="IndirectOrDifferentPackagesAreNotChanged" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="695216013" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000261" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="1086" name="MissingGitReferencesCannotStartAnUpdate" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.MissingGitReferencesCannotStartAnUpdate" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.001175" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1083" name="MissingGitReferencesCannotStartAnUpdate(null)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.MissingGitReferencesCannotStartAnUpdate(null)" methodname="MissingGitReferencesCannotStartAnUpdate" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="537239163" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000181" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1084" name="MissingGitReferencesCannotStartAnUpdate(&quot;&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.MissingGitReferencesCannotStartAnUpdate(&quot;&quot;)" methodname="MissingGitReferencesCannotStartAnUpdate" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="398192924" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000093" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1085" name="MissingGitReferencesCannotStartAnUpdate(&quot;com.geurts.gameforge.documentation@&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.MissingGitReferencesCannotStartAnUpdate(&quot;com.geurts.gameforge.documentation@&quot;)" methodname="MissingGitReferencesCannotStartAnUpdate" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="397796360" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000106" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-suite type="ParameterizedMethod" id="1081" name="NonGitInstallationsAreNotReplaced" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.NonGitInstallationsAreNotReplaced" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.002187" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1077" name="NonGitInstallationsAreNotReplaced(Local)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.NonGitInstallationsAreNotReplaced(Local)" methodname="NonGitInstallationsAreNotReplaced" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="135053731" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000374" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1078" name="NonGitInstallationsAreNotReplaced(Embedded)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.NonGitInstallationsAreNotReplaced(Embedded)" methodname="NonGitInstallationsAreNotReplaced" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1798597134" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000140" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1079" name="NonGitInstallationsAreNotReplaced(Registry)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.NonGitInstallationsAreNotReplaced(Registry)" methodname="NonGitInstallationsAreNotReplaced" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1856699826" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000130" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1080" name="NonGitInstallationsAreNotReplaced(Unknown)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.NonGitInstallationsAreNotReplaced(Unknown)" methodname="NonGitInstallationsAreNotReplaced" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1590860969" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000131" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-suite type="ParameterizedMethod" id="1076" name="UpdatePreservesTheExactConfiguredGitReference" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.002454" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1069" name="UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1218045124" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000189" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1070" name="UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#main&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#main&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1621922947" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000117" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1071" name="UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#codex/package-self-update&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#codex/package-self-update&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1160835829" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000102" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1072" name="UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#v0.4.0&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#v0.4.0&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="182671542" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000121" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1073" name="UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#0592549b676e3c5145a53b2a66c2cf8dd43aaffd&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#0592549b676e3c5145a53b2a66c2cf8dd43aaffd&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="411056234" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000099" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1074" name="UpdatePreservesTheExactConfiguredGitReference(&quot;ssh://git@github.com/studio/fork.git?path=/Packages/Documentation#preview&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;ssh://git@github.com/studio/fork.git?path=/Packages/Documentation#preview&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="1629509754" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000085" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1075" name="UpdatePreservesTheExactConfiguredGitReference(&quot;git+file:///C:/Packages/Documentation#main&quot;)" fullname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests.UpdatePreservesTheExactConfiguredGitReference(&quot;git+file:///C:/Packages/Documentation#main&quot;)" methodname="UpdatePreservesTheExactConfiguredGitReference" classname="Geurts.GameForge.Documentation.Tests.PackageSelfUpdaterTests" runstate="Runnable" seed="107145620" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000081" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+              </test-suite>
+              <test-suite type="TestFixture" id="1088" name="UpdateVersionTests" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.068317" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-suite type="ParameterizedMethod" id="1094" name="ChecksPreserveSelectedRepositoryRevisionAndPackagePath" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.ChecksPreserveSelectedRepositoryRevisionAndPackagePath" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.006901" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1089" name="ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git&quot;,&quot;HEAD&quot;,&quot;&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;https://github.com/Geurtsy/com.geurts.gameforge.documentation.git&quot;,&quot;HEAD&quot;,&quot;&quot;)" methodname="ChecksPreserveSelectedRepositoryRevisionAndPackagePath" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="2047714345" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.004489" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1090" name="ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;git+https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#main&quot;,&quot;main&quot;,&quot;&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;git+https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#main&quot;,&quot;main&quot;,&quot;&quot;)" methodname="ChecksPreserveSelectedRepositoryRevisionAndPackagePath" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="242142126" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000306" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1091" name="ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;git@github.com:Other/Fork.git?path=/Packages/docs#preview/ui&quot;,&quot;preview%2Fui&quot;,&quot;Packages/docs/&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;git@github.com:Other/Fork.git?path=/Packages/docs#preview/ui&quot;,&quot;preview%2Fui&quot;,&quot;Packages/docs/&quot;)" methodname="ChecksPreserveSelectedRepositoryRevisionAndPackagePath" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="2015274044" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000428" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1092" name="ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;ssh://git@github.com/Other/Fork.git#v0.4.0&quot;,&quot;v0.4.0&quot;,&quot;&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;ssh://git@github.com/Other/Fork.git#v0.4.0&quot;,&quot;v0.4.0&quot;,&quot;&quot;)" methodname="ChecksPreserveSelectedRepositoryRevisionAndPackagePath" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="717485494" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000157" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1093" name="ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;https://github.com/Other/Fork.git#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;,&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;,&quot;&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.ChecksPreserveSelectedRepositoryRevisionAndPackagePath(&quot;https://github.com/Other/Fork.git#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;,&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;,&quot;&quot;)" methodname="ChecksPreserveSelectedRepositoryRevisionAndPackagePath" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="525816358" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000180" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-case id="1106" name="DocumentationExplainsSameVersionRevisionChangesAndMissingRecordsSeparately" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.DocumentationExplainsSameVersionRevisionChangesAndMissingRecordsSeparately" methodname="DocumentationExplainsSameVersionRevisionChangesAndMissingRecordsSeparately" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="2060993897" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000292" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1104" name="HttpFailureIsReportedAndCanBeRetried" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.HttpFailureIsReportedAndCanBeRetried" methodname="HttpFailureIsReportedAndCanBeRetried" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1371277692" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.019869" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1107" name="InstalledDocumentationReadsOnlyItsVersionManifest" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.InstalledDocumentationReadsOnlyItsVersionManifest" methodname="InstalledDocumentationReadsOnlyItsVersionManifest" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1301450779" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.020669" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="1102" name="InvalidRemotePackageVersionCannotReportCurrent" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.InvalidRemotePackageVersionCannotReportCurrent" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.007703" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1100" name="InvalidRemotePackageVersionCannotReportCurrent(&quot;{\&quot;name\&quot;:\&quot;wrong.package\&quot;,\&quot;version\&quot;:\&quot;0.5.0\&quot;}&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.InvalidRemotePackageVersionCannotReportCurrent(&quot;{\&quot;name\&quot;:\&quot;wrong.package\&quot;,\&quot;version\&quot;:\&quot;0.5.0\&quot;}&quot;)" methodname="InvalidRemotePackageVersionCannotReportCurrent" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="269555125" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.005953" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1101" name="InvalidRemotePackageVersionCannotReportCurrent(&quot;{\&quot;name\&quot;:\&quot;com.geurts.gameforge.documentation\&quot;}&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.InvalidRemotePackageVersionCannotReportCurrent(&quot;{\&quot;name\&quot;:\&quot;com.geurts.gameforge.documentation\&quot;}&quot;)" methodname="InvalidRemotePackageVersionCannotReportCurrent" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1545554252" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000706" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+                <test-case id="1108" name="OverlappingOpenAndManualChecksShareWorkAndLaterRefreshRunsBothAgain" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.OverlappingOpenAndManualChecksShareWorkAndLaterRefreshRunsBothAgain" methodname="OverlappingOpenAndManualChecksShareWorkAndLaterRefreshRunsBothAgain" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1798950769" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.003479" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1103" name="OversizedMetadataIsRejectedBeforeParsing" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.OversizedMetadataIsRejectedBeforeParsing" methodname="OversizedMetadataIsRejectedBeforeParsing" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1001433929" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.001717" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1099" name="PackageVersionIsFetchedAtResolvedCommitWithCompactMetadata" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.PackageVersionIsFetchedAtResolvedCommitWithCompactMetadata" methodname="PackageVersionIsFetchedAtResolvedCommitWithCompactMetadata" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1906459755" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.002105" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1105" name="SameVersionDifferentCommitStillOffersAnUpdate" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.SameVersionDifferentCommitStillOffersAnUpdate" methodname="SameVersionDifferentCommitStillOffersAnUpdate" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1525039240" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000316" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="1098" name="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.UnsupportedChecksNeverSilentlySwitchToTheOfficialSource" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.002160" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1095" name="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource(&quot;git+file:///C:/fixture#main&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.UnsupportedChecksNeverSilentlySwitchToTheOfficialSource(&quot;git+file:///C:/fixture#main&quot;)" methodname="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1426275305" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.001027" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1096" name="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource(&quot;https://github.com.example.com/Owner/Repo.git&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.UnsupportedChecksNeverSilentlySwitchToTheOfficialSource(&quot;https://github.com.example.com/Owner/Repo.git&quot;)" methodname="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="199175448" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000144" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1097" name="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource(&quot;https://github.com/Owner/Repo.git?path=../../private#main&quot;)" fullname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests.UnsupportedChecksNeverSilentlySwitchToTheOfficialSource(&quot;https://github.com/Owner/Repo.git?path=../../private#main&quot;)" methodname="UnsupportedChecksNeverSilentlySwitchToTheOfficialSource" classname="Geurts.GameForge.Documentation.Tests.UpdateVersionTests" runstate="Runnable" seed="1411778610" result="Passed" start-time="2026-09-08 06:42:16Z" end-time="2026-09-08 06:42:16Z" duration="0.000202" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                    <output><![CDATA[Saving results to: C:/Users/david_3oqzree/Documents/GitHub/DocumentationDependencyCards/work~/UnityValidation/FinalResults.xml
+]]></output>
+                  </test-case>
+                </test-suite>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -278,7 +280,7 @@ namespace Geurts.GameForge.Documentation
             private void Fail(string message)
             {
                 throw new InvalidDataException(
-                    "The documentation companion contract is not valid schema 1.0.0 JSON at character " +
+                    "The documentation companion contract is not valid schema 2.0.0 JSON at character " +
                     position + ": " + message);
             }
         }

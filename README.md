@@ -2,7 +2,7 @@
 
 An independent Windows Unity Editor package that installs and updates the project-local copy of the authoritative [Geurts Game Forge documentation](https://github.com/Geurtsy/GeurtsGameForge_Documentation).
 
-The package contains no generic Geurts documentation. It checks package and documentation Git versions when Unity opens and shows an available update in **Tools > Geurts Game Forge > Documentation**. Nothing is replaced until the user chooses **Update Geurts Game Forge Documentation** and confirms the five listed managed targets.
+The package contains no generic Geurts documentation. It checks package and documentation Git versions when Unity opens and shows an available update in **Tools > Geurts Game Forge > Documentation**. Nothing is replaced until the user chooses **Update Geurts Game Forge Documentation** and confirms the four listed managed targets.
 
 ## Install through Unity Package Manager
 
@@ -12,7 +12,7 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Package version 0.6.1 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
+Package version 0.7.0 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
 
 Select **Geurts Game Forge Documentation** in Unity Package Manager to see **Required external dependencies**, with separate **Required** labels for Odin Inspector and Quantum Console. The package description also includes these labels before the scripts compile. These are separately imported assets, so the native resolver's Dependencies list remains reserved for Unity package dependencies.
 
@@ -22,7 +22,7 @@ Each dependency box turns green and shows **Installed and ready** when its requi
 
 The `OdinEditorWindow` dashboard automatically checks **both the editor package and documentation whenever it opens**. The boxed **Check for updates** section has a larger full-width button to refresh both sources manually. Each update card shows **Installed** and **Available on Git** version numbers, a last-check time, and a plain-language result. Orange means the installed Git commit differs from the available revision (or no successful documentation install is recorded). This also detects changes published without a version bump. Each version now includes its short Git revision; when both version numbers match but revisions differ, the card explains that Git changed without a version bump. A missing installed revision is described as unverified rather than claiming a newer version exists. Matching commits are green; unknown and failed checks are clearly labelled, with unavailable remote versions shown as **Unavailable** rather than stale numbers.
 
-Checking and installation each show an animated activity bar and detailed status. Documentation downloads show bytes received and a percentage when the server supplies a total size; unknown-duration steps use activity animation without inventing a percentage. The package bar stays active while Unity resolves, installs, and recompiles. **Source and managed files** contains copyable source URLs, both package/documentation commit identifiers, and the five documentation-update targets. Content scrolls in small or docked windows.
+Checking and installation each show an animated activity bar and detailed status. Documentation downloads show bytes received and a percentage when the server supplies a total size; unknown-duration steps use activity animation without inventing a percentage. The package bar stays active while Unity resolves, installs, and recompiles. **Source and managed files** contains copyable source URLs, both package/documentation commit identifiers, and the four documentation-update targets. Content scrolls in small or docked windows.
 
 **Dependencies** shows both required tools using the update-card palette: green for installed and ready, orange for missing, blue while Unity compiles/imports, red for script or installation-action errors, and grey for unverified tools. The dashboard animates an activity bar during compilation/import; Unity owns download/import progress in its native windows. Green verifies loaded tool assemblies, not ownership or the latest vendor version. The assembly references require both Odin Inspector and Quantum Console; missing commercial assemblies must be installed before this package compiles. Keep Odin's standard `ODIN_INSPECTOR` define enabled. `GeurtsGameForge.Documentation.Status` exposes the existing dashboard status through Quantum Console as a read-only Editor command. This tool requirement supersedes older optional or no-tool compilation guidance; Documentation remains independent of God.
 
@@ -61,12 +61,11 @@ This separately confirmed tool is an explicitly requested extension to the origi
 A confirmed update replaces only:
 
 - `GeurtsGameForgeDocumentation/`
-- `AGENTS.md`
 - `.github/copilot-instructions.md`
 - `.github/instructions/geurts-unity.instructions.md`
 - `.github/instructions/geurts-game-design.instructions.md`
 
-The destination and four-route list are pinned by schema 1.0.0 of `GeurtsTechniques/GeurtsDocumentationCompanionContract.json` and are verified against the downloaded archive before any replacement begins. Documentation release versions and validation entries may advance without changing that closed update boundary. The separate .gitignore installer writes only the project-root `.gitignore`. In particular, `Docs/GameDesign/` is never inspected or changed by either action.
+The destination and three-route list are pinned by schema 2.0.0 of `GeurtsTechniques/GeurtsDocumentationCompanionContract.json` and are verified against the downloaded archive before any replacement begins. Documentation release versions and validation entries may advance without changing that closed update boundary. The separate .gitignore installer writes only the project-root `.gitignore`. In particular, `Docs/GameDesign/` is never inspected or changed by either action.
 
 ## Scope
 
@@ -85,3 +84,11 @@ Each dependency card in the Documentation dashboard and Unity Package Manager in
 Alternatively choose **Import licensed .unitypackage…**, select the file from your licensed source, and review Unity''s asset selection before importing. Reimporting can replace existing vendor files. Cancelling the file picker imports nothing. Both actions are disabled while Unity or a documentation/package operation is busy, and launch failures are shown on the affected card. Readiness refreshes after scripts compile.
 
 For a first installation where required assemblies are missing and this package cannot compile, use Unity''s built-in **Window > Package Management > My Assets** to import Odin Inspector and Quantum Console first; the custom cards become available after compilation succeeds.
+
+## Install Codex guide
+
+In **Tools > Geurts Game Forge > Documentation**, choose **Install Codex guide**, select a folder and confirm the displayed destination and documentation entry point. The action writes **AGENTS.md** from the sole template in the installed `GeurtsTechniques/GeurtsAgentTechnique.md`. Existing contents are overwritten only after confirmation. Start a new Codex task in that folder or a descendant within the same project to load it.
+
+The guide points to the exact absolute path of this Unity project's `GeurtsGameForgeDocumentation/AI_READ_FIRST.md`, even when installed elsewhere. Reinstall the guide if the Unity project moves. Normal documentation Update no longer creates or changes root Codex guides, and the documentation contains no standalone AGENTS.md. To replace an old project-root guide, select the project root with this button.
+
+Update this companion package to **0.7.0** before updating documentation to **0.12.0**, which introduces contract schema **2.0.0**. Then install the guide; older documentation has no guide technique and will show an instruction to update it first.

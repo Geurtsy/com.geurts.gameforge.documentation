@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.IO;
 
@@ -76,7 +78,7 @@ namespace Geurts.GameForge.Documentation
             {
                 return new DocumentationApplyResult(
                     false,
-                    "The five managed targets updated successfully, but the per-project commit signal could not be saved: " +
+                    "The four managed targets updated successfully, but the per-project commit signal could not be saved: " +
                     exception.Message + " A later Unity open may offer the same update again.");
             }
         }

@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +16,7 @@ namespace Geurts.GameForge.Documentation
         internal const string ArchiveUrlFormat = "https://codeload.github.com/Geurtsy/GeurtsGameForge_Documentation/zip/{0}";
         internal const string ContractRelativePath = "GeurtsTechniques/GeurtsDocumentationCompanionContract.json";
         internal const string ManagedDocumentationDirectory = "GeurtsGameForgeDocumentation";
-        internal const string ExpectedSchemaVersion = "1.0.0";
+        internal const string ExpectedSchemaVersion = "2.0.0";
         internal const string UpdateActionLabel = "Update Geurts Game Forge Documentation";
         internal const int MetadataLimitBytes = 128 * 1024;
         internal const long ArchiveLimitBytes = 64L * 1024L * 1024L;
@@ -23,9 +25,6 @@ namespace Geurts.GameForge.Documentation
         internal static readonly IReadOnlyList<ManagedAiRoute> ExpectedManagedAiRoutes =
             Array.AsReadOnly(new[]
             {
-                new ManagedAiRoute(
-                    "Tools/AIAgentInstructionTemplates/AGENTS.md",
-                    "AGENTS.md"),
                 new ManagedAiRoute(
                     "Tools/AIAgentInstructionTemplates/copilot-instructions.md",
                     ".github/copilot-instructions.md"),
@@ -40,8 +39,8 @@ namespace Geurts.GameForge.Documentation
         internal static readonly IReadOnlyList<string> RequiredRoutingEntries =
             Array.AsReadOnly(new[]
             {
-                "AGENTS.md",
                 "AI_READ_FIRST.md",
+                CodexGuideInstaller.TechniquePath,
                 "GeurtsTechniqueManifest.md"
             });
 
@@ -66,7 +65,6 @@ namespace Geurts.GameForge.Documentation
             return
                 "This update will directly replace the managed documentation folder and these system-managed project AI instruction files:\n\n" +
                 "- GeurtsGameForgeDocumentation/\n" +
-                "- AGENTS.md\n" +
                 "- .github/copilot-instructions.md\n" +
                 "- .github/instructions/geurts-unity.instructions.md\n" +
                 "- .github/instructions/geurts-game-design.instructions.md\n\n" +

@@ -40,7 +40,6 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(managedBullets, Is.EqualTo(new[]
             {
                 "- GeurtsGameForgeDocumentation/",
-                "- AGENTS.md",
                 "- .github/copilot-instructions.md",
                 "- .github/instructions/geurts-unity.instructions.md",
                 "- .github/instructions/geurts-game-design.instructions.md"

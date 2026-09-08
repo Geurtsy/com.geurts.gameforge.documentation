@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -125,7 +127,7 @@ namespace Geurts.GameForge.Documentation
         {
             if (actual == null || actual.Length != DocumentationPackageConstants.ExpectedManagedAiRoutes.Count)
             {
-                throw new InvalidDataException("The documentation contract must declare exactly four managed AI routes.");
+                throw new InvalidDataException("The documentation contract must declare exactly three managed AI routes.");
             }
 
             for (int index = 0; index < actual.Length; index++)
@@ -146,9 +148,9 @@ namespace Geurts.GameForge.Documentation
 
         private static void ValidateConfirmationTargets(ConfirmationTargetDto[] actual)
         {
-            if (actual == null || actual.Length != 5)
+            if (actual == null || actual.Length != 4)
             {
-                throw new InvalidDataException("The documentation contract must display exactly five confirmation targets.");
+                throw new InvalidDataException("The documentation contract must display exactly four confirmation targets.");
             }
 
             RequireEqual(actual[0]?.path, DocumentationPackageConstants.ManagedDocumentationDirectory, "updateUi.confirmationTargets.path");
@@ -281,7 +283,9 @@ namespace Geurts.GameForge.Documentation
             {
                 throw new InvalidDataException(
                     "Unsupported documentation contract value for " + field + ". Expected '" +
-                    expected + "'.");
+                    expected + "'." + (field == "schemaVersion"
+                        ? " Update the documentation companion package first, then retry the documentation update."
+                        : string.Empty));
             }
         }
 

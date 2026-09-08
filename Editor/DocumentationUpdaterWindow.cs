@@ -19,6 +19,33 @@ namespace Geurts.GameForge.Documentation
         EditorWindow
 #endif
     {
+        private static bool _openingAfterCheck;
+        internal static System.Func<System.Threading.Tasks.Task> OpenCheckForTests;
+
+        internal static void ShowAfterCheck()
+        {
+            _openingAfterCheck = true;
+            try { ShowWindow(); }
+            finally { _openingAfterCheck = false; }
+        }
+
+        private async void CheckOnOpen()
+        {
+            if (this == null) return;
+            if (PackageSelfUpdater.instance.IsInstalling || DocumentationUpdaterController.IsInstalling)
+            {
+                EditorApplication.delayCall += CheckOnOpen;
+                return;
+            }
+            await (OpenCheckForTests != null ? OpenCheckForTests() : DocumentationUpdateChecks.CheckAllAsync());
+        }
+
+        private void ScheduleOpenCheck()
+        {
+            if (!_openingAfterCheck && (!Application.isBatchMode || OpenCheckForTests != null))
+                EditorApplication.delayCall += CheckOnOpen;
+        }
+
         private const string MenuPath = "Tools/Geurts Game Forge/Documentation";
 
         [MenuItem(MenuPath)]
@@ -48,110 +75,149 @@ namespace Geurts.GameForge.Documentation
             DocumentationUpdaterController.Changed += Repaint;
             PackageSelfUpdater.Changed -= Repaint;
             PackageSelfUpdater.Changed += Repaint;
+            EditorApplication.update -= RepaintWhileBusy;
+            EditorApplication.update += RepaintWhileBusy;
+            ScheduleOpenCheck();
         }
 
         protected override void OnDisable()
         {
             DocumentationUpdaterController.Changed -= Repaint;
             PackageSelfUpdater.Changed -= Repaint;
+            EditorApplication.update -= RepaintWhileBusy;
+            EditorApplication.delayCall -= CheckOnOpen;
             base.OnDisable();
         }
 
-        // Keep status above the action groups; drawing reads only the controller's cached state.
+        private void RepaintWhileBusy()
+        {
+            if (DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy) Repaint();
+        }
+
         [OnInspectorGUI, PropertyOrder(-20)]
         private void DrawOverview()
         {
             EnsureStyles();
             GUILayout.Label("GEURTS GAME FORGE", _eyebrowStyle);
             GUILayout.Label("Documentation", _titleStyle);
-            GUILayout.Label("Shared guidance for your project and AI tools.", _bodyStyle);
-            GUILayout.Space(18f);
+            GUILayout.Label("Installed versions and the latest from Git, in one place.", _bodyStyle);
+            GUILayout.Space(8f);
+            GUILayout.Label("Both sources are checked automatically whenever this window opens.", _bodyStyle);
+        }
 
-            Color accent = DocumentationUpdaterController.IsBusy
-                ? new Color(0.35f, 0.68f, 1f)
-                : DocumentationUpdaterController.Availability == DocumentationAvailability.Current
-                    ? new Color(0.35f, 0.76f, 0.57f)
-                    : DocumentationUpdaterController.Availability == DocumentationAvailability.Unknown
-                        ? new Color(0.9f, 0.66f, 0.28f)
-                        : new Color(0.35f, 0.68f, 1f);
+        [Button("Check for updates", ButtonSizes.Medium), PropertyOrder(-10), DisableIf(nameof(IsBusy))]
+        private async void CheckForUpdates()
+        {
+            await DocumentationUpdateChecks.CheckAllAsync();
+        }
 
+        [OnInspectorGUI, PropertyOrder(0)]
+        private void DrawDocumentationCard()
+        {
+            DrawUpdateCard("Documentation update", DocumentationUpdaterController.Status,
+                DocumentationUpdaterController.IsInstalling,
+                "Checks the official documentation repository on main.",
+                "Replaces the shared documentation and four AI instruction files after confirmation.",
+                DocumentationPackageConstants.UpdateActionLabel, !IsBusy,
+                DocumentationUpdaterController.ConfirmAndUpdate);
+        }
+
+        [OnInspectorGUI, PropertyOrder(10)]
+        private void DrawPackageCard()
+        {
+            PackageSelfUpdater updater = PackageSelfUpdater.instance;
+            DrawUpdateCard("Package update", updater.Status, updater.IsInstalling,
+                updater.Installed?.source == UnityEditor.PackageManager.PackageSource.Git
+                    ? "Checks your configured Git source. Branches, tags and pinned commits are preserved."
+                    : "Available version: official Git repository. Local installations have no Git commit to compare.",
+                updater.GitReference == null ? updater.SourceDescription
+                    : "Updates this editor package through Unity. Scripts may recompile.",
+                PackageSelfUpdater.ActionLabel, CanUpdatePackage, updater.BeginUpdate);
+            if (updater.HasUpdateResult && !updater.IsBusy)
+                EditorGUILayout.HelpBox(updater.StatusMessage, updater.Failed ? MessageType.Error : MessageType.Info);
+        }
+
+        private void DrawUpdateCard(string title, UpdateStatus status, bool installing,
+            string source, string explanation, string actionLabel, bool enabled, System.Action action)
+        {
+            EnsureStyles();
+            GUILayout.Space(12f);
+            bool busy = installing || status.IsChecking;
+            Color accent = status.Availability == DocumentationAvailability.UpdateAvailable
+                ? new Color(1f, 0.57f, 0.18f)
+                : busy ? new Color(0.35f, 0.68f, 1f)
+                : status.Failed ? new Color(1f, 0.4f, 0.36f)
+                : status.Availability == DocumentationAvailability.Current
+                    ? new Color(0.35f, 0.76f, 0.57f) : new Color(0.6f, 0.65f, 0.7f);
             Rect card = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             if (Event.current.type == EventType.Repaint)
             {
-                EditorGUI.DrawRect(new Rect(card.x, card.y, 3f, card.height), accent);
+                EditorGUI.DrawRect(card, new Color(accent.r, accent.g, accent.b, 0.09f));
+                EditorGUI.DrawRect(new Rect(card.x, card.y, 4f, card.height), accent);
             }
-            GUILayout.Space(9f);
+            GUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Space(12f);
+            GUILayout.Space(14f);
             EditorGUILayout.BeginVertical();
-            GUILayout.Label(StatusTitle, _statusTitleStyle);
-            GUILayout.Space(4f);
-            GUILayout.Label(DocumentationUpdaterController.StatusMessage, _bodyStyle);
-            EditorGUILayout.EndVertical();
+            GUILayout.Label(title, _statusTitleStyle);
+            string badge = installing ? "INSTALLING" : status.IsChecking ? "CHECKING GIT"
+                : status.Failed ? "NEEDS ATTENTION"
+                : status.Availability == DocumentationAvailability.UpdateAvailable ? "UPDATE AVAILABLE"
+                : status.Availability == DocumentationAvailability.Current ? "UP TO DATE" : "STATUS UNKNOWN";
+            Color previous = GUI.contentColor;
+            GUI.contentColor = accent;
+            GUILayout.Label(badge, _eyebrowStyle);
+            GUI.contentColor = previous;
+            GUILayout.Space(8f);
+            EditorGUILayout.BeginHorizontal();
+            DrawVersion("INSTALLED", status.InstalledVersion);
             GUILayout.Space(12f);
+            DrawVersion("AVAILABLE ON GIT", status.AvailableVersion);
             EditorGUILayout.EndHorizontal();
-            GUILayout.Space(9f);
-            EditorGUILayout.EndVertical();
-            GUILayout.Space(16f);
-        }
-
-        private string StatusTitle => DocumentationUpdaterController.IsBusy
-            ? "Working on documentation..."
-            : DocumentationUpdaterController.Availability == DocumentationAvailability.Current
-                ? "Source unchanged since your last update"
-                : DocumentationUpdaterController.Availability == DocumentationAvailability.UpdateAvailable
-                    ? "Documentation update available"
-                    : DocumentationUpdaterController.Availability == DocumentationAvailability.NotInstalled
-                        ? "Ready for your first update"
-                        : "Update status unavailable";
-
-        // Primary action card: the existing confirmation remains the only route to replacement.
-        [BoxGroup("Documentation update", order: 0), OnInspectorGUI, PropertyOrder(0)]
-        private void DrawUpdateDescription()
-        {
-            EnsureStyles();
-            GUILayout.Label("Get the latest shared documentation and the four AI instruction files.", _bodyStyle);
-            GUILayout.Space(4f);
-            GUILayout.Label("Local changes in those five targets will be replaced after confirmation.", _bodyStyle);
-            GUILayout.Space(6f);
-        }
-
-        [BoxGroup("Documentation update"), PropertyOrder(1)]
-        [Button(DocumentationPackageConstants.UpdateActionLabel, ButtonSizes.Large)]
-        [GUIColor(0.8f, 0.92f, 1f), DisableIf(nameof(IsBusy))]
-        private void UpdateDocumentation()
-        {
-            DocumentationUpdaterController.ConfirmAndUpdate();
-        }
-
-        [OnInspectorGUI, PropertyOrder(5)]
-        private void DrawActionSpacing()
-        {
-            GUILayout.Space(12f);
-        }
-
-        // Package maintenance is separate from the documentation-content replacement action above.
-        [BoxGroup("Package update", order: 10), OnInspectorGUI, PropertyOrder(0)]
-        private void DrawPackageDescription()
-        {
-            EnsureStyles();
-            GUILayout.Label("Installed package: " + PackageSelfUpdater.instance.InstalledVersion, EditorStyles.boldLabel);
-            GUILayout.Label("Update this editor package from Git without opening Package Manager. Unity may recompile scripts.", _bodyStyle);
-            GUILayout.Space(4f);
-            GUILayout.Label(PackageSelfUpdater.instance.SourceDescription, _bodyStyle);
-            if (PackageSelfUpdater.instance.GitReference != null)
+            GUILayout.Space(7f);
+            GUILayout.Label(source, _bodyStyle);
+            GUILayout.Space(7f);
+            if (busy) DrawProgress(status.Progress, accent);
+            GUILayout.Label(busy ? status.Progress?.Message ?? status.Message : status.Message, _bodyStyle);
+            if (!busy) GUILayout.Label("Last check: " + status.LastChecked, EditorStyles.miniLabel);
+            GUILayout.Space(8f);
+            GUILayout.Label(explanation, _bodyStyle);
+            GUILayout.Space(8f);
+            using (new EditorGUI.DisabledScope(!enabled))
             {
-                GUILayout.Label("Uses the configured Git reference. A pinned commit stays pinned.", _bodyStyle);
-                EditorGUILayout.HelpBox(PackageSelfUpdater.instance.StatusMessage,
-                    PackageSelfUpdater.instance.Failed ? MessageType.Error : MessageType.Info);
+                if (GUILayout.Button(actionLabel, GUILayout.Height(34f))) action();
             }
+            EditorGUILayout.EndVertical();
+            GUILayout.Space(10f);
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(10f);
+            EditorGUILayout.EndVertical();
         }
 
-        [BoxGroup("Package update"), PropertyOrder(1)]
-        [Button(PackageSelfUpdater.ActionLabel, ButtonSizes.Large), EnableIf(nameof(CanUpdatePackage))]
-        private void UpdatePackage()
+        private void DrawVersion(string label, string value)
         {
-            PackageSelfUpdater.instance.BeginUpdate();
+            EditorGUILayout.BeginVertical(GUILayout.MinWidth(0f));
+            GUILayout.Label(label, _eyebrowStyle);
+            GUILayout.Label(value, _statusTitleStyle);
+            EditorGUILayout.EndVertical();
+        }
+
+        private static void DrawProgress(UpdateProgress progress, Color accent)
+        {
+            Rect bar = GUILayoutUtility.GetRect(0f, 20f, GUILayout.ExpandWidth(true));
+            EditorGUI.DrawRect(bar, EditorGUIUtility.isProSkin ? new Color(0.12f, 0.13f, 0.15f) : new Color(0.8f, 0.82f, 0.84f));
+            float fraction = progress?.Fraction ?? -1f;
+            Rect fill = bar;
+            if (fraction < 0f)
+            {
+                fill.width *= 0.23f;
+                fill.x += (bar.width - fill.width) * (float)(0.5 + 0.5 * System.Math.Sin(EditorApplication.timeSinceStartup * 2.5));
+            }
+            else fill.width *= Mathf.Clamp01(fraction);
+            EditorGUI.DrawRect(fill, new Color(accent.r, accent.g, accent.b, 0.65f));
+            GUI.Label(bar, fraction < 0f ? "Working..." : Mathf.RoundToInt(Mathf.Clamp01(fraction) * 100f) + "% downloaded",
+                EditorStyles.centeredGreyMiniLabel);
+            GUILayout.Space(6f);
         }
 
         [OnInspectorGUI, PropertyOrder(15)]
@@ -214,6 +280,11 @@ namespace Geurts.GameForge.Documentation
             EnsureStyles();
             GUILayout.Label("Authoritative source", EditorStyles.boldLabel);
             DrawSelectable(DocumentationPackageConstants.RepositoryUrl);
+            GUILayout.Label("Package source", EditorStyles.boldLabel);
+            DrawSelectable(PackageSelfUpdater.instance.SourceDescription);
+            DrawCommit("Installed package commit", PackageSelfUpdater.instance.Status.InstalledCommit);
+            DrawCommit("Available package commit", PackageSelfUpdater.instance.Status.RemoteCommit);
+            GUILayout.Space(8f);
             GUILayout.Label("Branch: " + DocumentationPackageConstants.RepositoryBranch, _bodyStyle);
             GUILayout.Space(8f);
             DrawCommit("Latest source commit", DocumentationUpdaterController.RemoteCommit);
@@ -236,7 +307,7 @@ namespace Geurts.GameForge.Documentation
         {
             EnsureStyles();
             GUILayout.Space(12f);
-            GUILayout.Label("Startup checks the source only. You choose when to replace files.", _bodyStyle);
+            GUILayout.Label("Checks read version metadata only. You choose when to install updates.", _bodyStyle);
         }
 
         private void EnsureStyles()
@@ -262,6 +333,9 @@ namespace Geurts.GameForge.Documentation
             DrawSelectable(string.IsNullOrWhiteSpace(commit) ? "Not recorded" : commit);
         }
 #else
+        private void OnEnable() => ScheduleOpenCheck();
+        private void OnDisable() => EditorApplication.delayCall -= CheckOnOpen;
+
         // Odin is distributed separately; missing it must not create compilation errors or hide the menu.
         private void CreateGUI()
         {

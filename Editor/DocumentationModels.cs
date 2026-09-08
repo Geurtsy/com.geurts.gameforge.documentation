@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.Collections.Generic;
 
@@ -132,16 +134,20 @@ namespace Geurts.GameForge.Documentation
         internal DocumentationCheckResult(
             DocumentationAvailability availability,
             string remoteCommit,
-            string installedCommit)
+            string installedCommit, string installedVersion, string availableVersion)
         {
             Availability = availability;
             RemoteCommit = remoteCommit;
             InstalledCommit = installedCommit;
+            InstalledVersion = installedVersion;
+            AvailableVersion = availableVersion;
         }
 
         internal DocumentationAvailability Availability { get; }
         internal string RemoteCommit { get; }
         internal string InstalledCommit { get; }
+        internal string InstalledVersion { get; }
+        internal string AvailableVersion { get; }
     }
 
 }

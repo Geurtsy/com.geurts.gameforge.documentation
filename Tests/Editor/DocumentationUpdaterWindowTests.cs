@@ -17,6 +17,15 @@ namespace Geurts.GameForge.Documentation.Tests
         [UnityTest]
         public IEnumerator DashboardOpensAndReopensWithTheInstalledInspector()
         {
+            int checks = 0;
+            System.Type dashboardType = typeof(DocumentationUpdateService).Assembly.GetType(
+                "Geurts.GameForge.Documentation.DocumentationUpdaterWindow", true);
+            var openCheck = dashboardType.GetField("OpenCheckForTests",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            System.Func<System.Threading.Tasks.Task> check = () => { checks++; return System.Threading.Tasks.Task.CompletedTask; };
+            openCheck.SetValue(null, check);
+            try
+            {
             for (int attempt = 0; attempt < 2; attempt++)
             {
                 // Resolve through the core assembly so the test assembly needs no optional DLL reference.
@@ -29,6 +38,9 @@ namespace Geurts.GameForge.Documentation.Tests
                     window.Repaint();
                     yield return null;
                     yield return null;
+                    double deadline = EditorApplication.timeSinceStartup + 3;
+                    while (checks < attempt + 1 && EditorApplication.timeSinceStartup < deadline) yield return null;
+                    Assert.That(checks, Is.EqualTo(attempt + 1), "Each opening should automatically request both update checks once.");
 #if ODIN_INSPECTOR
                     Assert.That(windowType.BaseType.FullName,
                         Is.EqualTo("Sirenix.OdinInspector.Editor.OdinEditorWindow"));
@@ -47,6 +59,8 @@ namespace Geurts.GameForge.Documentation.Tests
                     window.Close();
                 }
             }
+            }
+            finally { openCheck.SetValue(null, null); }
         }
     }
 }

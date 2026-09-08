@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.IO;
 using System.Threading;
@@ -27,21 +29,30 @@ namespace Geurts.GameForge.Documentation
         }
 
         internal async Task<DocumentationCheckResult> CheckForUpdateAsync(
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, Action<UpdateProgress> progress = null)
         {
+            string installedVersion = ReadInstalledVersion();
+            progress?.Invoke(new UpdateProgress("Resolving the latest documentation commit on main..."));
             string remoteCommit = await transport.ResolveHeadCommitAsync(cancellationToken);
+            progress?.Invoke(new UpdateProgress("Reading the documentation version at Git commit " + remoteCommit.Substring(0, 8) + "..."));
+            string remoteVersion = await transport.ReadVersionAsync(remoteCommit, cancellationToken);
             string installedCommit = installer.ReadLastSuccessfulCommit();
             DocumentationAvailability availability =
+                GitVersionMetadata.IsVersion(installedVersion) &&
+                string.Equals(installedVersion, remoteVersion, StringComparison.Ordinal) &&
                 string.Equals(remoteCommit, installedCommit, StringComparison.OrdinalIgnoreCase)
                     ? DocumentationAvailability.Current
                     : DocumentationAvailability.UpdateAvailable;
 
-            return new DocumentationCheckResult(availability, remoteCommit, installedCommit);
+            return new DocumentationCheckResult(availability, remoteCommit, installedCommit, installedVersion, remoteVersion);
         }
 
+        internal string ReadInstalledVersion() => GitVersionMetadata.ReadInstalledDocumentationVersion(projectRoot);
+
         internal async Task<PreparedDocumentationUpdate> PrepareLatestAsync(
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, Action<UpdateProgress> progress = null)
         {
+            progress?.Invoke(new UpdateProgress("Resolving the latest documentation revision for installation..."));
             string commit = await transport.ResolveHeadCommitAsync(cancellationToken);
             string workingDirectory = Path.Combine(
                 Path.GetTempPath(),
@@ -53,7 +64,8 @@ namespace Geurts.GameForge.Documentation
                 download = await transport.DownloadCommitAsync(
                     commit,
                     workingDirectory,
-                    cancellationToken);
+                    cancellationToken, progress);
+                progress?.Invoke(new UpdateProgress("Validating the documentation contract and required files..."));
                 DocumentationCompanionContract contract = DocumentationContractReader.LoadAndValidate(
                     download.CandidateRoot);
                 return new PreparedDocumentationUpdate(commit, download, contract);

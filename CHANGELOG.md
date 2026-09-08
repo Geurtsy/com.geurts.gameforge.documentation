@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 - 2026-09-08
+
+- Automatically check package and documentation Git versions on window open; add a manual Check for updates action for both.
+- Show installed and available versions in separate update cards, with orange highlighting when Git commits differ, even if version numbers match.
+- Read bounded version metadata at the resolved commit; retain configured package repositories, branches, tags, pins, and subfolders.
+- Show download byte progress plus animated activity bars and detailed checking, extraction, validation, installation, and failure status.
+- Keep checks read-only, coalesce overlapping checks, and report unavailable remote versions explicitly.
+
 ## 0.4.0 - 2026-09-08
 
 - Added Update package from Git inside the dashboard, with installed version, configured source, progress, success, and failure feedback.

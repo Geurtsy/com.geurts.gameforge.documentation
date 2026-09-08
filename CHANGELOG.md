@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.1 - Unreleased
+## 0.5.1 - 2026-09-08
 
 - Require the actual Odin Inspector and Quantum Console assemblies under the current Geurts Game Forge package contract. Both commercial tools remain separately installed and are never bundled.
 - Add the read-only `GeurtsGameForge.Documentation.Status` Quantum Console command in the Editor assembly.

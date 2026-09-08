@@ -61,6 +61,8 @@ namespace Geurts.GameForge.Documentation.Tests
             }
 
             Assert.That(ReadInstalledCommit(), Is.EqualTo(Commit('a')));
+            Assert.That(File.Exists(Path.Combine(projectRoot, "AGENTS.md")), Is.False,
+                "Documentation Update must not create a root Codex guide.");
         }
 
         [Test]

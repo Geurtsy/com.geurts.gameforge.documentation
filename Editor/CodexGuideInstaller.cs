@@ -57,11 +57,11 @@ namespace Geurts.GameForge.Documentation
             if (name != "AGENTS.md")
                 throw new InvalidDataException("The Codex guide must be named AGENTS.md.");
             string folder = Path.GetDirectoryName(target);
-            if (!Directory.Exists(folder)) throw new DirectoryNotFoundException("Choose an existing destination folder.");
             string fullRoot = Path.GetFullPath(projectRoot);
             string documentation = Path.Combine(fullRoot, DocumentationPackageConstants.ManagedDocumentationDirectory);
             if (IsWithin(target, documentation) || IsWithin(target, Path.Combine(fullRoot, "Docs", "GameDesign")))
                 throw new InvalidDataException("Choose a location outside the managed documentation and Docs/GameDesign folders.");
+            if (!Directory.Exists(folder)) throw new DirectoryNotFoundException("Choose an existing destination folder.");
             ValidateTarget(target);
             // Prepare from the installed, manifest-selected technique before asking to overwrite anything.
             byte[] payload = Load(fullRoot);

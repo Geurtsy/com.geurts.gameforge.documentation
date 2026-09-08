@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.0] - 2026-09-08
+
+- Add Install Codex guide with a user-selected destination, direct documentation entry point, and cancel-default overwrite confirmation.
+- Read the sole guide template from the installed documentation technique.
+- Adopt documentation contract schema 2.0.0: updates replace documentation and three Copilot routes; Codex guides are installed separately. Update this package before installing documentation 0.12.0.
+
 ## 0.6.1 - 2026-09-08
 
 - Give Check for updates its own labelled Odin box above the update cards, with a larger full-width button and the automatic-check explanation inside the section.

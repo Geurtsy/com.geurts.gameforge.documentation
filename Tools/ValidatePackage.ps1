@@ -161,7 +161,7 @@ if (-not [string]::IsNullOrWhiteSpace($OdinPath)) {
 # Use real documentation as an external integration fixture, never as a bundled template.
 if (-not [string]::IsNullOrWhiteSpace($DocumentationPath)) {
     $fixtureRoot = Join-Path $ProjectPath "GeurtsGameForgeDocumentation"
-    foreach ($relativePath in @("GeurtsTechniqueManifest.md", "GeurtsTechniques/GeurtsGitIgnoreTechnique.md")) {
+    foreach ($relativePath in @("GeurtsTechniqueManifest.md", "AI_READ_FIRST.md", "GeurtsTechniques/GeurtsGitIgnoreTechnique.md", "GeurtsTechniques/GeurtsAgentTechnique.md")) {
         $sourcePath = Join-Path $DocumentationPath $relativePath
         $fixturePath = Join-Path $fixtureRoot $relativePath
         New-Item -ItemType Directory -Path (Split-Path -Parent $fixturePath) -Force | Out-Null

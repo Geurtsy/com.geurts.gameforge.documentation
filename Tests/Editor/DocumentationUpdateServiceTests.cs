@@ -30,6 +30,7 @@ namespace Geurts.GameForge.Documentation.Tests
             candidateTemplate = Path.Combine(temporaryRoot, "CandidateTemplate");
             Directory.CreateDirectory(Path.Combine(projectRoot, "Assets"));
             Directory.CreateDirectory(candidateTemplate);
+            Directory.CreateDirectory(Path.Combine(projectRoot, ".github"));
             CandidateFixture.Write(candidateTemplate, "new documentation", "new route");
 
             transport = new FixtureTransport(candidateTemplate, Commit('a'));
@@ -60,6 +61,8 @@ namespace Geurts.GameForge.Documentation.Tests
             }
 
             Assert.That(ReadInstalledCommit(), Is.EqualTo(Commit('a')));
+            Assert.That(File.Exists(Path.Combine(projectRoot, "AGENTS.md")), Is.False,
+                "Documentation Update must not create a root Codex guide.");
         }
 
         [Test]
@@ -100,25 +103,14 @@ namespace Geurts.GameForge.Documentation.Tests
         }
 
         [Test]
-        public async Task ExistingRootAgentsIsReplacedAndMissingRootAgentsIsCreated()
+        public async Task DocumentationUpdatePreservesRootGuidesAndDoesNotCreateThem()
         {
-            string agents = Path.Combine(projectRoot, "AGENTS.md");
-            File.WriteAllText(agents, "existing user content");
-
+            string guide = Path.Combine(projectRoot, "AGENTS.md");
+            File.WriteAllText(guide, "user guide");
             await InstallAsync(service);
-
-            Assert.That(File.ReadAllText(agents), Is.EqualTo("new route: AGENTS.md"));
-
-            string secondProject = Path.Combine(temporaryRoot, "SecondBareUnityProject");
-            Directory.CreateDirectory(Path.Combine(secondProject, "Assets"));
-            FixtureTransport secondTransport = new FixtureTransport(candidateTemplate, Commit('b'));
-            DocumentationUpdateService secondService = new DocumentationUpdateService(secondProject, secondTransport);
-            await InstallAsync(secondService);
-
-            Assert.That(
-                File.ReadAllText(Path.Combine(secondProject, "AGENTS.md")),
-                Is.EqualTo("new route: AGENTS.md"));
-            new ProjectInstallCommitStore(secondProject).ClearForTests();
+            Assert.That(File.ReadAllText(guide), Is.EqualTo("user guide"));
+            Assert.That(File.Exists(Path.Combine(projectRoot, "AGENT.md")), Is.False);
+            Assert.That(File.Exists(Path.Combine(projectRoot, "GeurtsGameForgeDocumentation", "AGENTS.md")), Is.False);
         }
 
         [Test]
@@ -156,7 +148,7 @@ namespace Geurts.GameForge.Documentation.Tests
                 projectRoot,
                 "GeurtsGameForgeDocumentation",
                 "Guide.md");
-            string installedAgents = Path.Combine(projectRoot, "AGENTS.md");
+            string installedAgents = Path.Combine(projectRoot, ".github/copilot-instructions.md");
             File.WriteAllText(installedGuide, "local drift remains uninspected");
             File.Delete(installedAgents);
             transport.ResetCounts();
@@ -246,10 +238,10 @@ namespace Geurts.GameForge.Documentation.Tests
                 "GeurtsTechniques",
                 "GeurtsDocumentationCompanionContract.json");
             File.WriteAllText(contract, File.ReadAllText(contract).Replace(
-                "\"schemaVersion\": \"1.0.0\"",
+                "\"schemaVersion\": \"2.0.0\"",
                 "\"schemaVersion\": \"9.0.0\""));
 
-            string existingAgents = Path.Combine(projectRoot, "AGENTS.md");
+            string existingAgents = Path.Combine(projectRoot, ".github/copilot-instructions.md");
             File.WriteAllText(existingAgents, "untouched");
 
             InvalidDataException exception = Assert.ThrowsAsync<InvalidDataException>(async () =>
@@ -272,7 +264,7 @@ namespace Geurts.GameForge.Documentation.Tests
                 "\"target\": \".github/copilot-instructions.md\"",
                 "\"target\": \".github/unlisted.md\""));
 
-            string existingAgents = Path.Combine(projectRoot, "AGENTS.md");
+            string existingAgents = Path.Combine(projectRoot, ".github/copilot-instructions.md");
             File.WriteAllText(existingAgents, "still untouched");
 
             Assert.ThrowsAsync<InvalidDataException>(async () =>
@@ -337,19 +329,19 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(
                 File.ReadAllText(Path.Combine(projectRoot, "GeurtsGameForgeDocumentation", "Guide.md")),
                 Is.EqualTo("new documentation"));
-            Assert.That(File.ReadAllText(Path.Combine(projectRoot, "AGENTS.md")), Is.EqualTo("new route: AGENTS.md"));
+            Assert.That(File.ReadAllText(Path.Combine(projectRoot, ".github/copilot-instructions.md")), Is.EqualTo("new route: copilot-instructions.md"));
         }
 
         [Test]
         public async Task ReadOnlyManagedAiFileIsDirectlyReplacedAfterConfirmation()
         {
-            string agentsPath = Path.Combine(projectRoot, "AGENTS.md");
+            string agentsPath = Path.Combine(projectRoot, ".github/copilot-instructions.md");
             File.WriteAllText(agentsPath, "old route");
             File.SetAttributes(agentsPath, File.GetAttributes(agentsPath) | FileAttributes.ReadOnly);
 
             await InstallAsync(service);
 
-            Assert.That(File.ReadAllText(agentsPath), Is.EqualTo("new route: AGENTS.md"));
+            Assert.That(File.ReadAllText(agentsPath), Is.EqualTo("new route: copilot-instructions.md"));
         }
 
         [Test]
@@ -413,7 +405,7 @@ namespace Geurts.GameForge.Documentation.Tests
                     "{\n  \"schemaVersion\"",
                     "{\n  \"contractVersion\": \"1.0.0\",\n  \"schemaVersion\""));
 
-            string existingAgents = Path.Combine(projectRoot, "AGENTS.md");
+            string existingAgents = Path.Combine(projectRoot, ".github/copilot-instructions.md");
             File.WriteAllText(existingAgents, "untouched");
 
             InvalidDataException exception = Assert.ThrowsAsync<InvalidDataException>(async () =>
@@ -457,7 +449,7 @@ namespace Geurts.GameForge.Documentation.Tests
         [Test]
         public async Task ManagedHardLinkCannotRedirectAWriteOutsideTheProject()
         {
-            string agentsPath = Path.Combine(projectRoot, "AGENTS.md");
+            string agentsPath = Path.Combine(projectRoot, ".github/copilot-instructions.md");
             string escapedPath = Path.Combine(temporaryRoot, "escaped-agents.md");
             File.WriteAllText(escapedPath, "outside content");
             bool created = CreateHardLink(agentsPath, escapedPath, IntPtr.Zero);
@@ -473,7 +465,7 @@ namespace Geurts.GameForge.Documentation.Tests
             }
 
             Assert.That(File.ReadAllText(escapedPath), Is.EqualTo("outside content"));
-            Assert.That(File.ReadAllText(agentsPath), Is.EqualTo("new route: AGENTS.md"));
+            Assert.That(File.ReadAllText(agentsPath), Is.EqualTo("new route: copilot-instructions.md"));
         }
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true, EntryPoint = "CreateHardLinkW")]
@@ -629,13 +621,12 @@ namespace Geurts.GameForge.Documentation.Tests
             {
                 Dictionary<string, string> files = new Dictionary<string, string>(StringComparer.Ordinal)
                 {
-                    ["AGENTS.md"] = "# Documentation package entry",
                     ["AI_READ_FIRST.md"] = "Read GeurtsTechniqueManifest.md next.",
+                    [CodexGuideInstaller.TechniquePath] = "# Codex guide technique",
                     ["README.md"] = "**Version:** 0.11.0",
                     ["Guide.md"] = guideText,
                     ["GeurtsTechniques/GeurtsDocumentationCompanionTechnique.md"] = "# Companion technique",
                     ["GeurtsTechniques/GeurtsDocumentationCompanionContract.json"] = ContractJson,
-                    ["Tools/AIAgentInstructionTemplates/AGENTS.md"] = routePrefix + ": AGENTS.md",
                     ["Tools/AIAgentInstructionTemplates/copilot-instructions.md"] = routePrefix + ": copilot-instructions.md",
                     ["Tools/AIAgentInstructionTemplates/instructions/geurts-unity.instructions.md"] = routePrefix + ": geurts-unity.instructions.md",
                     ["Tools/AIAgentInstructionTemplates/instructions/geurts-game-design.instructions.md"] = routePrefix + ": geurts-game-design.instructions.md"
@@ -670,7 +661,7 @@ namespace Geurts.GameForge.Documentation.Tests
             }
 
             private const string ContractJson = @"{
-  ""schemaVersion"": ""1.0.0"",
+  ""schemaVersion"": ""2.0.0"",
   ""packageVersion"": ""0.11.0"",
   ""source"": {
     ""repository"": ""https://github.com/Geurtsy/GeurtsGameForge_Documentation.git"",
@@ -683,12 +674,10 @@ namespace Geurts.GameForge.Documentation.Tests
     ""access"": ""logically-read-only""
   },
   ""validationEntries"": [
-    ""AGENTS.md"",
     ""AI_READ_FIRST.md"",
     ""GeurtsTechniqueManifest.md"",
     ""GeurtsTechniques/GeurtsDocumentationCompanionTechnique.md"",
     ""GeurtsTechniques/GeurtsDocumentationCompanionContract.json"",
-    ""Tools/AIAgentInstructionTemplates/AGENTS.md"",
     ""Tools/AIAgentInstructionTemplates/copilot-instructions.md"",
     ""Tools/AIAgentInstructionTemplates/instructions/geurts-unity.instructions.md"",
     ""Tools/AIAgentInstructionTemplates/instructions/geurts-game-design.instructions.md""
@@ -699,14 +688,12 @@ namespace Geurts.GameForge.Documentation.Tests
     ""cancelResult"": ""no-network-or-filesystem-change"",
     ""confirmationTargets"": [
       { ""path"": ""GeurtsGameForgeDocumentation"", ""effect"": ""replace-complete-directory"" },
-      { ""path"": ""AGENTS.md"", ""effect"": ""replace-complete-file"" },
       { ""path"": "".github/copilot-instructions.md"", ""effect"": ""replace-complete-file"" },
       { ""path"": "".github/instructions/geurts-unity.instructions.md"", ""effect"": ""replace-complete-file"" },
       { ""path"": "".github/instructions/geurts-game-design.instructions.md"", ""effect"": ""replace-complete-file"" }
     ]
   },
   ""routeMappings"": [
-    { ""template"": ""Tools/AIAgentInstructionTemplates/AGENTS.md"", ""target"": ""AGENTS.md"" },
     { ""template"": ""Tools/AIAgentInstructionTemplates/copilot-instructions.md"", ""target"": "".github/copilot-instructions.md"" },
     { ""template"": ""Tools/AIAgentInstructionTemplates/instructions/geurts-unity.instructions.md"", ""target"": "".github/instructions/geurts-unity.instructions.md"" },
     { ""template"": ""Tools/AIAgentInstructionTemplates/instructions/geurts-game-design.instructions.md"", ""target"": "".github/instructions/geurts-game-design.instructions.md"" }

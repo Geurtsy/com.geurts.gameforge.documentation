@@ -140,7 +140,7 @@ namespace Geurts.GameForge.Documentation
             DrawUpdateCard("Documentation update", DocumentationUpdaterController.Status,
                 DocumentationUpdaterController.IsInstalling,
                 "Checks the official documentation repository on main.",
-                "Replaces the shared documentation and four AI instruction files after confirmation.",
+                "Replaces the shared documentation and three Copilot instruction files after confirmation.",
                 DocumentationPackageConstants.UpdateActionLabel, !IsBusy,
                 DocumentationUpdaterController.ConfirmAndUpdate);
         }
@@ -310,6 +310,22 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(12f);
         }
 
+        [BoxGroup("Codex guide", order: 26), OnInspectorGUI, PropertyOrder(0)]
+        private void DrawCodexGuideDescription()
+        {
+            EnsureStyles();
+            GUILayout.Label("Choose where to install a guide that points the AI directly to your installed Geurts documentation.", _bodyStyle);
+            GUILayout.Label("Installs AGENTS.md for automatic Codex discovery. You choose the folder; existing contents are replaced after confirmation.", _bodyStyle);
+            GUILayout.Space(6f);
+        }
+
+        [BoxGroup("Codex guide"), PropertyOrder(1)]
+        [Button(CodexGuideInstaller.ActionLabel, ButtonSizes.Large), DisableIf(nameof(IsBusy))]
+        private void InstallCodexGuide()
+        {
+            DeferAction(CodexGuideInstaller.ChooseAndInstall);
+        }
+
         // Secondary action card: installing ignore rules is independent of documentation Update.
         [BoxGroup("Git ignore rules", order: 30), OnInspectorGUI, PropertyOrder(0)]
         private void DrawGitIgnoreDescription()
@@ -361,7 +377,7 @@ namespace Geurts.GameForge.Documentation
             }
             GUILayout.Space(6f);
             GUILayout.Label("Docs/GameDesign/ and every unlisted path are outside this update.", _bodyStyle);
-            GUILayout.Label("AI tools must support these instruction files or be told to read AGENTS.md.", _bodyStyle);
+            GUILayout.Label("Use Install Codex guide to choose a guide location. AI tools must support their instruction files or read the documentation entry explicitly.", _bodyStyle);
         }
 
         [OnInspectorGUI, PropertyOrder(50)]

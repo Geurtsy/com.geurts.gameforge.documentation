@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1 - Unreleased
+
+- Require the actual Odin Inspector and Quantum Console assemblies under the current Geurts Game Forge package contract. Both commercial tools remain separately installed and are never bundled.
+- Add the read-only `GeurtsGameForge.Documentation.Status` Quantum Console command in the Editor assembly.
+- Declare the Unity 6000.3 baseline. Preserve the existing documentation dashboard and its confirmation/update flows; no God dependency is introduced.
+
 ## 0.5.0 - 2026-09-08
 
 - Automatically check package and documentation Git versions on window open; add a manual Check for updates action for both.

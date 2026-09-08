@@ -105,6 +105,18 @@ namespace Geurts.GameForge.Documentation.Tests
         }
 
         [Test]
+        public void DocumentationExplainsSameVersionRevisionChangesAndMissingRecordsSeparately()
+        {
+            var changed = new DocumentationCheckResult(DocumentationAvailability.UpdateAvailable,
+                new string('b', 40), new string('a', 40), "0.11.0", "0.11.0");
+            Assert.That(DocumentationUpdaterController.BuildCheckMessage(changed), Does.Contain("same version number (0.11.0)"));
+            var unrecorded = new DocumentationCheckResult(DocumentationAvailability.UpdateAvailable,
+                new string('b', 40), null, "0.11.0", "0.11.0");
+            Assert.That(DocumentationUpdaterController.BuildCheckMessage(unrecorded), Does.Contain("cannot be verified"));
+            Assert.That(DocumentationUpdaterController.BuildCheckMessage(unrecorded), Does.Not.Contain("different revision"));
+        }
+
+        [Test]
         public void InstalledDocumentationReadsOnlyItsVersionManifest()
         {
             string root = Path.Combine(Path.GetTempPath(), "GeurtsVersions-" + Guid.NewGuid().ToString("N"));

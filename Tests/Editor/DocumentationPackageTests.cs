@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -18,7 +20,11 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(Directory.Exists(Path.Combine(package.resolvedPath, "GeurtsTechniques")), Is.False);
             Assert.That(Directory.Exists(Path.Combine(package.resolvedPath, "GeurtsGameForgeDocumentation")), Is.False);
             Assert.That(
-                Directory.EnumerateFiles(package.resolvedPath, "*.bat", SearchOption.AllDirectories),
+                Directory.EnumerateFiles(package.resolvedPath, "*.bat", SearchOption.AllDirectories)
+                    // Local file: installs can see ignored test projects, including downloaded documentation fixtures.
+                    // Those directories are not shipped with the Git package, matching ValidatePackage.ps1's boundary.
+                    .Where(file => !new[] { "work~", "old-validation~", "outputs", ".git" }.Contains(
+                        file.Substring(package.resolvedPath.Length).TrimStart('\\', '/').Split('\\', '/')[0])),
                 Is.Empty);
         }
 

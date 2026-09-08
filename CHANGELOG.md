@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.2 - 2026-09-08
+
+- Fix the dashboard confirmation path: defer actions until Odin has finished drawing, collect confirmation in a UI Toolkit dialog, then start the approved documentation update after the modal window closes.
+- Report a blocked update attempt instead of silently discarding it when Unity or another operation is busy.
+- Show installed and available Git revision identifiers alongside versions, and explain same-version revision changes or missing installation records explicitly.
+- Cover real dashboard clicks, confirmation acceptance/cancellation, file replacement, commit persistence, and a fresh up-to-date result with an Editor integration test.
+
 ## 0.5.1 - 2026-09-08
 
 - Require the actual Odin Inspector and Quantum Console assemblies under the current Geurts Game Forge package contract. Both commercial tools remain separately installed and are never bundled.

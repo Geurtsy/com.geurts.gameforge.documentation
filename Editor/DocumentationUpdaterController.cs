@@ -11,7 +11,7 @@ namespace Geurts.GameForge.Documentation
     internal static class DocumentationUpdaterController
     {
         private static readonly GitHubDocumentationTransport Transport = new GitHubDocumentationTransport();
-        private static readonly DocumentationUpdateService Service = new DocumentationUpdateService(
+        internal static DocumentationUpdateService Service { get; set; } = new DocumentationUpdateService(
             DocumentationPackageConstants.GetProjectRootFromAssetsPath(Application.dataPath),
             Transport);
 
@@ -45,9 +45,7 @@ namespace Geurts.GameForge.Documentation
                 Status.InstalledCommit = result.InstalledCommit;
                 Status.CompleteCheck(result.AvailableVersion, result.RemoteCommit, true);
                 Status.Availability = result.Availability;
-                Status.Message = result.Availability == DocumentationAvailability.Current
-                    ? "Up to date with the checked Git revision. Local file contents have not been verified."
-                    : "Documentation update available. Install the latest Git revision using the button below.";
+                Status.Message = BuildCheckMessage(result);
             }
             catch (Exception exception)
             {
@@ -66,20 +64,14 @@ namespace Geurts.GameForge.Documentation
 
         internal static void ConfirmAndUpdate()
         {
-            if (!DocumentationDependencies.OdinInstalled || IsBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy)
-            {
-                return;
-            }
-
-            DocumentationUpdateConfirmation.Open();
+            if (!CanStartUpdate()) return;
+            if (DocumentationUpdateConfirmation.Confirm())
+                EditorApplication.delayCall += BeginConfirmedUpdate;
         }
 
         internal static async void BeginConfirmedUpdate()
         {
-            if (!DocumentationDependencies.OdinInstalled || IsBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy)
-            {
-                return;
-            }
+            if (!CanStartUpdate()) return;
 
             _installing = true;
             Status.Failed = false;
@@ -143,6 +135,39 @@ namespace Geurts.GameForge.Documentation
             Status.Progress = progress;
             Status.Message = progress.Message;
             NotifyChanged();
+        }
+
+        internal static string BuildCheckMessage(DocumentationCheckResult result)
+        {
+            if (result.Availability == DocumentationAvailability.Current)
+                return "Up to date with the checked Git revision. Local file contents have not been verified.";
+            if (result.InstalledVersion == "Not installed")
+                return "Documentation is not installed. Use Update to install the available Git version.";
+            if (string.IsNullOrEmpty(result.InstalledCommit))
+                return "The installed Git revision is not recorded, so its update status cannot be verified. " +
+                       "A confirmed update will install Git's current content and record its revision.";
+            if (result.InstalledVersion == result.AvailableVersion)
+                return "Git has a different revision with the same version number (" + result.AvailableVersion + "). " +
+                       "Update to install those changes; the version number may stay the same.";
+            return "Documentation update available. Install the latest Git revision using the button below.";
+        }
+
+        private static bool CanStartUpdate()
+        {
+            string reason = !DocumentationDependencies.OdinInstalled ? "Odin Inspector is required."
+                : IsBusy || PackageSelfUpdater.instance.IsBusy ? "Another documentation or package operation is still running."
+                : PackageSelfUpdater.EditorBusy ? "Unity is compiling, importing assets, or in Play mode." : null;
+            if (reason == null) return true;
+            // Do not replace progress from an active operation, but never silently discard an accepted action.
+            string message = "Documentation update could not start: " + reason + " Try Update again when Unity is ready.";
+            if (!IsBusy)
+            {
+                Status.Message = message;
+                Status.Failed = true;
+                NotifyChanged();
+            }
+            Debug.LogWarning("[Geurts Documentation] " + message);
+            return false;
         }
 
         private static void NotifyChanged()

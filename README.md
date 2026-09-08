@@ -16,7 +16,7 @@ Version 0.5.1 is available on main and targets **Unity 6000.3 on Windows**. Impo
 
 ## Odin documentation dashboard
 
-The `OdinEditorWindow` dashboard automatically checks **both the editor package and documentation whenever it opens**. **Check for updates** refreshes both sources manually. Each update card shows **Installed** and **Available on Git** version numbers, a last-check time, and a plain-language result. Orange means the installed Git commit differs from the available revision (or no successful documentation install is recorded). This also detects changes published without a version bump. Matching commits are green; unknown and failed checks are clearly labelled, with unavailable remote versions shown as **Unavailable** rather than stale numbers.
+The `OdinEditorWindow` dashboard automatically checks **both the editor package and documentation whenever it opens**. **Check for updates** refreshes both sources manually. Each update card shows **Installed** and **Available on Git** version numbers, a last-check time, and a plain-language result. Orange means the installed Git commit differs from the available revision (or no successful documentation install is recorded). This also detects changes published without a version bump. Each version now includes its short Git revision; when both version numbers match but revisions differ, the card explains that Git changed without a version bump. A missing installed revision is described as unverified rather than claiming a newer version exists. Matching commits are green; unknown and failed checks are clearly labelled, with unavailable remote versions shown as **Unavailable** rather than stale numbers.
 
 Checking and installation each show an animated activity bar and detailed status. Documentation downloads show bytes received and a percentage when the server supplies a total size; unknown-duration steps use activity animation without inventing a percentage. The package bar stays active while Unity resolves, installs, and recompiles. **Source and managed files** contains copyable source URLs, both package/documentation commit identifiers, and the five documentation-update targets. Content scrolls in small or docked windows.
 
@@ -33,6 +33,8 @@ Package updates run only when you press the button. Unity may recompile scripts;
 This package-maintenance action is an explicitly requested extension to the original companion scope. It does not run the documentation-content update or the .gitignore installer, and it does not directly rewrite Unity's package files.
 
 ## Version checks
+
+Dashboard actions run after the current Odin draw finishes. Documentation confirmation is a UI Toolkit dialog with Cancel focused by default; accepting it starts the update after the modal window closes. If Unity cannot start the action, the dashboard or Console explains the reason instead of silently returning.
 
 Package version checks support public `github.com` repositories, including configured forks, branches, tags, pinned commits, and package subfolders. They resolve that exact source and read `package.json` at its resolved commit. Local/embedded installations display the official Git release version but cannot claim Git equality or use self-update. Other Git hosts, local Git URLs, private repositories without anonymous access, and network/rate-limit errors show an explicit unavailable check result; the existing Unity Git update action still uses its configured URL.
 

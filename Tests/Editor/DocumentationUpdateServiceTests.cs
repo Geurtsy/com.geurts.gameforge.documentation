@@ -623,7 +623,7 @@ namespace Geurts.GameForge.Documentation.Tests
             }
         }
 
-        private static class CandidateFixture
+        internal static class CandidateFixture
         {
             internal static void Write(string root, string guideText, string routePrefix)
             {

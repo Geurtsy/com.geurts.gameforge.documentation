@@ -115,11 +115,20 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Label("GEURTS GAME FORGE", _eyebrowStyle);
             GUILayout.Label("Documentation", _titleStyle);
             GUILayout.Label("Installed versions and the latest from Git, in one place.", _bodyStyle);
-            GUILayout.Space(8f);
-            GUILayout.Label("Both sources are checked automatically whenever this window opens.", _bodyStyle);
+            GUILayout.Space(12f);
         }
 
-        [Button("Check for updates", ButtonSizes.Medium), PropertyOrder(-10), DisableIf(nameof(IsBusy))]
+        [BoxGroup("Check for updates", order: -10), OnInspectorGUI, PropertyOrder(0)]
+        private void DrawUpdateCheckDescription()
+        {
+            EnsureStyles();
+            GUILayout.Label("Refresh the package and documentation versions from Git.", _bodyStyle);
+            GUILayout.Label("Both sources are checked automatically whenever this window opens.", _bodyStyle);
+            GUILayout.Space(6f);
+        }
+
+        [BoxGroup("Check for updates", order: -10)]
+        [Button("Check for updates", ButtonSizes.Large), PropertyOrder(1), DisableIf(nameof(IsBusy))]
         private async void CheckForUpdates()
         {
             await DocumentationUpdateChecks.CheckAllAsync();

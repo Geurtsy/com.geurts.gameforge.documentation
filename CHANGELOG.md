@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1 - 2026-09-08
+
+- Give Check for updates its own labelled Odin box above the update cards, with a larger full-width button and the automatic-check explanation inside the section.
+- Include Unity metadata for the existing validation-evidence folder and file.
+
 ## 0.6.0 - 2026-09-08
 
 - Give Odin Inspector and Quantum Console dependency cards the same green ready, orange missing, blue checking and red error palette as package/documentation update cards, in the dashboard and Unity Package Manager extension.

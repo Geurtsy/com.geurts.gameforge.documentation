@@ -1,8 +1,8 @@
 {
   "name": "com.geurts.gameforge.documentation",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "displayName": "Geurts Game Forge Documentation",
-  "description": "An Odin Inspector dashboard for updating this package from Git, updating Geurts Game Forge documentation and AI routes, and installing the documentation-owned .gitignore after confirmation. Requires separately installed Odin Inspector and Quantum Console; exposes read-only status through Quantum Console.",
+  "description": "An Odin Inspector dashboard for updating this package from Git, updating Geurts Game Forge documentation and AI routes, and installing the documentation-owned .gitignore after confirmation. Exposes read-only status through Quantum Console.\n\nRequired external dependencies (import licensed copies separately):\n- Odin Inspector — Required\n- Quantum Console — Required",
   "unity": "6000.3",
   "author": {
     "name": "Geurts Game Forge",

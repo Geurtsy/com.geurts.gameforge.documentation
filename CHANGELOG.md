@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.3 - 2026-09-08
+
+- Label Odin Inspector and Quantum Console as required external dependencies in Unity Package Manager's package details.
+- Include the same explicit requirements in the package description so they remain readable before package scripts compile. Commercial assets remain separate imports, with no invented registry dependencies.
+
 ## 0.5.2 - 2026-09-08
 
 - Fix the dashboard confirmation path: defer actions until Odin has finished drawing, collect confirmation in a UI Toolkit dialog, then start the approved documentation update after the modal window closes.

@@ -5,6 +5,9 @@ namespace Geurts.GameForge.Documentation
     /// <summary>Required dashboard dependency status shared by the UI and action entry points.</summary>
     internal static class DocumentationDependencies
     {
+        internal static readonly System.Collections.Generic.IReadOnlyList<string> RequiredExternalTools =
+            System.Array.AsReadOnly(new[] { "Odin Inspector", "Quantum Console" });
+
         internal const string OdinGuideUrl = "https://odininspector.com/tutorials/getting-started/installing-odin-inspector";
         internal static bool OdinInstalled
         {

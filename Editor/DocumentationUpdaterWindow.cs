@@ -68,6 +68,7 @@ namespace Geurts.GameForge.Documentation
         private GUIStyle _bodyStyle;
         private GUIStyle _eyebrowStyle;
         private GUIStyle _statusTitleStyle;
+        private bool _dependencyCheckWasBusy;
         internal Rect DocumentationUpdateButtonRect { get; private set; }
 
         private bool IsBusy => DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy;
@@ -82,6 +83,8 @@ namespace Geurts.GameForge.Documentation
             DocumentationUpdaterController.Changed += Repaint;
             PackageSelfUpdater.Changed -= Repaint;
             PackageSelfUpdater.Changed += Repaint;
+            DependencyInstallation.Changed -= Repaint;
+            DependencyInstallation.Changed += Repaint;
             EditorApplication.update -= RepaintWhileBusy;
             EditorApplication.update += RepaintWhileBusy;
             ScheduleOpenCheck();
@@ -91,6 +94,7 @@ namespace Geurts.GameForge.Documentation
         {
             DocumentationUpdaterController.Changed -= Repaint;
             PackageSelfUpdater.Changed -= Repaint;
+            DependencyInstallation.Changed -= Repaint;
             EditorApplication.update -= RepaintWhileBusy;
             EditorApplication.delayCall -= CheckOnOpen;
             base.OnDisable();
@@ -98,7 +102,10 @@ namespace Geurts.GameForge.Documentation
 
         private void RepaintWhileBusy()
         {
-            if (DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy) Repaint();
+            bool checkingDependencies = EditorApplication.isCompiling || EditorApplication.isUpdating;
+            if (DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy ||
+                checkingDependencies || _dependencyCheckWasBusy) Repaint();
+            _dependencyCheckWasBusy = checkingDependencies;
         }
 
         [OnInspectorGUI, PropertyOrder(-20)]
@@ -150,16 +157,15 @@ namespace Geurts.GameForge.Documentation
             EnsureStyles();
             GUILayout.Space(12f);
             bool busy = installing || status.IsChecking;
-            Color accent = status.Availability == DocumentationAvailability.UpdateAvailable
-                ? new Color(1f, 0.57f, 0.18f)
-                : busy ? new Color(0.35f, 0.68f, 1f)
-                : status.Failed ? new Color(1f, 0.4f, 0.36f)
+            Color accent = busy ? DashboardColours.Working
+                : status.Failed ? DashboardColours.Failed
+                : status.Availability == DocumentationAvailability.UpdateAvailable ? DashboardColours.Attention
                 : status.Availability == DocumentationAvailability.Current
-                    ? new Color(0.35f, 0.76f, 0.57f) : new Color(0.6f, 0.65f, 0.7f);
+                    ? DashboardColours.Ready : DashboardColours.Unknown;
             Rect card = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             if (Event.current.type == EventType.Repaint)
             {
-                EditorGUI.DrawRect(card, new Color(accent.r, accent.g, accent.b, 0.09f));
+                EditorGUI.DrawRect(card, DashboardColours.Tint(accent));
                 EditorGUI.DrawRect(new Rect(card.x, card.y, 4f, card.height), accent);
             }
             GUILayout.Space(10f);
@@ -242,15 +248,51 @@ namespace Geurts.GameForge.Documentation
         private void DrawDependencies()
         {
             EnsureStyles();
-            GUILayout.Label(DocumentationDependencies.OdinStatus, EditorStyles.boldLabel);
-            GUILayout.Label(DocumentationDependencies.OdinDescription, _bodyStyle);
+            GUILayout.Label("Required tools · licensed and installed separately", _bodyStyle);
+            foreach (string tool in DocumentationDependencies.RequiredExternalTools)
+                DrawDependencyCard(tool);
         }
 
-        [BoxGroup("Dependencies"), PropertyOrder(1)]
-        [Button("Odin Inspector installation guide", ButtonSizes.Medium)]
-        private void OpenOdinGuide()
+        private void DrawDependencyCard(string tool)
         {
-            Application.OpenURL(DocumentationDependencies.OdinGuideUrl);
+            var status = DocumentationDependencies.ToolStatus(tool);
+            Color accent = status.Background;
+            GUILayout.Space(8f);
+            Rect card = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            if (Event.current.type == EventType.Repaint)
+            {
+                EditorGUI.DrawRect(card, DashboardColours.Tint(accent));
+                EditorGUI.DrawRect(new Rect(card.x, card.y, 4f, card.height), accent);
+            }
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(12f);
+            EditorGUILayout.BeginVertical();
+            GUILayout.Space(8f);
+            GUILayout.Label(tool, _statusTitleStyle);
+            Color previous = GUI.contentColor;
+            GUI.contentColor = accent;
+            GUILayout.Label(status.Message, _eyebrowStyle);
+            GUI.contentColor = previous;
+            GUILayout.Space(6f);
+            GUILayout.Label(DocumentationDependencies.Description(tool), _bodyStyle);
+            if (EditorApplication.isCompiling || EditorApplication.isUpdating) DrawProgress(null, accent);
+            string message = DependencyInstallation.Message(tool);
+            if (!string.IsNullOrEmpty(message)) GUILayout.Label(message, _bodyStyle);
+            GUILayout.Space(6f);
+            using (new EditorGUI.DisabledScope(DependencyInstallation.IsBusy))
+            {
+                if (GUILayout.Button("Download / import owned copy in My Assets", GUILayout.Height(30f)))
+                    DeferAction(() => { DependencyInstallation.OpenOwnedAssets(tool); Repaint(); });
+                if (GUILayout.Button("Import licensed .unitypackage…", GUILayout.Height(26f)))
+                    DeferAction(() => { DependencyInstallation.ImportLicensedCopy(tool); Repaint(); });
+            }
+            if (tool == "Odin Inspector" && GUILayout.Button("Installation guide", EditorStyles.linkLabel))
+                Application.OpenURL(DocumentationDependencies.OdinGuideUrl);
+            GUILayout.Space(8f);
+            EditorGUILayout.EndVertical();
+            GUILayout.Space(8f);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
 
         [OnInspectorGUI, PropertyOrder(25)]
@@ -359,6 +401,9 @@ namespace Geurts.GameForge.Documentation
             root.Add(new Label("Dependencies") { style = { fontSize = 16, marginBottom = 8f } });
             root.Add(new Label(DocumentationDependencies.OdinStatus) { name = "odin-status", style = { marginBottom = 8f } });
             root.Add(new HelpBox(DocumentationDependencies.OdinDescription, HelpBoxMessageType.Error));
+            var dependencies = new DocumentationPackageManagerExtension();
+            root.Add(dependencies.CreateExtensionUI());
+            dependencies.OnPackageSelectionChange(UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(DocumentationUpdaterWindow).Assembly));
             root.Add(new Label("All documentation tools require Odin Inspector. Odin supplies the ODIN_INSPECTOR scripting symbol automatically.")
             {
                 style = { whiteSpace = WhiteSpace.Normal, marginTop = 12f, marginBottom = 12f }

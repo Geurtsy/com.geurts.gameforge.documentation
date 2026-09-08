@@ -21,22 +21,26 @@ namespace Geurts.GameForge.Documentation
 
         internal static (string Message, Color Background) ToolStatus(string tool)
         {
-            Color waiting = new Color(.46f, .32f, .08f);
-            Color unavailable = new Color(.52f, .16f, .16f);
             if (EditorApplication.isCompiling || EditorApplication.isUpdating)
-                return ("Checking — Unity is compiling or importing", waiting);
+                return ("Checking — Unity is compiling or importing", DashboardColours.Working);
             if (EditorUtility.scriptCompilationFailed)
-                return ("Unavailable — fix Unity script errors", unavailable);
+                return ("Needs attention — fix Unity script errors", DashboardColours.Failed);
+            if (DependencyInstallation.Failed(tool))
+                return ("Needs attention — installation action failed", DashboardColours.Failed);
             bool available;
             switch (tool)
             {
-                case "Odin Inspector": available = _odinAvailable; break;
+                case "Odin Inspector": available = OdinInstalled && _odinAvailable; break;
                 case "Quantum Console": available = _quantumAvailable; break;
-                default: return ("Not verified", waiting);
+                default: return ("Not verified", DashboardColours.Unknown);
             }
-            return available ? ("Installed and ready", new Color(.12f, .38f, .20f))
-                : ("Missing or unavailable", unavailable);
+            return available ? ("Installed and ready", DashboardColours.Ready)
+                : ("Missing — required", DashboardColours.Attention);
         }
+
+        internal static string Description(string tool) => tool == "Odin Inspector"
+            ? "Required for the clearer layout, styled controls and enhanced documentation dashboard."
+            : "Required for Geurts Game Forge's console integration and documentation status command.";
 
         private static bool HasType(string assemblyName, string typeName) =>
             AppDomain.CurrentDomain.GetAssemblies().Any(assembly => assembly.GetName().Name == assemblyName &&

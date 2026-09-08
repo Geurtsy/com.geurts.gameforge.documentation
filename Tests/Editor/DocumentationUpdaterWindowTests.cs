@@ -50,7 +50,7 @@ namespace Geurts.GameForge.Documentation.Tests
                     Assert.That(notice.text, Does.Contain("Odin Inspector is required"));
                     Assert.That(notice.messageType, Is.EqualTo(HelpBoxMessageType.Error));
                     Assert.That(window.rootVisualElement.Q<Label>("odin-status").text, Does.Contain("Missing (required)"));
-                    Assert.That(window.rootVisualElement.Query<Button>().ToList(), Has.Count.EqualTo(1));
+                    Assert.That(window.rootVisualElement.Query<Button>().ToList(), Has.Count.EqualTo(5));
 #endif
                     LogAssert.NoUnexpectedReceived();
                 }

@@ -33,18 +33,32 @@ namespace Geurts.GameForge.Documentation
             _dependencyLabels.Clear();
             foreach (string dependency in DocumentationDependencies.RequiredExternalTools)
             {
+                VisualElement card = new VisualElement { name = "geurts-dependency-card-" + _dependencyLabels.Count };
+                card.style.marginTop = 8f;
+                card.style.paddingLeft = card.style.paddingRight = 12f;
+                card.style.paddingTop = card.style.paddingBottom = 10f;
+                card.style.borderLeftWidth = 4f;
                 Label label = new Label { name = "geurts-dependency-" + _dependencyLabels.Count, userData = dependency };
                 label.style.whiteSpace = WhiteSpace.Normal;
-                label.style.marginTop = 4f;
-                label.style.paddingLeft = label.style.paddingRight = 8f;
-                label.style.paddingTop = label.style.paddingBottom = 6f;
-                label.style.borderTopLeftRadius = label.style.borderTopRightRadius = 4f;
-                label.style.borderBottomLeftRadius = label.style.borderBottomRightRadius = 4f;
-                label.style.color = Color.white;
+                label.style.unityFontStyleAndWeight = FontStyle.Bold;
                 _dependencyLabels.Add(label);
-                _root.Add(label);
+                card.Add(label);
+                card.Add(new Label(DocumentationDependencies.Description(dependency))
+                {
+                    style = { whiteSpace = WhiteSpace.Normal, marginTop = 6f }
+                });
+                card.Add(new Label { name = "installation-status", style = { whiteSpace = WhiteSpace.Normal, marginTop = 6f } });
+                card.Add(new Button(() => EditorApplication.delayCall += () => DependencyInstallation.OpenOwnedAssets(dependency))
+                {
+                    text = "Download / import owned copy in My Assets", style = { height = 30f, marginTop = 8f }
+                });
+                card.Add(new Button(() => EditorApplication.delayCall += () => DependencyInstallation.ImportLicensedCopy(dependency))
+                {
+                    text = "Import licensed .unitypackage…", style = { height = 26f }
+                });
+                _root.Add(card);
             }
-            Label guidance = new Label("Import licensed copies separately before using this package.");
+            Label guidance = new Label("My Assets uses your signed-in Unity account to download owned assets inside the Editor. Choose Download, then Import there. Green means the required assemblies are ready; it does not verify ownership or the latest vendor version.");
             guidance.style.whiteSpace = WhiteSpace.Normal;
             guidance.style.marginTop = 6f;
             _root.Add(guidance);
@@ -62,7 +76,12 @@ namespace Geurts.GameForge.Documentation
                 string tool = (string)label.userData;
                 var status = DocumentationDependencies.ToolStatus(tool);
                 label.text = tool + " — Required · " + status.Message;
-                label.style.backgroundColor = status.Background;
+                label.style.color = status.Background;
+                label.parent.style.backgroundColor = DashboardColours.Tint(status.Background);
+                label.parent.style.borderLeftColor = status.Background;
+                label.parent.Q<Label>("installation-status").text = DependencyInstallation.Message(tool);
+                foreach (Button button in label.parent.Query<Button>().ToList())
+                    button.SetEnabled(!DependencyInstallation.IsBusy);
             }
         }
 

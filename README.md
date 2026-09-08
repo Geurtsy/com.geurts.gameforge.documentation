@@ -12,7 +12,7 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-This 0.5.1 implementation candidate targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled or downloaded by this package. The repository is public, so the Git URL does not require package-specific credentials. The published main-branch version remains separate until this change is reviewed.
+Version 0.5.1 is available on main and targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled or downloaded by this package. The repository is public, so the Git URL does not require package-specific credentials.
 
 ## Odin documentation dashboard
 
@@ -20,7 +20,7 @@ The `OdinEditorWindow` dashboard automatically checks **both the editor package 
 
 Checking and installation each show an animated activity bar and detailed status. Documentation downloads show bytes received and a percentage when the server supplies a total size; unknown-duration steps use activity animation without inventing a percentage. The package bar stays active while Unity resolves, installs, and recompiles. **Source and managed files** contains copyable source URLs, both package/documentation commit identifiers, and the five documentation-update targets. Content scrolls in small or docked windows.
 
-**Dependencies** explains Odin's dashboard integration. The assembly references require both Odin Inspector and Quantum Console; missing commercial assemblies must be installed before this candidate compiles. Keep Odin's standard `ODIN_INSPECTOR` define enabled. `GeurtsGameForge.Documentation.Status` exposes the existing dashboard status through Quantum Console as a read-only Editor command. This tool requirement supersedes older optional or no-tool compilation guidance; Documentation remains independent of God.
+**Dependencies** explains Odin's dashboard integration. The assembly references require both Odin Inspector and Quantum Console; missing commercial assemblies must be installed before this package compiles. Keep Odin's standard `ODIN_INSPECTOR` define enabled. `GeurtsGameForge.Documentation.Status` exposes the existing dashboard status through Quantum Console as a read-only Editor command. This tool requirement supersedes older optional or no-tool compilation guidance; Documentation remains independent of God.
 
 ## Update the editor package from Git
 
@@ -64,10 +64,10 @@ The destination and four-route list are pinned by schema 1.0.0 of `GeurtsTechniq
 
 ## Scope
 
-This package is Windows-only and Editor-only. Its dashboard requires Odin Inspector; it has no dependency on Geurts Game Forge God, Brick Manager, Quantum Console, or GameForgeIntelligence. The Odin dashboard is an explicitly requested change to the original companion's no-Odin requirement. It does not change the documentation replacement contract or copy generic Geurts guidance into this package. It does not provide preview, backup, rollback, journaling, migration, recovery, or local-drift preservation.
+This package is Windows-only and Editor-only. Its dashboard requires Odin Inspector and its status command requires Quantum Console; it has no dependency on Geurts Game Forge God, Brick Manager, or GameForgeIntelligence. These required tool integrations are explicitly requested changes to the original companion's tool exemptions. They do not change the documentation replacement contract or copy generic Geurts guidance into this package. It does not provide preview, backup, rollback, journaling, migration, recovery, or local-drift preservation.
 
 ## Validation
 
 Run `Tools/ValidatePackage.ps1 -DocumentationPath <path-to-GeurtsGameForgeDocumentation>` to run Editor tests in a disposable project. The documentation path supplies only the manifest and Git Ignore Technique as an external integration fixture; the source is not changed or bundled with the package. Without this parameter, tests requiring the real template are reported as skipped. `-StaticOnly` checks package structure without launching Unity.
 
-Provide `-OdinPath <path-to-Assets/Plugins/Sirenix> -QuantumConsolePath <path-to-Assets/Plugins/QFSW/Quantum Console> -ProjectPath <package-root>/work~/UnityValidationOdin` to compile and test against your installed licensed tools. Both paths are required for this candidate's integration tests. The validation copy stays under the ignored `work~/` directory and must not be committed or distributed. `-StaticOnly` checks the manifest and assembly contract without importing tools.
+Provide `-OdinPath <path-to-Assets/Plugins/Sirenix> -QuantumConsolePath <path-to-Assets/Plugins/QFSW/Quantum Console> -ProjectPath <package-root>/work~/UnityValidationOdin` to compile and test against your installed licensed tools. Both paths are required for the integration tests. The validation copy stays under the ignored `work~/` directory and must not be committed or distributed. `-StaticOnly` checks the manifest and assembly contract without importing tools.

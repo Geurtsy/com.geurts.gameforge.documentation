@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$UnityPath = "C:\Program Files\Unity\Hub\Editor\6000.3.11f1\Editor\Unity.exe",
+    [string]$UnityPath = "C:\Program Files\Unity\Hub\Editor\6000.3.22f1\Editor\Unity.exe",
 
     [Parameter()]
     [string]$ProjectPath,
@@ -14,6 +14,9 @@ param(
 
     [Parameter()]
     [string]$OdinPath,
+
+    [Parameter()]
+    [string]$QuantumConsolePath,
 
     [Parameter()]
     [switch]$StaticOnly
@@ -44,8 +47,11 @@ $productionAssembly = Get-Content -LiteralPath (Join-Path $repositoryRoot "Edito
 if (@($productionAssembly.includePlatforms).Count -ne 1 -or $productionAssembly.includePlatforms[0] -ne "Editor") {
     throw "The production assembly must be Editor-only."
 }
-if (@($productionAssembly.references).Count -ne 0) {
-    throw "The production assembly must not reference another package assembly."
+if (@($productionAssembly.references).Count -ne 1 -or $productionAssembly.references[0] -ne "QFSW.QC") {
+    throw "The production assembly must reference the required Quantum Console assembly."
+}
+if (-not $productionAssembly.overrideReferences -or $productionAssembly.precompiledReferences -notcontains "Sirenix.OdinInspector.Editor.dll") {
+    throw "The production assembly must reference the required Odin Inspector editor library."
 }
 if (@($productionAssembly.defineConstraints).Count -ne 1 -or $productionAssembly.defineConstraints[0] -ne "UNITY_EDITOR_WIN") {
     throw "The production assembly must be limited to Windows Editor hosts."
@@ -64,7 +70,7 @@ if (Test-Path -LiteralPath (Join-Path $repositoryRoot "GeurtsGameForgeDocumentat
     throw "The Unity package must not embed an installed documentation copy."
 }
 
-$forbiddenDependencyPattern = '(?i)com\.gameforge\.intelligence|quantum|brick.?manager|gameforge.?god'
+$forbiddenDependencyPattern = '(?i)com\.gameforge\.intelligence|brick.?manager|gameforge.?god'
 $dependencyFiles = @(
     (Join-Path $repositoryRoot "package.json"),
     (Join-Path $repositoryRoot "Editor\Geurts.GameForge.Documentation.Editor.asmdef")
@@ -87,6 +93,12 @@ if ($StaticOnly) {
 if (-not (Test-Path -LiteralPath $UnityPath -PathType Leaf)) {
     throw "Unity Editor was not found at: $UnityPath"
 }
+if ([string]::IsNullOrWhiteSpace($OdinPath) -or [string]::IsNullOrWhiteSpace($QuantumConsolePath)) {
+    throw "Provide locally licensed OdinPath and QuantumConsolePath for Unity integration validation."
+}
+if (-not (Test-Path -LiteralPath (Join-Path $QuantumConsolePath 'Source') -PathType Container)) {
+    throw "QuantumConsolePath must point to the installed Quantum Console asset folder."
+}
 
 if (Test-Path -LiteralPath $ProjectPath) {
     Remove-Item -LiteralPath $ProjectPath -Recurse -Force
@@ -104,10 +116,26 @@ $manifest = [ordered]@{
     dependencies = [ordered]@{
         "com.geurts.gameforge.documentation" = $PackageReference
         "com.unity.test-framework" = "1.6.0"
+        "com.unity.inputsystem" = "1.20.0"
+        "com.unity.ugui" = "2.0.0"
+        "com.unity.modules.audio" = "1.0.0"
+        "com.unity.modules.animation" = "1.0.0"
+        "com.unity.modules.screencapture" = "1.0.0"
+        "com.unity.modules.physics" = "1.0.0"
+        "com.unity.modules.physics2d" = "1.0.0"
+        "com.unity.modules.imgui" = "1.0.0"
+        "com.unity.modules.jsonserialize" = "1.0.0"
+        "com.unity.modules.ui" = "1.0.0"
+        "com.unity.modules.unitywebrequest" = "1.0.0"
+        "com.unity.modules.imageconversion" = "1.0.0"
     }
     testables = @("com.geurts.gameforge.documentation")
 }
 $manifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $ProjectPath "Packages\manifest.json") -Encoding UTF8
+
+$quantumDestination = Join-Path $ProjectPath "Assets\Plugins\QFSW\Quantum Console"
+New-Item -ItemType Directory -Path $quantumDestination -Force | Out-Null
+Copy-Item -LiteralPath (Join-Path $QuantumConsolePath 'Source') -Destination $quantumDestination -Recurse
 
 # Use a locally licensed Odin installation only in the disposable test project.
 if (-not [string]::IsNullOrWhiteSpace($OdinPath)) {
@@ -141,8 +169,8 @@ if (-not [string]::IsNullOrWhiteSpace($DocumentationPath)) {
     }
 }
 @"
-m_EditorVersion: 6000.3.11f1
-m_EditorVersionWithRevision: 6000.3.11f1 (3000ef702840)
+m_EditorVersion: 6000.3.22f1
+m_EditorVersionWithRevision: 6000.3.22f1 (1c726e1fb402)
 "@ | Set-Content -LiteralPath (Join-Path $ProjectPath "ProjectSettings\ProjectVersion.txt") -Encoding UTF8
 
 $resultPath = Join-Path $ProjectPath "TestResults.xml"
@@ -187,7 +215,8 @@ if ($log -match '(?m)\berror CS\d+' -or $log -match '(?m)\bwarning CS\d+' -or $l
     PackageVersion = $package.version
     PackageReference = $PackageReference
     Odin = -not [string]::IsNullOrWhiteSpace($OdinPath)
-    Unity = "6000.3.11f1"
+    QuantumConsole = -not [string]::IsNullOrWhiteSpace($QuantumConsolePath)
+    Unity = "6000.3.22f1"
     Passed = [int]$testRun.passed
     Failed = [int]$testRun.failed
     Skipped = [int]$testRun.skipped

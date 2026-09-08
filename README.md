@@ -12,7 +12,7 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Unity 2022.3 or newer on Windows is required. Import your licensed **Odin Inspector** installation into the Unity project to use the dashboard. Odin is distributed separately and is not bundled or downloaded by this package. The repository is public, so the Git URL does not require package-specific credentials.
+This 0.5.1 implementation candidate targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled or downloaded by this package. The repository is public, so the Git URL does not require package-specific credentials. The published main-branch version remains separate until this change is reviewed.
 
 ## Odin documentation dashboard
 
@@ -20,7 +20,7 @@ The `OdinEditorWindow` dashboard automatically checks **both the editor package 
 
 Checking and installation each show an animated activity bar and detailed status. Documentation downloads show bytes received and a percentage when the server supplies a total size; unknown-duration steps use activity animation without inventing a percentage. The package bar stays active while Unity resolves, installs, and recompiles. **Source and managed files** contains copyable source URLs, both package/documentation commit identifiers, and the five documentation-update targets. Content scrolls in small or docked windows.
 
-**Dependencies** shows whether the mandatory Odin Inspector dependency is installed and explains the UI improvements it provides. Without Odin, the package still compiles and the Documentation menu displays installation guidance, but documentation, package-update, and .gitignore actions are unavailable. Read-only version checks can still run without Odin; the full dashboard requires Odin. The tools become available when Odin defines `ODIN_INSPECTOR`; keep Odin's assemblies enabled and auto-referenced as in its standard installation.
+**Dependencies** explains Odin's dashboard integration. The assembly references require both Odin Inspector and Quantum Console; missing commercial assemblies must be installed before this candidate compiles. Keep Odin's standard `ODIN_INSPECTOR` define enabled. `GeurtsGameForge.Documentation.Status` exposes the existing dashboard status through Quantum Console as a read-only Editor command. This tool requirement supersedes older optional or no-tool compilation guidance; Documentation remains independent of God.
 
 ## Update the editor package from Git
 
@@ -70,4 +70,4 @@ This package is Windows-only and Editor-only. Its dashboard requires Odin Inspec
 
 Run `Tools/ValidatePackage.ps1 -DocumentationPath <path-to-GeurtsGameForgeDocumentation>` to run Editor tests in a disposable project. The documentation path supplies only the manifest and Git Ignore Technique as an external integration fixture; the source is not changed or bundled with the package. Without this parameter, tests requiring the real template are reported as skipped. `-StaticOnly` checks package structure without launching Unity.
 
-Run again with `-OdinPath <path-to-Assets/Plugins/Sirenix> -ProjectPath <package-root>/work~/UnityValidationOdin` to compile and test the Odin dashboard against your installed copy. Omit `-OdinPath` to test the missing-Odin screen. The validation copy stays under the ignored `work~/` directory and must not be committed or distributed.
+Provide `-OdinPath <path-to-Assets/Plugins/Sirenix> -QuantumConsolePath <path-to-Assets/Plugins/QFSW/Quantum Console> -ProjectPath <package-root>/work~/UnityValidationOdin` to compile and test against your installed licensed tools. Both paths are required for this candidate's integration tests. The validation copy stays under the ignored `work~/` directory and must not be committed or distributed. `-StaticOnly` checks the manifest and assembly contract without importing tools.

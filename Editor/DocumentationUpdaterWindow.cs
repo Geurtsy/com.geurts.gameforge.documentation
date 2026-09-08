@@ -22,6 +22,12 @@ namespace Geurts.GameForge.Documentation
         private static bool _openingAfterCheck;
         internal static System.Func<System.Threading.Tasks.Task> OpenCheckForTests;
 
+        // Modal windows and package operations must start after the current Odin/IMGUI draw has finished.
+        internal static void DeferAction(System.Action action)
+        {
+            EditorApplication.delayCall += () => action();
+        }
+
         internal static void ShowAfterCheck()
         {
             _openingAfterCheck = true;
@@ -62,6 +68,7 @@ namespace Geurts.GameForge.Documentation
         private GUIStyle _bodyStyle;
         private GUIStyle _eyebrowStyle;
         private GUIStyle _statusTitleStyle;
+        internal Rect DocumentationUpdateButtonRect { get; private set; }
 
         private bool IsBusy => DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy || PackageSelfUpdater.EditorBusy;
         private bool CanUpdatePackage => PackageSelfUpdater.instance.CanUpdate;
@@ -170,9 +177,9 @@ namespace Geurts.GameForge.Documentation
             GUI.contentColor = previous;
             GUILayout.Space(8f);
             EditorGUILayout.BeginHorizontal();
-            DrawVersion("INSTALLED", status.InstalledVersion);
+            DrawVersion("INSTALLED", status.InstalledVersion, status.InstalledCommit);
             GUILayout.Space(12f);
-            DrawVersion("AVAILABLE ON GIT", status.AvailableVersion);
+            DrawVersion("AVAILABLE ON GIT", status.AvailableVersion, status.RemoteCommit);
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(7f);
             GUILayout.Label(source, _bodyStyle);
@@ -185,7 +192,9 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(8f);
             using (new EditorGUI.DisabledScope(!enabled))
             {
-                if (GUILayout.Button(actionLabel, GUILayout.Height(34f))) action();
+                if (GUILayout.Button(actionLabel, GUILayout.Height(34f))) DeferAction(action);
+                if (Event.current.type == EventType.Repaint && actionLabel == DocumentationPackageConstants.UpdateActionLabel)
+                    DocumentationUpdateButtonRect = GUILayoutUtility.GetLastRect();
             }
             EditorGUILayout.EndVertical();
             GUILayout.Space(10f);
@@ -194,11 +203,13 @@ namespace Geurts.GameForge.Documentation
             EditorGUILayout.EndVertical();
         }
 
-        private void DrawVersion(string label, string value)
+        private void DrawVersion(string label, string value, string commit)
         {
             EditorGUILayout.BeginVertical(GUILayout.MinWidth(0f));
             GUILayout.Label(label, _eyebrowStyle);
             GUILayout.Label(value, _statusTitleStyle);
+            GUILayout.Label(string.IsNullOrEmpty(commit) ? "Revision not recorded" : "Revision " + commit.Substring(0, System.Math.Min(8, commit.Length)),
+                EditorStyles.miniLabel);
             EditorGUILayout.EndVertical();
         }
 
@@ -263,7 +274,7 @@ namespace Geurts.GameForge.Documentation
         [Button(GitIgnoreInstaller.ActionLabel, ButtonSizes.Medium), DisableIf(nameof(IsBusy))]
         private void InstallGitIgnore()
         {
-            GitIgnoreInstaller.ConfirmAndInstall();
+            DeferAction(GitIgnoreInstaller.ConfirmAndInstall);
         }
 
         [OnInspectorGUI, PropertyOrder(35)]

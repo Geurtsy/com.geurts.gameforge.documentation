@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.1] - 2026-09-23
+
+- Apply the shared dark sci-fi and green Editor theme to the Odin dashboard, dependency guidance, Package Manager extension and all three confirmation windows.
+- Preserve warning and error colours, cancel-default confirmation behaviour, explicit/deferred actions and the companion's independence from God.
+- Generate the companion's theme from God's canonical Editor source without adding a God/UPM package dependency; required licensed Odin/QC assemblies remain separate prerequisites. Temporary IMGUI styling is restored after every draw and generated resources are released when the window closes.
+- Keep long confirmation paths and dependency guidance scrollable without hiding the action controls.
+
+## [0.9.0] - Unreleased
+
+- Expose the existing documentation status, checks, confirmed content update and window through a public optional Editor integration API for Game Forge God.
+- Keep the companion independent: no reverse dependency, duplicated updater or changed confirmation targets.
+- Reserve confirmed updates before delayed execution and accept disposable host-operation guards so documentation and package changes cannot overlap.
+- Cover optional API checks, cancelled updates, queued-work guards and unchanged project boundaries in integration tests.
+
 ## [0.8.1] - 2026-09-23
 
 - Recognize the approved `.gitignore` with LF, CRLF or CR newlines as already installed, preserving its original bytes and timestamp without a confirmation or rewrite.

@@ -68,6 +68,9 @@ namespace Geurts.GameForge.Documentation
         private GUIStyle _bodyStyle;
         private GUIStyle _eyebrowStyle;
         private GUIStyle _statusTitleStyle;
+        private GUIStyle _badgeStyle;
+        private GUIStyle _progressStyle;
+        private DocumentationEditorTheme _theme;
         private bool _dependencyCheckWasBusy;
         internal Rect DocumentationUpdateButtonRect { get; private set; }
 
@@ -78,6 +81,8 @@ namespace Geurts.GameForge.Documentation
         {
             base.OnEnable();
             WindowPadding = new Vector4(20f, 20f, 16f, 16f);
+            OnBeginGUI -= DrawCanvas;
+            OnBeginGUI += DrawCanvas;
             // Removing first also makes subscription safe across repeated enable calls.
             DocumentationUpdaterController.Changed -= Repaint;
             DocumentationUpdaterController.Changed += Repaint;
@@ -97,7 +102,23 @@ namespace Geurts.GameForge.Documentation
             DependencyInstallation.Changed -= Repaint;
             EditorApplication.update -= RepaintWhileBusy;
             EditorApplication.delayCall -= CheckOnOpen;
+            OnBeginGUI -= DrawCanvas;
+            _theme?.Dispose();
+            _theme = null;
+            _titleStyle = _bodyStyle = _eyebrowStyle = _statusTitleStyle = _progressStyle = _badgeStyle = null;
             base.OnDisable();
+        }
+
+        private void DrawCanvas()
+        {
+            EditorGUI.DrawRect(new Rect(0, 0, position.width, position.height), DocumentationEditorTheme.Background);
+        }
+
+        // Odin retains the groups, validation and action drawers; temporary styles never escape this window.
+        protected override void DrawEditors()
+        {
+            EnsureStyles();
+            using (_theme.Scope()) base.DrawEditors();
         }
 
         private void RepaintWhileBusy()
@@ -112,9 +133,14 @@ namespace Geurts.GameForge.Documentation
         private void DrawOverview()
         {
             EnsureStyles();
-            GUILayout.Label("GEURTS GAME FORGE", _eyebrowStyle);
-            GUILayout.Label("Documentation", _titleStyle);
-            GUILayout.Label("Installed versions and the latest from Git, in one place.", _bodyStyle);
+            using (var header = new EditorGUILayout.VerticalScope(_theme.Card))
+            {
+                if (Event.current.type == EventType.Repaint)
+                    EditorGUI.DrawRect(new Rect(header.rect.x, header.rect.y, 4f, header.rect.height), DocumentationEditorTheme.Green);
+                GUILayout.Label("GEURTS  /  GAME FORGE", _eyebrowStyle);
+                GUILayout.Label("DOCUMENTATION", _titleStyle);
+                GUILayout.Label("Installed versions and the latest from Git, in one place.", _bodyStyle);
+            }
             GUILayout.Space(12f);
         }
 
@@ -171,10 +197,9 @@ namespace Geurts.GameForge.Documentation
                 : status.Availability == DocumentationAvailability.UpdateAvailable ? DashboardColours.Attention
                 : status.Availability == DocumentationAvailability.Current
                     ? DashboardColours.Ready : DashboardColours.Unknown;
-            Rect card = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            Rect card = EditorGUILayout.BeginVertical(_theme.Card);
             if (Event.current.type == EventType.Repaint)
             {
-                EditorGUI.DrawRect(card, DashboardColours.Tint(accent));
                 EditorGUI.DrawRect(new Rect(card.x, card.y, 4f, card.height), accent);
             }
             GUILayout.Space(10f);
@@ -188,7 +213,7 @@ namespace Geurts.GameForge.Documentation
                 : status.Availability == DocumentationAvailability.Current ? "UP TO DATE" : "STATUS UNKNOWN";
             Color previous = GUI.contentColor;
             GUI.contentColor = accent;
-            GUILayout.Label(badge, _eyebrowStyle);
+            GUILayout.Label(badge, _badgeStyle);
             GUI.contentColor = previous;
             GUILayout.Space(8f);
             EditorGUILayout.BeginHorizontal();
@@ -201,13 +226,13 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(7f);
             if (busy) DrawProgress(status.Progress, accent);
             GUILayout.Label(busy ? status.Progress?.Message ?? status.Message : status.Message, _bodyStyle);
-            if (!busy) GUILayout.Label("Last check: " + status.LastChecked, EditorStyles.miniLabel);
+            if (!busy) GUILayout.Label("Last check: " + status.LastChecked, _theme.Small);
             GUILayout.Space(8f);
             GUILayout.Label(explanation, _bodyStyle);
             GUILayout.Space(8f);
             using (new EditorGUI.DisabledScope(!enabled))
             {
-                if (GUILayout.Button(actionLabel, GUILayout.Height(34f))) DeferAction(action);
+                if (GUILayout.Button(actionLabel, _theme.Button, GUILayout.Height(34f))) DeferAction(action);
                 if (Event.current.type == EventType.Repaint && actionLabel == DocumentationPackageConstants.UpdateActionLabel)
                     DocumentationUpdateButtonRect = GUILayoutUtility.GetLastRect();
             }
@@ -224,14 +249,14 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Label(label, _eyebrowStyle);
             GUILayout.Label(value, _statusTitleStyle);
             GUILayout.Label(string.IsNullOrEmpty(commit) ? "Revision not recorded" : "Revision " + commit.Substring(0, System.Math.Min(8, commit.Length)),
-                EditorStyles.miniLabel);
+                _theme.Small);
             EditorGUILayout.EndVertical();
         }
 
-        private static void DrawProgress(UpdateProgress progress, Color accent)
+        private void DrawProgress(UpdateProgress progress, Color accent)
         {
             Rect bar = GUILayoutUtility.GetRect(0f, 20f, GUILayout.ExpandWidth(true));
-            EditorGUI.DrawRect(bar, EditorGUIUtility.isProSkin ? new Color(0.12f, 0.13f, 0.15f) : new Color(0.8f, 0.82f, 0.84f));
+            EditorGUI.DrawRect(bar, DocumentationEditorTheme.Background);
             float fraction = progress?.Fraction ?? -1f;
             Rect fill = bar;
             if (fraction < 0f)
@@ -240,9 +265,9 @@ namespace Geurts.GameForge.Documentation
                 fill.x += (bar.width - fill.width) * (float)(0.5 + 0.5 * System.Math.Sin(EditorApplication.timeSinceStartup * 2.5));
             }
             else fill.width *= Mathf.Clamp01(fraction);
-            EditorGUI.DrawRect(fill, new Color(accent.r, accent.g, accent.b, 0.65f));
+            EditorGUI.DrawRect(fill, new Color(accent.r, accent.g, accent.b, 0.28f));
             GUI.Label(bar, fraction < 0f ? "Working..." : Mathf.RoundToInt(Mathf.Clamp01(fraction) * 100f) + "% downloaded",
-                EditorStyles.centeredGreyMiniLabel);
+                _progressStyle);
             GUILayout.Space(6f);
         }
 
@@ -267,10 +292,9 @@ namespace Geurts.GameForge.Documentation
             var status = DocumentationDependencies.ToolStatus(tool);
             Color accent = status.Background;
             GUILayout.Space(8f);
-            Rect card = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            Rect card = EditorGUILayout.BeginVertical(_theme.Card);
             if (Event.current.type == EventType.Repaint)
             {
-                EditorGUI.DrawRect(card, DashboardColours.Tint(accent));
                 EditorGUI.DrawRect(new Rect(card.x, card.y, 4f, card.height), accent);
             }
             EditorGUILayout.BeginHorizontal();
@@ -280,7 +304,7 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Label(tool, _statusTitleStyle);
             Color previous = GUI.contentColor;
             GUI.contentColor = accent;
-            GUILayout.Label(status.Message, _eyebrowStyle);
+            GUILayout.Label(status.Message, _badgeStyle);
             GUI.contentColor = previous;
             GUILayout.Space(6f);
             GUILayout.Label(DocumentationDependencies.Description(tool), _bodyStyle);
@@ -290,12 +314,12 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(6f);
             using (new EditorGUI.DisabledScope(DependencyInstallation.IsBusy))
             {
-                if (GUILayout.Button("Download / import owned copy in My Assets", GUILayout.Height(30f)))
+                if (GUILayout.Button("Download / import owned copy in My Assets", _theme.Button, GUILayout.Height(30f)))
                     DeferAction(() => { DependencyInstallation.OpenOwnedAssets(tool); Repaint(); });
-                if (GUILayout.Button("Import licensed .unitypackage…", GUILayout.Height(26f)))
+                if (GUILayout.Button("Import licensed .unitypackage…", _theme.Button, GUILayout.Height(26f)))
                     DeferAction(() => { DependencyInstallation.ImportLicensedCopy(tool); Repaint(); });
             }
-            if (tool == "Odin Inspector" && GUILayout.Button("Installation guide", EditorStyles.linkLabel))
+            if (tool == "Odin Inspector" && GUILayout.Button("Installation guide", _theme.Button))
                 Application.OpenURL(DocumentationDependencies.OdinGuideUrl);
             GUILayout.Space(8f);
             EditorGUILayout.EndVertical();
@@ -411,10 +435,15 @@ namespace Geurts.GameForge.Documentation
             {
                 return;
             }
-            _titleStyle = new GUIStyle(EditorStyles.boldLabel) { fontSize = 26, fixedHeight = 36f };
-            _bodyStyle = new GUIStyle(EditorStyles.wordWrappedLabel) { fontSize = 12, richText = false };
-            _eyebrowStyle = new GUIStyle(EditorStyles.miniBoldLabel) { fontSize = 10 };
-            _statusTitleStyle = new GUIStyle(EditorStyles.wordWrappedLabel) { fontSize = 14, fontStyle = FontStyle.Bold };
+            _theme = new DocumentationEditorTheme();
+            _theme.IncludePanelStyles(EditorStyles.helpBox);
+            _titleStyle = new GUIStyle(_theme.Title) { fontSize = 26, fixedHeight = 36f };
+            _bodyStyle = _theme.Body;
+            _eyebrowStyle = _theme.Eyebrow;
+            // GUI.contentColor supplies semantic warning/error colours, so this base must remain white.
+            _badgeStyle = new GUIStyle(_theme.Eyebrow) { normal = { textColor = Color.white } };
+            _statusTitleStyle = _theme.Section;
+            _progressStyle = new GUIStyle(_theme.Small) { alignment = TextAnchor.MiddleCenter };
         }
 
         private static void DrawSelectable(string text)
@@ -434,12 +463,20 @@ namespace Geurts.GameForge.Documentation
         // Odin is distributed separately; missing it must not create compilation errors or hide the menu.
         private void CreateGUI()
         {
-            VisualElement root = rootVisualElement;
-            root.Clear();
+            rootVisualElement.Clear();
+            DocumentationEditorTheme.ApplyToolkit(rootVisualElement);
+            VisualElement root = new ScrollView();
+            root.style.flexGrow = 1f;
+            rootVisualElement.Add(root);
             root.style.paddingLeft = root.style.paddingRight = 20f;
             root.style.paddingTop = root.style.paddingBottom = 20f;
-            root.Add(new Label("GEURTS GAME FORGE") { style = { fontSize = 10 } });
-            root.Add(new Label("Documentation") { style = { fontSize = 26, marginBottom = 16f } });
+            var header = new VisualElement();
+            header.AddToClassList("forge-header");
+            var eyebrow = new Label("GEURTS  /  GAME FORGE");
+            eyebrow.AddToClassList("forge-eyebrow");
+            var title = new Label("DOCUMENTATION");
+            title.AddToClassList("forge-title");
+            header.Add(eyebrow); header.Add(title); root.Add(header);
             root.Add(new Label("Dependencies") { style = { fontSize = 16, marginBottom = 8f } });
             root.Add(new Label(DocumentationDependencies.OdinStatus) { name = "odin-status", style = { marginBottom = 8f } });
             root.Add(new HelpBox(DocumentationDependencies.OdinDescription, HelpBoxMessageType.Error));

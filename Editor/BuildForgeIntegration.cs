@@ -13,7 +13,7 @@ namespace Geurts.GameForge.Documentation
         /// <summary>Whether active work, compilation errors or missing required tools prevent setup writes.</summary>
         public static bool IsBusy => DocumentationUpdaterController.IsBusy || PackageSelfUpdater.instance.IsBusy ||
                                      PackageSelfUpdater.EditorBusy || DependencyInstallation.IsBusy || EditorUtility.scriptCompilationFailed ||
-                                     !DocumentationDependencies.RequiredToolsAvailable;
+                                     !DocumentationDependencies.RequiredToolsAvailable || DocumentationIntegration.ExternalOperationUnavailableReason != null;
 
         /// <summary>Loads and validates the approved Git ignore bytes from installed documentation; writes nothing.</summary>
         /// <param name="projectRoot">The absolute Unity project root.</param>

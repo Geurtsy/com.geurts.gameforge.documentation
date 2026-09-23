@@ -26,14 +26,21 @@ namespace Geurts.GameForge.Documentation
         public VisualElement CreateExtensionUI()
         {
             _root = new VisualElement { name = "geurts-documentation-required-dependencies" };
+            DocumentationEditorTheme.ApplyToolkit(_root);
+            // This is an embedded Forge subtree, not the Package Manager window itself.
+            _root.style.flexGrow = 0f;
+            _root.style.paddingLeft = _root.style.paddingRight = 12f;
+            _root.style.paddingTop = _root.style.paddingBottom = 12f;
             _root.style.marginTop = _root.style.marginBottom = 8f;
             Label heading = new Label("Required external dependencies");
+            heading.AddToClassList("forge-eyebrow");
             heading.style.unityFontStyleAndWeight = FontStyle.Bold;
             _root.Add(heading);
             _dependencyLabels.Clear();
             foreach (string dependency in DocumentationDependencies.RequiredExternalTools)
             {
                 VisualElement card = new VisualElement { name = "geurts-dependency-card-" + _dependencyLabels.Count };
+                card.AddToClassList("forge-card");
                 card.style.marginTop = 8f;
                 card.style.paddingLeft = card.style.paddingRight = 12f;
                 card.style.paddingTop = card.style.paddingBottom = 10f;
@@ -58,7 +65,7 @@ namespace Geurts.GameForge.Documentation
                 });
                 _root.Add(card);
             }
-            Label guidance = new Label("My Assets uses your signed-in Unity account to download owned assets inside the Editor. Choose Download, then Import there. Green means the required assemblies are ready; it does not verify ownership or the latest vendor version.");
+            Label guidance = new Label("My Assets uses your signed-in Unity account to download owned assets inside the Editor. Choose Download, then Import there. Installed and ready means the required assemblies are loaded; it does not verify ownership or the latest vendor version.");
             guidance.style.whiteSpace = WhiteSpace.Normal;
             guidance.style.marginTop = 6f;
             _root.Add(guidance);
@@ -77,7 +84,7 @@ namespace Geurts.GameForge.Documentation
                 var status = DocumentationDependencies.ToolStatus(tool);
                 label.text = tool + " — Required · " + status.Message;
                 label.style.color = status.Background;
-                label.parent.style.backgroundColor = DashboardColours.Tint(status.Background);
+                label.parent.style.backgroundColor = DocumentationEditorTheme.Panel;
                 label.parent.style.borderLeftColor = status.Background;
                 label.parent.Q<Label>("installation-status").text = DependencyInstallation.Message(tool);
                 foreach (Button button in label.parent.Query<Button>().ToList())

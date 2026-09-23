@@ -44,6 +44,7 @@ namespace Geurts.GameForge.Documentation.Tests
                 {
                     confirmations++;
                     Button cancel = confirmation.rootVisualElement.Q<Button>("cancel-update");
+                    Assert.That(confirmation.rootVisualElement.ClassListContains(DocumentationEditorTheme.RootClass), Is.True);
                     focusedCancel = confirmation.rootVisualElement.focusController.focusedElement == cancel;
                     // A UI Toolkit click exercises the actual accept control and closes the real modal window.
                     Click(confirmation.rootVisualElement.Q<Button>("confirm-update"));

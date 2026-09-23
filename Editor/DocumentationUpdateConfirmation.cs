@@ -25,22 +25,34 @@ namespace Geurts.GameForge.Documentation
         private void CreateGUI()
         {
             VisualElement root = rootVisualElement;
+            DocumentationEditorTheme.ApplyToolkit(root);
             root.style.paddingTop = root.style.paddingBottom = 12f;
             root.style.paddingLeft = root.style.paddingRight = 12f;
-            root.Add(new Label(DocumentationPackageConstants.UpdateActionLabel)
+            var heading = new Label(DocumentationPackageConstants.UpdateActionLabel)
             {
                 style = { unityFontStyleAndWeight = FontStyle.Bold, marginBottom = 8f }
-            });
-            root.Add(new HelpBox(DocumentationPackageConstants.BuildConfirmationMessage(), HelpBoxMessageType.Warning));
+            };
+            heading.AddToClassList("forge-header");
+            heading.style.whiteSpace = WhiteSpace.Normal;
+            root.Add(heading);
+            // Keep exact replacement targets readable at a narrow window size.
+            var message = new ScrollView();
+            message.style.flexGrow = 1f;
+            var warning = new HelpBox(DocumentationPackageConstants.BuildConfirmationMessage(), HelpBoxMessageType.Warning);
+            warning.AddToClassList("forge-warning");
+            message.Add(warning);
+            root.Add(message);
             VisualElement buttons = new VisualElement();
             buttons.style.flexDirection = FlexDirection.Row;
             buttons.style.justifyContent = Justify.FlexEnd;
             buttons.style.marginTop = 12f;
+            buttons.style.flexShrink = 0f;
             Button cancel = new Button(Close) { text = "Cancel", name = "cancel-update" };
             Button accept = new Button(() => { _confirmed = true; Close(); })
             {
                 text = DocumentationPackageConstants.UpdateActionLabel, name = "confirm-update"
             };
+            accept.AddToClassList("forge-danger");
             cancel.style.minWidth = 100f;
             accept.style.minWidth = 290f;
             cancel.style.height = accept.style.height = 28f;

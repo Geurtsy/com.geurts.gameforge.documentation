@@ -15,13 +15,14 @@ namespace Geurts.GameForge.Documentation
             DocumentationPackageConstants.GetProjectRootFromAssetsPath(Application.dataPath),
             Transport);
 
-        private static bool _installing;
+        private static bool _installing, _updateQueued;
+        internal static Func<bool> ConfirmForTests;
         internal static UpdateStatus Status { get; } = new UpdateStatus();
 
         internal static event Action Changed;
 
         internal static bool IsInstalling => _installing;
-        internal static bool IsBusy => _installing || Status.IsChecking;
+        internal static bool IsBusy => _installing || _updateQueued || Status.IsChecking;
         internal static DocumentationAvailability Availability => Status.Availability;
         internal static string StatusMessage => Status.Message;
         internal static string RemoteCommit => Status.RemoteCommit;
@@ -29,7 +30,7 @@ namespace Geurts.GameForge.Documentation
 
         internal static async Task CheckForUpdatesAsync(bool showWindowWhenAvailable)
         {
-            if (IsBusy || PackageSelfUpdater.instance.IsInstalling)
+            if (IsBusy || PackageSelfUpdater.instance.IsInstalling || DocumentationIntegration.ExternalOperationUnavailableReason != null)
             {
                 return;
             }
@@ -65,12 +66,18 @@ namespace Geurts.GameForge.Documentation
         internal static void ConfirmAndUpdate()
         {
             if (!CanStartUpdate()) return;
-            if (DocumentationUpdateConfirmation.Confirm())
+            if ((ConfirmForTests ?? DocumentationUpdateConfirmation.Confirm)())
+            {
+                _updateQueued = true;
+                Status.Message = "Documentation update confirmed; waiting to start.";
+                NotifyChanged();
                 EditorApplication.delayCall += BeginConfirmedUpdate;
+            }
         }
 
         internal static async void BeginConfirmedUpdate()
         {
+            _updateQueued = false;
             if (!CanStartUpdate()) return;
 
             _installing = true;
@@ -81,7 +88,7 @@ namespace Geurts.GameForge.Documentation
             try
             {
                 prepared = await Service.PrepareLatestAsync(CancellationToken.None, ReportProgress);
-                ReportProgress(new UpdateProgress("Replacing and verifying the five confirmed managed targets..."));
+                ReportProgress(new UpdateProgress("Replacing and verifying the four confirmed managed targets..."));
                 await Task.Yield();
 
                 DocumentationApplyResult applyResult = Service.Apply(prepared);
@@ -154,9 +161,10 @@ namespace Geurts.GameForge.Documentation
 
         private static bool CanStartUpdate()
         {
-            string reason = !DocumentationDependencies.OdinInstalled ? "Odin Inspector is required."
+            string reason = DocumentationIntegration.ExternalOperationUnavailableReason ?? (!DocumentationDependencies.RequiredToolsAvailable ? "Odin Inspector and Quantum Console are required."
                 : IsBusy || PackageSelfUpdater.instance.IsBusy ? "Another documentation or package operation is still running."
-                : PackageSelfUpdater.EditorBusy ? "Unity is compiling, importing assets, or in Play mode." : null;
+                : EditorUtility.scriptCompilationFailed ? "Unity has script compilation errors."
+                : PackageSelfUpdater.EditorBusy ? "Unity is compiling, importing assets, or in Play mode." : null);
             if (reason == null) return true;
             // Do not replace progress from an active operation, but never silently discard an accepted action.
             string message = "Documentation update could not start: " + reason + " Try Update again when Unity is ready.";

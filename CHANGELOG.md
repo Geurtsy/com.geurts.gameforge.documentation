@@ -1,10 +1,10 @@
 # Changelog
 
-## [0.9.1] - Unreleased
+## [0.9.1] - 2026-09-23
 
 - Apply the shared dark sci-fi and green Editor theme to the Odin dashboard, dependency guidance, Package Manager extension and all three confirmation windows.
 - Preserve warning and error colours, cancel-default confirmation behaviour, explicit/deferred actions and the companion's independence from God.
-- Generate the companion's dependency-free theme from God's canonical Editor source; temporary IMGUI styling is restored after every draw and generated resources are released when the window closes.
+- Generate the companion's theme from God's canonical Editor source without adding a God/UPM package dependency; required licensed Odin/QC assemblies remain separate prerequisites. Temporary IMGUI styling is restored after every draw and generated resources are released when the window closes.
 - Keep long confirmation paths and dependency guidance scrollable without hiding the action controls.
 
 ## [0.9.0] - Unreleased

@@ -9,10 +9,10 @@ The package contains no generic Geurts documentation. It checks package and docu
 In Unity, open **Window > Package Manager**, choose **Install package from git URL**, and enter:
 
 ```text
-https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
+https://github.com/Geurtsy/com.geurts.gameforge.documentation.git#main
 ```
 
-Package version 0.9.1 (unreleased) targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
+Package version 0.9.1 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
 
 Select **Geurts Game Forge Documentation** in Unity Package Manager to see **Required external dependencies**, with separate **Required** labels for Odin Inspector and Quantum Console. The package description also includes these labels before the scripts compile. These are separately imported assets, so the native resolver's Dependencies list remains reserved for Unity package dependencies.
 
@@ -107,7 +107,7 @@ These methods never update documentation, run scripts, create the folder structu
 
 ## Optional Game Forge God interface
 
-God 0.8.0 or later can be installed first. Its **Game Forge God** window can then install this companion, update the companion package, and separately check or update the actual project documentation. Documentation 0.9.1 is an unreleased source version until published with an exact catalogue pin. This companion remains independently installable.
+God 0.8.0 or later can be installed first. Its **Game Forge God** window can then install this companion, update the companion package, and separately check or update the actual project documentation. Package 0.9.1 includes the shared Editor theme and optional God integration API; documentation content has its own version and update action. Use the authoritative catalogue's immutable source for a specific package release. This companion remains independently installable.
 
 ## Shared Editor appearance
 

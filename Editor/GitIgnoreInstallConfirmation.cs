@@ -32,7 +32,9 @@ namespace Geurts.GameForge.Documentation
             root.Add(heading);
             var message = new ScrollView();
             message.style.flexGrow = 1f;
-            message.Add(new HelpBox(_message, HelpBoxMessageType.Warning));
+            var warning = new HelpBox(_message, HelpBoxMessageType.Warning);
+            warning.AddToClassList("forge-warning");
+            message.Add(warning);
             root.Add(message);
 
             VisualElement buttons = new VisualElement();

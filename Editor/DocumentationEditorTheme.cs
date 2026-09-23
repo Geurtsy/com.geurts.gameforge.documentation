@@ -40,7 +40,7 @@ namespace Geurts.GameForge.Documentation
 
         private readonly List<Texture2D> _textures = new List<Texture2D>();
         /// <summary>Owned, cached styles. Reuse these for all IMGUI/Odin presentation in the surface.</summary>
-        public readonly GUIStyle Window, Title, Eyebrow, Body, Small, Section, Button, SelectedButton, Log, Card, Inspection;
+        public readonly GUIStyle Window, Title, Eyebrow, Body, Small, Section, Foldout, Button, SelectedButton, DangerButton, Log, Card, Inspection;
         private GUISkin _skin;
         private readonly List<GUIStyle> _readableStyles = new List<GUIStyle>();
         private Color[] _savedColors;
@@ -52,9 +52,6 @@ namespace Geurts.GameForge.Documentation
         private Color[] _savedControlColors;
         private RectOffset[] _savedBorders;
         private readonly RectOffset _thinBorder = new RectOffset(1, 1, 1, 1);
-#if ODIN_INSPECTOR
-        private Color _odinBox, _odinHeader, _odinBorder;
-#endif
 
         /// <summary>Creates cached styles and window-owned textures in an active IMGUI context.</summary>
         public DocumentationEditorTheme()
@@ -65,21 +62,28 @@ namespace Geurts.GameForge.Documentation
             Body = Label(12, Text); Body.wordWrap = true;
             Small = Label(10, Muted); Small.wordWrap = true;
             Section = Label(14, Text, true); Section.wordWrap = true;
+            Foldout = new GUIStyle(EditorStyles.foldout) { fontSize = 12, fontStyle = FontStyle.Bold, wordWrap = false, fixedHeight = 22 };
+            for (int state = 0; state < 8; state++) State(Foldout, state).textColor = state % 4 == 1 || state % 4 == 3 ? Green : Text;
             Button = new GUIStyle(GUI.skin.button)
             {
                 fontSize = 11, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter,
-                border = new RectOffset(1, 1, 1, 1), padding = new RectOffset(10, 10, 7, 7),
-                margin = new RectOffset(2, 2, 2, 2), wordWrap = true
+                border = new RectOffset(2, 2, 2, 2), padding = new RectOffset(8, 8, 4, 4),
+                margin = new RectOffset(2, 2, 2, 2), wordWrap = false
             };
             SetState(Button.normal, Texture(Raised, Border), Text);
             SetState(Button.hover, Texture(new Color32(31, 58, 46, 255), Green), Green);
             SetState(Button.active, Texture(new Color32(48, 91, 64, 255), Green), Color.white);
-            SetState(Button.focused, Button.hover.background, Green);
+            SetState(Button.focused, Texture(Raised, Green, 2), Green);
             SelectedButton = new GUIStyle(Button);
             SetState(SelectedButton.normal, Texture(new Color32(31, 65, 46, 255), Green), Green);
             SetState(SelectedButton.hover, Button.hover.background, Color.white);
             SetState(SelectedButton.active, Button.active.background, Color.white);
-            SetState(SelectedButton.focused, Button.hover.background, Color.white);
+            SetState(SelectedButton.focused, Button.focused.background, Color.white);
+            DangerButton = new GUIStyle(Button);
+            SetState(DangerButton.normal, Texture(Raised, Error), Text);
+            SetState(DangerButton.hover, Texture(Panel, Error), Error);
+            SetState(DangerButton.focused, Texture(Raised, Error, 2), Error);
+            SetState(DangerButton.active, Texture(Panel, Error, 2), Color.white);
             Log = Label(12, Text); Log.richText = true; Log.wordWrap = true;
             Log.padding = new RectOffset(14, 12, 10, 10);
             SetState(Log.hover, null, Color.white);
@@ -163,7 +167,12 @@ namespace Geurts.GameForge.Documentation
             {
                 bool button = i < _buttonStyles.Count;
                 var style = button ? _buttonStyles[i] : _panelStyles[i - _buttonStyles.Count];
-                _savedBorders[i] = style.border; style.border = _thinBorder;
+                // GUIStyle.border is a live native view, so save the values rather than that view.
+                var border = style.border;
+                if (_savedBorders[i] == null) _savedBorders[i] = new RectOffset();
+                _savedBorders[i].left = border.left; _savedBorders[i].right = border.right;
+                _savedBorders[i].top = border.top; _savedBorders[i].bottom = border.bottom;
+                style.border = button ? Button.border : _thinBorder;
                 for (int state = 0; state < 8; state++)
                 {
                     var value = State(style, state);
@@ -173,10 +182,6 @@ namespace Geurts.GameForge.Documentation
                     value.textColor = button ? source.textColor : Text;
                 }
             }
-#if ODIN_INSPECTOR
-            _odinBox = SirenixGUIStyles.BoxBackgroundColor; _odinHeader = SirenixGUIStyles.HeaderBoxBackgroundColor; _odinBorder = SirenixGUIStyles.BorderColor;
-            SirenixGUIStyles.BoxBackgroundColor = Panel; SirenixGUIStyles.HeaderBoxBackgroundColor = Raised; SirenixGUIStyles.BorderColor = Border;
-#endif
         }
 
         private void Leave()
@@ -194,9 +199,6 @@ namespace Geurts.GameForge.Documentation
             }
             for (int i = _readableStyles.Count - 1; i >= 0; i--)
                 for (int state = 0; state < 8; state++) State(_readableStyles[i], state).textColor = _savedColors[i * 8 + state];
-#if ODIN_INSPECTOR
-            SirenixGUIStyles.BoxBackgroundColor = _odinBox; SirenixGUIStyles.HeaderBoxBackgroundColor = _odinHeader; SirenixGUIStyles.BorderColor = _odinBorder;
-#endif
             GUI.skin = _previousSkin;
         }
 
@@ -251,7 +253,7 @@ namespace Geurts.GameForge.Documentation
         private static GUIStyle Label(int size, Color color, bool bold = false)
         {
             var style = new GUIStyle(EditorStyles.label) { fontSize = size, fontStyle = bold ? FontStyle.Bold : FontStyle.Normal };
-            style.normal.textColor = color;
+            for (int state = 0; state < 8; state++) State(style, state).textColor = color;
             return style;
         }
 
@@ -262,11 +264,13 @@ namespace Geurts.GameForge.Documentation
         }
 
         // Small nine-sliced textures avoid per-repaint allocations and do not ship bitmap assets.
-        private Texture2D Texture(Color fill, Color edge)
+        private Texture2D Texture(Color fill, Color edge, int thickness = 1)
         {
-            var texture = new Texture2D(3, 3) { hideFlags = HideFlags.HideAndDontSave, filterMode = FilterMode.Point };
-            var pixels = new Color[9];
-            for (int i = 0; i < pixels.Length; i++) pixels[i] = i == 4 ? fill : edge;
+            var texture = new Texture2D(5, 5) { hideFlags = HideFlags.HideAndDontSave, filterMode = FilterMode.Point };
+            var pixels = new Color[25];
+            for (int y = 0; y < 5; y++)
+                for (int x = 0; x < 5; x++)
+                    pixels[y * 5 + x] = x < thickness || y < thickness || x >= 5 - thickness || y >= 5 - thickness ? edge : fill;
             texture.SetPixels(pixels); texture.Apply(); _textures.Add(texture);
             return texture;
         }

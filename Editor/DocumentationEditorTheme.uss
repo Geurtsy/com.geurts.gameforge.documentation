@@ -80,8 +80,12 @@
 }
 .geurts-forge .unity-base-field__input { color: #DEECE7; }
 .geurts-forge .unity-toggle__label { color: #DEECE7; white-space: normal; }
+.geurts-forge .unity-toggle:disabled { opacity: 1; }
+.geurts-forge .unity-toggle:disabled .unity-toggle__label { color: #8FA8A1; opacity: 1; }
 .geurts-forge .unity-foldout__toggle { color: #DEECE7; }
-.geurts-forge .unity-toggle__checkmark { -unity-background-image-tint-color: #6EF29D; }
+.geurts-forge .unity-toggle__checkmark { -unity-background-image-tint-color: #8FA8A1; }
+.geurts-forge .unity-toggle:checked .unity-toggle__checkmark,
+.geurts-forge .unity-toggle__input:checked .unity-toggle__checkmark { -unity-background-image-tint-color: #6EF29D; }
 .geurts-forge .forge-card:disabled { opacity: 0.75; }
 .geurts-forge .forge-complete { border-color: #6EF29D; }
 .geurts-forge .forge-warning { border-left-color: #FFE66D; }

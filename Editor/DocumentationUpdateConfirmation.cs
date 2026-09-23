@@ -38,7 +38,9 @@ namespace Geurts.GameForge.Documentation
             // Keep exact replacement targets readable at a narrow window size.
             var message = new ScrollView();
             message.style.flexGrow = 1f;
-            message.Add(new HelpBox(DocumentationPackageConstants.BuildConfirmationMessage(), HelpBoxMessageType.Warning));
+            var warning = new HelpBox(DocumentationPackageConstants.BuildConfirmationMessage(), HelpBoxMessageType.Warning);
+            warning.AddToClassList("forge-warning");
+            message.Add(warning);
             root.Add(message);
             VisualElement buttons = new VisualElement();
             buttons.style.flexDirection = FlexDirection.Row;

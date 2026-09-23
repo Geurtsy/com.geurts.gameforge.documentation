@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$UnityPath = "C:\Program Files\Unity\Hub\Editor\6000.3.22f1\Editor\Unity.exe",
+    [string]$UnityPath = "C:\Program Files\Unity\Hub\Editor\6000.3.24f1\Editor\Unity.exe",
 
     [Parameter()]
     [string]$ProjectPath,
@@ -169,8 +169,8 @@ if (-not [string]::IsNullOrWhiteSpace($DocumentationPath)) {
     }
 }
 @"
-m_EditorVersion: 6000.3.22f1
-m_EditorVersionWithRevision: 6000.3.22f1 (1c726e1fb402)
+m_EditorVersion: 6000.3.24f1
+m_EditorVersionWithRevision: 6000.3.24f1 (4e7b9b5b6244)
 "@ | Set-Content -LiteralPath (Join-Path $ProjectPath "ProjectSettings\ProjectVersion.txt") -Encoding UTF8
 
 $resultPath = Join-Path $ProjectPath "TestResults.xml"
@@ -216,7 +216,7 @@ if ($log -match '(?m)\berror CS\d+' -or $log -match '(?m)\bwarning CS\d+' -or $l
     PackageReference = $PackageReference
     Odin = -not [string]::IsNullOrWhiteSpace($OdinPath)
     QuantumConsole = -not [string]::IsNullOrWhiteSpace($QuantumConsolePath)
-    Unity = "6000.3.22f1"
+    Unity = "6000.3.24f1"
     Passed = [int]$testRun.passed
     Failed = [int]$testRun.failed
     Skipped = [int]$testRun.skipped

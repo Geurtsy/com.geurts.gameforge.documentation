@@ -16,10 +16,8 @@ namespace Geurts.GameForge.Documentation
         internal const string TechniquePath = "GeurtsTechniques/GeurtsAgentTechnique.md";
         internal const string EntryPath = "AI_READ_FIRST.md";
         internal const string EntryPlaceholder = "{{GEURTS_DOCUMENTATION_ENTRY_POINT}}";
-        private const string MenuPath = "Tools/Geurts Game Forge/" + ActionLabel;
         private static readonly UTF8Encoding _utf8 = new UTF8Encoding(false, true);
 
-        [MenuItem(MenuPath, false, 102)]
         internal static void ChooseAndInstall()
         {
             if (!CanInstall()) return;
@@ -42,7 +40,6 @@ namespace Geurts.GameForge.Documentation
             }
         }
 
-        [MenuItem(MenuPath, true)]
         private static bool CanInstall()
         {
             return DocumentationDependencies.OdinInstalled && !DocumentationUpdaterController.IsBusy &&
@@ -52,6 +49,27 @@ namespace Geurts.GameForge.Documentation
         internal static bool Install(string projectRoot, string target, Func<string, bool> confirm)
         {
             if (string.IsNullOrWhiteSpace(target)) return false;
+            target = ValidateDestination(projectRoot, target);
+            string fullRoot = Path.GetFullPath(projectRoot);
+            // Prepare from the installed, manifest-selected technique before asking to overwrite anything.
+            byte[] payload = Load(fullRoot);
+            string message = "Create the Codex guide at:\n" + target + "\n\nIt will direct the AI to:\n" +
+                             GetEntryPoint(fullRoot) + "\n\n" + DiscoveryNotice() +
+                             "\n\nWARNING: If this guide already exists, installation will overwrite all of its contents. " +
+                             "Local changes will be lost. No backup is created.";
+            if (!confirm(message)) return false;
+            ValidateDestination(fullRoot, target);
+            // Replace the directory entry rather than writing through a possible hard link.
+            File.Delete(target);
+            using (FileStream stream = new FileStream(target, FileMode.CreateNew, FileAccess.Write))
+                stream.Write(payload, 0, payload.Length);
+            if (!File.ReadAllBytes(target).SequenceEqual(payload))
+                throw new IOException("The installed guide could not be verified. Run Install Codex guide again.");
+            return true;
+        }
+
+        internal static string ValidateDestination(string projectRoot, string target)
+        {
             target = Path.GetFullPath(target);
             string name = Path.GetFileName(target);
             if (name != "AGENTS.md")
@@ -63,21 +81,7 @@ namespace Geurts.GameForge.Documentation
                 throw new InvalidDataException("Choose a location outside the managed documentation and Docs/GameDesign folders.");
             if (!Directory.Exists(folder)) throw new DirectoryNotFoundException("Choose an existing destination folder.");
             ValidateTarget(target);
-            // Prepare from the installed, manifest-selected technique before asking to overwrite anything.
-            byte[] payload = Load(fullRoot);
-            string message = "Create the Codex guide at:\n" + target + "\n\nIt will direct the AI to:\n" +
-                             GetEntryPoint(fullRoot) + "\n\n" + DiscoveryNotice() +
-                             "\n\nWARNING: If this guide already exists, installation will overwrite all of its contents. " +
-                             "Local changes will be lost. No backup is created.";
-            if (!confirm(message)) return false;
-            ValidateTarget(target);
-            // Replace the directory entry rather than writing through a possible hard link.
-            File.Delete(target);
-            using (FileStream stream = new FileStream(target, FileMode.CreateNew, FileAccess.Write))
-                stream.Write(payload, 0, payload.Length);
-            if (!File.ReadAllBytes(target).SequenceEqual(payload))
-                throw new IOException("The installed guide could not be verified. Run Install Codex guide again.");
-            return true;
+            return target;
         }
 
         internal static string GetEntryPoint(string projectRoot)

@@ -11,9 +11,6 @@ namespace Geurts.GameForge.Documentation
     internal static class GitIgnoreInstaller
     {
         internal const string ActionLabel = "Install Geurts .gitignore";
-        internal const string MenuPath = "Tools/Geurts Game Forge/" + ActionLabel;
-
-        [MenuItem(MenuPath, false, 101)]
         internal static void ConfirmAndInstall()
         {
             if (!CanInstall())
@@ -26,6 +23,9 @@ namespace Geurts.GameForge.Documentation
                 string projectRoot = DocumentationPackageConstants.GetProjectRootFromAssetsPath(Application.dataPath);
                 if (!InstallWithConfirmation(projectRoot, GitIgnoreInstallConfirmation.Confirm))
                 {
+                    if (File.Exists(Path.Combine(projectRoot, ".gitignore")))
+                        EditorUtility.DisplayDialog("Geurts .gitignore Preserved",
+                            "Your existing .gitignore has different rules and was preserved. Review it before continuing project setup.", "Close");
                     return;
                 }
 
@@ -41,7 +41,6 @@ namespace Geurts.GameForge.Documentation
             }
         }
 
-        [MenuItem(MenuPath, true)]
         private static bool CanInstall()
         {
             return DocumentationDependencies.OdinInstalled && !DocumentationUpdaterController.IsBusy && !PackageSelfUpdater.instance.IsBusy &&
@@ -52,11 +51,13 @@ namespace Geurts.GameForge.Documentation
         {
             string fullRoot = Path.GetFullPath(projectRoot);
             string target = Path.Combine(fullRoot, ".gitignore");
+            ValidateDestination(fullRoot);
+            if (File.Exists(target))
+                return File.ReadAllBytes(target).SequenceEqual(GitIgnoreTemplateReader.Load(fullRoot));
             string message = "This installs the .gitignore template from GeurtsGameForgeDocumentation at:\n\n" +
                              target + "\n\n" +
-                             "WARNING: Your existing .gitignore will be overwritten in full. " +
-                             "All custom rules in that file will be lost. No backup is created.\n\n" +
-                             "If the file does not exist, it will be created.";
+                             "The file is created only when missing. Existing ignore rules are preserved unchanged. " +
+                             "Git tracking state will not be changed.";
             if (!confirm(message))
             {
                 return false;
@@ -64,10 +65,9 @@ namespace Geurts.GameForge.Documentation
 
             // Load and validate the documentation-owned payload before touching the destination.
             byte[] payload = GitIgnoreTemplateReader.Load(fullRoot);
-            DocumentationFileOperations.EnsureManagedTargetIsRegular(fullRoot, ".gitignore", false);
+            ValidateDestination(fullRoot);
 
-            // Replace the directory entry so a hard-linked destination cannot overwrite another file.
-            File.Delete(target);
+            // CreateNew preserves a file introduced after the confirmation, including hard links.
             using (FileStream stream = new FileStream(target, FileMode.CreateNew, FileAccess.Write))
             {
                 stream.Write(payload, 0, payload.Length);
@@ -79,6 +79,15 @@ namespace Geurts.GameForge.Documentation
             }
 
             return true;
+        }
+
+        internal static void ValidateDestination(string projectRoot)
+        {
+            string target = Path.GetFullPath(Path.Combine(projectRoot, ".gitignore"));
+            string volume = Path.GetPathRoot(target);
+            // Validate every ancestor, including the project root, before inspecting or creating the file.
+            DocumentationFileOperations.EnsureManagedTargetIsRegular(volume,
+                target.Substring(volume.Length).Replace('\\', '/'), false);
         }
     }
 }

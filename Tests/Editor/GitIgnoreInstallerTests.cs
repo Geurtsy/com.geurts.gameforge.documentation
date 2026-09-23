@@ -35,8 +35,9 @@ namespace Geurts.GameForge.Documentation.Tests
         }
 
         [Test]
-        public void CancelWarnsAboutTheExactTargetAndPreservesExistingBytesAndTimestamp()
+        public void DifferingExistingFileIsPreservedWithoutConfirmation()
         {
+            CopyDocumentationFixture();
             WriteExistingTarget();
             byte[] before = File.ReadAllBytes(_target);
             DateTime timestamp = File.GetLastWriteTimeUtc(_target);
@@ -48,11 +49,10 @@ namespace Geurts.GameForge.Documentation.Tests
                 return false;
             }), Is.False);
 
-            Assert.That(warning, Does.Contain(_target));
-            Assert.That(warning, Does.Contain("will be overwritten in full"));
-            Assert.That(warning, Does.Contain("All custom rules in that file will be lost"));
+            Assert.That(warning, Is.Null);
             Assert.That(File.ReadAllBytes(_target), Is.EqualTo(before));
             Assert.That(File.GetLastWriteTimeUtc(_target), Is.EqualTo(timestamp));
+            Assert.That(BuildForgeIntegration.IsGitIgnoreInstalled(_projectRoot), Is.False);
         }
 
         [Test]
@@ -81,11 +81,9 @@ namespace Geurts.GameForge.Documentation.Tests
             }
         }
 
-        [TestCase(false, false)]
-        [TestCase(false, true)]
-        [TestCase(true, false)]
-        [TestCase(true, true)]
-        public void ConfirmedInstallUsesTheActualDocumentationPayload(bool existing, bool crlfWithBom)
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ConfirmedInstallUsesTheActualDocumentationPayload(bool crlfWithBom)
         {
             CopyDocumentationFixture();
             foreach (string file in new[] { _documentPath, _manifestPath })
@@ -96,10 +94,6 @@ namespace Geurts.GameForge.Documentation.Tests
                     text = text.Replace("\n", "\r\n");
                 }
                 File.WriteAllText(file, text, new UTF8Encoding(crlfWithBom));
-            }
-            if (existing)
-            {
-                WriteExistingTarget();
             }
             string sentinel = Path.Combine(_projectRoot, "unrelated.txt");
             File.WriteAllText(sentinel, "user content");
@@ -121,9 +115,13 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(File.ReadAllText(sentinel), Is.EqualTo("user content"));
             Assert.That(File.ReadAllBytes(_documentPath), Is.EqualTo(documentBefore));
             Assert.That(File.ReadAllBytes(_manifestPath), Is.EqualTo(manifestBefore));
-
-            Assert.That(GitIgnoreInstaller.InstallWithConfirmation(_projectRoot, _ => true), Is.True);
+            Assert.That(BuildForgeIntegration.LoadGitIgnore(_projectRoot), Is.EqualTo(installed));
+            Assert.That(BuildForgeIntegration.IsGitIgnoreInstalled(_projectRoot), Is.True);
+            DateTime timestamp = File.GetLastWriteTimeUtc(_target);
+            Assert.That(GitIgnoreInstaller.InstallWithConfirmation(_projectRoot,
+                _ => throw new Exception("An identical existing file needs no confirmation.")), Is.True);
             Assert.That(File.ReadAllBytes(_target), Is.EqualTo(installed));
+            Assert.That(File.GetLastWriteTimeUtc(_target), Is.EqualTo(timestamp));
         }
 
         [TestCase("payload")]
@@ -184,7 +182,7 @@ namespace Geurts.GameForge.Documentation.Tests
         }
 
         [Test]
-        public void ReplacingHardLinkedTargetPreservesTheOtherFile()
+        public void ExistingHardLinkedTargetAndOtherFileAreBothPreserved()
         {
             CopyDocumentationFixture();
             string otherFile = Path.Combine(_projectRoot, "other-file.txt");
@@ -192,9 +190,30 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(CreateHardLink(_target, otherFile, IntPtr.Zero), Is.True,
                 "Could not create hard-link fixture: " + Marshal.GetLastWin32Error());
 
-            Assert.That(GitIgnoreInstaller.InstallWithConfirmation(_projectRoot, _ => true), Is.True);
+            Assert.That(GitIgnoreInstaller.InstallWithConfirmation(_projectRoot, _ => true), Is.False);
             Assert.That(File.ReadAllText(otherFile), Is.EqualTo("unrelated original"));
-            Assert.That(File.ReadAllText(_target), Is.Not.EqualTo("unrelated original"));
+            Assert.That(File.ReadAllText(_target), Is.EqualTo("unrelated original"));
+        }
+
+        [Test]
+        public void TargetCreatedDuringConfirmationIsPreserved()
+        {
+            CopyDocumentationFixture();
+            Assert.Throws<IOException>(() => GitIgnoreInstaller.InstallWithConfirmation(_projectRoot, message =>
+            {
+                Assert.That(message, Does.Contain(_target).And.Contain("preserved unchanged"));
+                WriteExistingTarget();
+                return true;
+            }));
+            Assert.That(File.ReadAllText(_target), Is.EqualTo("# custom rules\r\nkeep-private/\r\n"));
+        }
+
+        [Test]
+        public void MissingFileRemainsIncompleteUntilVerified()
+        {
+            CopyDocumentationFixture();
+            Assert.That(BuildForgeIntegration.IsGitIgnoreInstalled(_projectRoot), Is.False);
+            Assert.That(File.Exists(_target), Is.False);
         }
 
         private void WriteExistingTarget()

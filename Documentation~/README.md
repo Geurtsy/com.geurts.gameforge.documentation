@@ -16,9 +16,9 @@ At startup, window open, and manual refresh the package reads bounded remote ver
 
 Generic Geurts guidance is intentionally absent from this package and remains owned by `Geurtsy/GeurtsGameForge_Documentation`.
 
-To install the documentation-owned `.gitignore`, choose **Tools > Geurts Game Forge > Install Geurts .gitignore** or the matching button in the Documentation window. The installed documentation must contain the valid approved payload in `GeurtsTechniques/GeurtsGitIgnoreTechnique.md` and its manifest entry. The tool does not download or bundle a fallback template.
+In companion 0.8.0, project setup opens **Tools > Geurts Game Forge > Build Forge** when God's setup window is available. The separate top-level `.gitignore` and Codex install menus have been removed. When the setup window is unavailable, the Documentation window retains both standalone installer buttons. The installed documentation must contain the valid approved payload in `GeurtsTechniques/GeurtsGitIgnoreTechnique.md` and its manifest entry. The tool does not download or bundle a fallback template.
 
-The confirmation warns that the project-root `.gitignore` will be overwritten and custom rules lost. Cancel is the initial selection; Cancel, Enter, Escape, or closing the dialog changes nothing. **Install and Overwrite** validates the source first, then creates or replaces only `.gitignore`. No backup, merge, or Git tracking changes are performed. This separate action does not run with documentation Update or at startup.
+The confirmation identifies the exact project-root `.gitignore` path. Cancel is the initial selection; Cancel, Enter, Escape, or closing the dialog changes nothing. **Install** validates the source and creates only a missing file. Identical files remain unchanged; differing custom files retain their bytes and timestamps and require review. No merge or Git tracking changes are performed. This separate action does not run with documentation Update or at startup.
 
 Documentation confirmation collects the choice in a UI Toolkit dialog. Dashboard actions are deferred until drawing finishes, and installation begins only after the accepted modal closes. Cancel, Enter, Escape, or closing the confirmation does not start an update.
 

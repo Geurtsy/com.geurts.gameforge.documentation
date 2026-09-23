@@ -18,6 +18,7 @@ namespace Geurts.GameForge.Documentation
             HasType("Sirenix.OdinInspector.Editor", "Sirenix.OdinInspector.Editor.PropertyTree");
         private static readonly bool _quantumAvailable = HasType("QFSW.QC", "QFSW.QC.QuantumConsole") &&
             HasType("QFSW.QC", "QFSW.QC.QuantumConsoleProcessor");
+        internal static bool RequiredToolsAvailable => OdinInstalled && _odinAvailable && _quantumAvailable;
 
         internal static (string Message, Color Background) ToolStatus(string tool)
         {

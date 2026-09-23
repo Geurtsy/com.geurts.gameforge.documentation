@@ -304,13 +304,30 @@ namespace Geurts.GameForge.Documentation
             EditorGUILayout.EndVertical();
         }
 
-        [OnInspectorGUI, PropertyOrder(25)]
+        private static bool HasBuildForge => System.Type.GetType(
+            "Geurts.GameForge.God.Editor.BuildForgeWindow, Geurts.GameForge.God.Editor") != null;
+
+        [BoxGroup("Project setup", order: 25), ShowIf(nameof(HasBuildForge)), OnInspectorGUI, PropertyOrder(0)]
+        private void DrawBuildForgeDescription()
+        {
+            EnsureStyles();
+            GUILayout.Label("Build Forge guides you through Git ignore rules, the Codex guide, folders and bootstrap scenes, with a tick for each completed step.", _bodyStyle);
+        }
+
+        [BoxGroup("Project setup"), ShowIf(nameof(HasBuildForge)), PropertyOrder(1)]
+        [Button("Open Build Forge", ButtonSizes.Large), DisableIf(nameof(IsBusy))]
+        private void OpenBuildForge()
+        {
+            DeferAction(() => EditorApplication.ExecuteMenuItem("Tools/Geurts Game Forge/Build Forge"));
+        }
+
+        [OnInspectorGUI, PropertyOrder(25), HideIf(nameof(HasBuildForge))]
         private void DrawGitIgnoreSpacing()
         {
             GUILayout.Space(12f);
         }
 
-        [BoxGroup("Codex guide", order: 26), OnInspectorGUI, PropertyOrder(0)]
+        [BoxGroup("Codex guide", order: 26), HideIf(nameof(HasBuildForge)), OnInspectorGUI, PropertyOrder(0)]
         private void DrawCodexGuideDescription()
         {
             EnsureStyles();
@@ -319,7 +336,7 @@ namespace Geurts.GameForge.Documentation
             GUILayout.Space(6f);
         }
 
-        [BoxGroup("Codex guide"), PropertyOrder(1)]
+        [BoxGroup("Codex guide"), HideIf(nameof(HasBuildForge)), PropertyOrder(1)]
         [Button(CodexGuideInstaller.ActionLabel, ButtonSizes.Large), DisableIf(nameof(IsBusy))]
         private void InstallCodexGuide()
         {
@@ -327,17 +344,17 @@ namespace Geurts.GameForge.Documentation
         }
 
         // Secondary action card: installing ignore rules is independent of documentation Update.
-        [BoxGroup("Git ignore rules", order: 30), OnInspectorGUI, PropertyOrder(0)]
+        [BoxGroup("Git ignore rules", order: 30), HideIf(nameof(HasBuildForge)), OnInspectorGUI, PropertyOrder(0)]
         private void DrawGitIgnoreDescription()
         {
             EnsureStyles();
             GUILayout.Label("Use the approved Git ignore rules from your installed documentation.", _bodyStyle);
             GUILayout.Space(4f);
-            GUILayout.Label("Replaces your project .gitignore and its custom rules after a separate confirmation.", _bodyStyle);
+            GUILayout.Label("Creates a missing project .gitignore after confirmation. Existing custom rules are preserved.", _bodyStyle);
             GUILayout.Space(6f);
         }
 
-        [BoxGroup("Git ignore rules"), PropertyOrder(1)]
+        [BoxGroup("Git ignore rules"), HideIf(nameof(HasBuildForge)), PropertyOrder(1)]
         [Button(GitIgnoreInstaller.ActionLabel, ButtonSizes.Medium), DisableIf(nameof(IsBusy))]
         private void InstallGitIgnore()
         {

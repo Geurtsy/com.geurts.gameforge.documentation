@@ -2,13 +2,27 @@
 
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
-using UnityEditor.PackageManager;
+using UnityEditor;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace Geurts.GameForge.Documentation.Tests
 {
     internal sealed class DocumentationPackageTests
     {
+        /// <summary>Project setup is reached through Build Forge or the dashboard, with no duplicate top-level installers.</summary>
+        [Test]
+        public void SetupInstallersHaveNoTopLevelMenuEntries()
+        {
+            foreach (System.Type installer in new[] { typeof(GitIgnoreInstaller), typeof(CodexGuideInstaller) })
+            {
+                var menus = installer.GetMethods(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+                    .SelectMany(method => method.GetCustomAttributes(typeof(MenuItem), false));
+                Assert.That(menus, Is.Empty);
+            }
+        }
+
         [Test]
         public void PackageIsIndependentAndContainsNoGenericDocumentationPayload()
         {

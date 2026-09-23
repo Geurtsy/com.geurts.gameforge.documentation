@@ -37,7 +37,7 @@ namespace Geurts.GameForge.Documentation
             {
                 _confirmed = true;
                 Close();
-            }) { text = "Install and Overwrite", name = "confirm-install" };
+            }) { text = "Install", name = "confirm-install" };
             cancel.style.minWidth = 100f;
             install.style.minWidth = 170f;
             buttons.Add(cancel);

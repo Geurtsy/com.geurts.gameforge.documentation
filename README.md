@@ -12,7 +12,7 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Package version 0.7.0 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
+Package version 0.8.0 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
 
 Select **Geurts Game Forge Documentation** in Unity Package Manager to see **Required external dependencies**, with separate **Required** labels for Odin Inspector and Quantum Console. The package description also includes these labels before the scripts compile. These are separately imported assets, so the native resolver's Dependencies list remains reserved for Unity package dependencies.
 
@@ -48,11 +48,11 @@ Checks never acquire an installation archive, run an installer, or modify projec
 
 ## Install the project .gitignore
 
-After installing the documentation, choose **Tools > Geurts Game Forge > Install Geurts .gitignore**, or use the same button in the Documentation window.
+After installing the documentation, use the **Git ignore rules** step in **Tools > Geurts Game Forge > Build Forge**. The Documentation window opens that setup window when available. When God is absent or predates the setup window, use **Install Geurts .gitignore** inside the Documentation window. The duplicate top-level installation menus have been removed.
 
 The tool reads the approved fenced payload from `GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsGitIgnoreTechnique.md` and checks its version against `GeurtsTechniqueManifest.md`, plus its markers, encoding, line count, and checksum. No template is bundled with this Unity package or downloaded by this action. If the installed documentation is missing or invalid, installation stops before changing `.gitignore`; run the documentation Update first.
 
-The warning names the full project-root destination and explains that **the existing `.gitignore` will be overwritten in full and all custom rules will be lost**. Cancel is focused initially; Cancel, Enter, Escape, and closing the dialog leave the file untouched. Choose **Install and Overwrite** to continue. A missing file is created. There is no backup or merge, and Git tracking state is not changed. A write failure is reported and may require running the installer again.
+The confirmation names the full project-root destination. Cancel is focused initially; Cancel, Enter, Escape, and closing the dialog leave the file untouched. Choose **Install** to create a missing file. An identical file is left unchanged; a differing existing file is preserved byte-for-byte with its timestamp and reported for review. A file created while confirmation is open is also preserved. There is no replacement, merge, or Git tracking change.
 
 This separately confirmed tool is an explicitly requested extension to the original companion's update-only scope and the template technique's create-only policy. It does not expand the documentation Update contract or run at startup.
 
@@ -87,8 +87,20 @@ For a first installation where required assemblies are missing and this package 
 
 ## Install Codex guide
 
-In **Tools > Geurts Game Forge > Documentation**, choose **Install Codex guide**, select a folder and confirm the displayed destination and documentation entry point. The action writes **AGENTS.md** from the sole template in the installed `GeurtsTechniques/GeurtsAgentTechnique.md`. Existing contents are overwritten only after confirmation. Start a new Codex task in that folder or a descendant within the same project to load it.
+In **Tools > Geurts Game Forge > Build Forge**, use the **Codex guide** step, select a folder and confirm the displayed destination and documentation entry point. When the Build Forge setup window is unavailable, **Install Codex guide** remains inside the Documentation window. The action writes **AGENTS.md** from the sole template in the installed `GeurtsTechniques/GeurtsAgentTechnique.md`. Existing contents are overwritten only after confirmation. Start a new Codex task in that folder or a descendant within the same project to load it.
 
 The guide points to the exact absolute path of this Unity project's `GeurtsGameForgeDocumentation/AI_READ_FIRST.md`, even when installed elsewhere. Reinstall the guide if the Unity project moves. Normal documentation Update no longer creates or changes root Codex guides, and the documentation contains no standalone AGENTS.md. To replace an old project-root guide, select the project root with this button.
 
 Update this companion package to **0.7.0** before updating documentation to **0.12.0**, which introduces contract schema **2.0.0**. Then install the guide; older documentation has no guide technique and will show an instruction to update it first.
+
+## Build Forge integration API
+
+Version **0.8.0** exposes `Geurts.GameForge.Documentation.BuildForgeIntegration` in the Editor-only assembly. It lets God reuse the validated payloads and existing confirmation dialogs without introducing a companion dependency on God:
+
+- `IsBusy` reports active documentation/package work, Unity import, compilation, Play Mode, compilation failure or missing required tools.
+- `LoadGitIgnore(projectRoot)` and `LoadCodexGuide(projectRoot)` return validated payload bytes without writing.
+- `IsGitIgnoreInstalled(projectRoot)` and `IsCodexGuideInstalled(projectRoot, target)` compare exact file bytes for checklist completion. Invalid source or unsafe destinations throw; missing or differing files return false. A null guide selection returns false without inspecting a guide.
+- `InstallGitIgnore(projectRoot)` returns true for a verified creation or identical file, false for cancellation or a preserved custom file. The caller should report a differing file for review.
+- `InstallCodexGuide(projectRoot, target)` requires a target explicitly selected through a folder picker, retains the cancel-default overwrite confirmation and returns true only after verifying the installed bytes.
+
+These methods never update documentation, run scripts, create the folder structure or access project game-design content. Build Forge owns its setup steps. The companion keeps its independent documentation Update workflow.

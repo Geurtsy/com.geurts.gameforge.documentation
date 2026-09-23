@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0] - 2026-09-23
+
+- Expose a documented Editor API for Build Forge to validate setup completion and invoke the existing documentation-owned Git ignore and Codex guide installers.
+- Consolidate setup in Build Forge when its setup window is available; remove duplicate top-level install menu entries and retain the Documentation window's standalone installer buttons otherwise.
+- Create `.gitignore` only when missing. Preserve differing custom files and their timestamps, and leave identical files unchanged.
+- Keep Codex guide folder selection, protected destinations and cancel-default overwrite confirmation; compare exact final guide bytes for checklist completion.
+- Align the disposable validation project with the installed Unity 6000.3.24f1 patch.
+
 ## [0.7.0] - 2026-09-08
 
 - Add Install Codex guide with a user-selected destination, direct documentation entry point, and cancel-default overwrite confirmation.

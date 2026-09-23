@@ -40,6 +40,7 @@ namespace Geurts.GameForge.Documentation.Tests
         [Test]
         public void SelectedExternalFolderReceivesTheExactEntryPointAndSupportsOverwrite()
         {
+            Assert.That(BuildForgeIntegration.IsCodexGuideInstalled(_project, _destination), Is.False);
             Assert.That(CodexGuideInstaller.Install(_project, _destination, message =>
             {
                 Assert.That(message, Does.Contain(_destination));
@@ -53,7 +54,10 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(guide, Does.Contain("Every update, however small"));
             Assert.That(guide, Does.Not.Contain("{{"));
             Assert.That(File.Exists(Path.Combine(_project, "AGENTS.md")), Is.False);
+            Assert.That(BuildForgeIntegration.IsCodexGuideInstalled(_project, _destination), Is.True);
+            Assert.That(File.ReadAllBytes(_destination), Is.EqualTo(BuildForgeIntegration.LoadCodexGuide(_project)));
             File.WriteAllText(_destination, "local changes");
+            Assert.That(BuildForgeIntegration.IsCodexGuideInstalled(_project, _destination), Is.False);
             Assert.That(CodexGuideInstaller.Install(_project, _destination, _ => true), Is.True);
             Assert.That(File.ReadAllText(_destination), Is.EqualTo(guide));
         }
@@ -117,6 +121,7 @@ namespace Geurts.GameForge.Documentation.Tests
             Directory.CreateDirectory(folder);
             string target = Path.Combine(folder, "AGENTS.md");
             Assert.Throws<InvalidDataException>(() => CodexGuideInstaller.Install(_project, target, _ => true));
+            Assert.Throws<InvalidDataException>(() => BuildForgeIntegration.IsCodexGuideInstalled(_project, target));
             Assert.That(File.Exists(target), Is.False);
         }
 
@@ -126,7 +131,20 @@ namespace Geurts.GameForge.Documentation.Tests
         {
             Directory.CreateDirectory(_destination);
             Assert.Throws<IOException>(() => CodexGuideInstaller.Install(_project, _destination, _ => true));
+            Assert.Throws<IOException>(() => BuildForgeIntegration.IsCodexGuideInstalled(_project, _destination));
             Assert.That(Directory.Exists(_destination), Is.True);
+        }
+
+        /// <summary>A checklist cannot mistake an unrelated filename or invalid source for a completed guide.</summary>
+        [Test]
+        public void ChecklistRejectsUnselectedOrInvalidGuide()
+        {
+            Assert.That(BuildForgeIntegration.IsCodexGuideInstalled(_project, null), Is.False);
+            Assert.Throws<InvalidDataException>(() => BuildForgeIntegration.IsCodexGuideInstalled(_project,
+                Path.Combine(Path.GetDirectoryName(_destination), "AGENT.md")));
+            File.WriteAllBytes(_destination, BuildForgeIntegration.LoadCodexGuide(_project));
+            File.Delete(Path.Combine(_documentation, "AI_READ_FIRST.md"));
+            Assert.Throws<FileNotFoundException>(() => BuildForgeIntegration.IsCodexGuideInstalled(_project, _destination));
         }
 
         /// <summary>The real confirmation writes only after an explicit click, never on Enter, Escape or close.</summary>

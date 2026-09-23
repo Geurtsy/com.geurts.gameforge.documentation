@@ -27,6 +27,21 @@ namespace Geurts.GameForge.Documentation
             return Extract(document, manifest);
         }
 
+        // The approved source originally used CRLF. Check its logical text without rewriting user bytes.
+        internal static bool MatchesApprovedPayload(byte[] contents, byte[] approvedPayload)
+        {
+            if (contents.SequenceEqual(approvedPayload)) return true;
+            try
+            {
+                return string.Equals(NormalizeNewlines(_utf8.GetString(contents)),
+                    _utf8.GetString(approvedPayload), StringComparison.Ordinal);
+            }
+            catch (DecoderFallbackException)
+            {
+                return false;
+            }
+        }
+
         internal static byte[] Extract(string document, string manifest)
         {
             document = Normalize(document);
@@ -90,8 +105,10 @@ namespace Geurts.GameForge.Documentation
                 text = text.Substring(1);
             }
 
-            return text.Replace("\r\n", "\n").Replace('\r', '\n');
+            return NormalizeNewlines(text);
         }
+
+        private static string NormalizeNewlines(string text) => text.Replace("\r\n", "\n").Replace('\r', '\n');
 
         private static string ExtractRegion(string text, string begin, string end)
         {

@@ -37,15 +37,15 @@ namespace Geurts.GameForge.Documentation
             return File.Exists(target) && File.ReadAllBytes(target).SequenceEqual(payload);
         }
 
-        /// <summary>Checks the project-root Git ignore file against the validated payload without modifying it.</summary>
+        /// <summary>Checks the Git ignore file's approved text after newline normalization, without modifying it.</summary>
         /// <param name="projectRoot">The absolute Unity project root.</param>
-        /// <returns>True only for an existing regular file with exactly matching bytes.</returns>
+        /// <returns>True only for an existing regular UTF-8 file whose text matches after CRLF or CR newlines become LF.</returns>
         public static bool IsGitIgnoreInstalled(string projectRoot)
         {
             GitIgnoreInstaller.ValidateDestination(projectRoot);
             byte[] payload = LoadGitIgnore(projectRoot);
             string target = Path.Combine(projectRoot, ".gitignore");
-            return File.Exists(target) && File.ReadAllBytes(target).SequenceEqual(payload);
+            return File.Exists(target) && GitIgnoreTemplateReader.MatchesApprovedPayload(File.ReadAllBytes(target), payload);
         }
 
         /// <summary>Installs only the selected Codex guide after the existing cancel-default confirmation.</summary>
@@ -60,7 +60,7 @@ namespace Geurts.GameForge.Documentation
 
         /// <summary>Creates a missing Git ignore file after confirmation, preserving every existing file unchanged.</summary>
         /// <param name="projectRoot">The absolute Unity project root.</param>
-        /// <returns>True for verified or already identical bytes; false for cancellation or a preserved differing file.</returns>
+        /// <returns>True for a verified creation or equivalent existing text; false for cancellation or differing content.</returns>
         public static bool InstallGitIgnore(string projectRoot)
         {
             EnsureReady();

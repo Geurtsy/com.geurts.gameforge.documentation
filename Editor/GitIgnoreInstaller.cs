@@ -53,7 +53,7 @@ namespace Geurts.GameForge.Documentation
             string target = Path.Combine(fullRoot, ".gitignore");
             ValidateDestination(fullRoot);
             if (File.Exists(target))
-                return File.ReadAllBytes(target).SequenceEqual(GitIgnoreTemplateReader.Load(fullRoot));
+                return GitIgnoreTemplateReader.MatchesApprovedPayload(File.ReadAllBytes(target), GitIgnoreTemplateReader.Load(fullRoot));
             string message = "This installs the .gitignore template from GeurtsGameForgeDocumentation at:\n\n" +
                              target + "\n\n" +
                              "The file is created only when missing. Existing ignore rules are preserved unchanged. " +

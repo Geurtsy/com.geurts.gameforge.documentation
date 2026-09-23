@@ -12,7 +12,7 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Package version 0.8.0 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
+Package version 0.8.1 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
 
 Select **Geurts Game Forge Documentation** in Unity Package Manager to see **Required external dependencies**, with separate **Required** labels for Odin Inspector and Quantum Console. The package description also includes these labels before the scripts compile. These are separately imported assets, so the native resolver's Dependencies list remains reserved for Unity package dependencies.
 
@@ -52,7 +52,7 @@ After installing the documentation, use the **Git ignore rules** step in **Tools
 
 The tool reads the approved fenced payload from `GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsGitIgnoreTechnique.md` and checks its version against `GeurtsTechniqueManifest.md`, plus its markers, encoding, line count, and checksum. No template is bundled with this Unity package or downloaded by this action. If the installed documentation is missing or invalid, installation stops before changing `.gitignore`; run the documentation Update first.
 
-The confirmation names the full project-root destination. Cancel is focused initially; Cancel, Enter, Escape, and closing the dialog leave the file untouched. Choose **Install** to create a missing file. An identical file is left unchanged; a differing existing file is preserved byte-for-byte with its timestamp and reported for review. A file created while confirmation is open is also preserved. There is no replacement, merge, or Git tracking change.
+The confirmation names the full project-root destination. Cancel is focused initially; Cancel, Enter, Escape, and closing the dialog leave the file untouched. Choose **Install** to create a missing file. An existing approved file with LF, CRLF or CR newlines counts as installed and is left unchanged, including its bytes and timestamp. Only newlines are normalized for comparison: other text, whitespace, ordering, BOM and terminal-newline differences are preserved and reported for review. A file created while confirmation is open is also preserved. There is no replacement, merge, or Git tracking change.
 
 This separately confirmed tool is an explicitly requested extension to the original companion's update-only scope and the template technique's create-only policy. It does not expand the documentation Update contract or run at startup.
 
@@ -99,8 +99,8 @@ Version **0.8.0** exposes `Geurts.GameForge.Documentation.BuildForgeIntegration`
 
 - `IsBusy` reports active documentation/package work, Unity import, compilation, Play Mode, compilation failure or missing required tools.
 - `LoadGitIgnore(projectRoot)` and `LoadCodexGuide(projectRoot)` return validated payload bytes without writing.
-- `IsGitIgnoreInstalled(projectRoot)` and `IsCodexGuideInstalled(projectRoot, target)` compare exact file bytes for checklist completion. Invalid source or unsafe destinations throw; missing or differing files return false. A null guide selection returns false without inspecting a guide.
-- `InstallGitIgnore(projectRoot)` returns true for a verified creation or identical file, false for cancellation or a preserved custom file. The caller should report a differing file for review.
+- `IsGitIgnoreInstalled(projectRoot)` compares strict UTF-8 text after newline normalization; version 0.8.1 recognizes the approved CRLF source without rewriting it. `IsCodexGuideInstalled(projectRoot, target)` compares exact guide bytes. Invalid source or unsafe destinations throw; missing or differing files return false. A null guide selection returns false without inspecting a guide.
+- `InstallGitIgnore(projectRoot)` returns true for a verified creation or equivalent existing text, false for cancellation or a preserved custom file. The caller should report a differing file for review.
 - `InstallCodexGuide(projectRoot, target)` requires a target explicitly selected through a folder picker, retains the cancel-default overwrite confirmation and returns true only after verifying the installed bytes.
 
 These methods never update documentation, run scripts, create the folder structure or access project game-design content. Build Forge owns its setup steps. The companion keeps its independent documentation Update workflow.

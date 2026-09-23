@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.1] - 2026-09-23
+
+- Recognize the approved `.gitignore` with LF, CRLF or CR newlines as already installed, preserving its original bytes and timestamp without a confirmation or rewrite.
+- Share the same strict UTF-8, newline-only comparison between the installer and Build Forge completion checks. Changed rules, comments, ordering, whitespace, BOMs or terminal newlines remain differences.
+- Cover existing newline variants, substantive differences and missing-file installation in the installer regression tests.
+
 ## [0.8.0] - 2026-09-23
 
 - Expose a documented Editor API for Build Forge to validate setup completion and invoke the existing documentation-owned Git ignore and Codex guide installers.

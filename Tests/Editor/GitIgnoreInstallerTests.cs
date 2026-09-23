@@ -1,3 +1,5 @@
+// IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
+
 using System;
 using System.IO;
 using System.Linq;
@@ -53,6 +55,65 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(File.ReadAllBytes(_target), Is.EqualTo(before));
             Assert.That(File.GetLastWriteTimeUtc(_target), Is.EqualTo(timestamp));
             Assert.That(BuildForgeIntegration.IsGitIgnoreInstalled(_projectRoot), Is.False);
+        }
+
+        [TestCase("LF")]
+        [TestCase("CRLF")]
+        [TestCase("CR")]
+        [TestCase("mixed")]
+        public void ApprovedTextWithDifferentNewlinesIsCompleteWithoutRewriting(string variant)
+        {
+            CopyDocumentationFixture();
+            string payload = _utf8.GetString(BuildForgeIntegration.LoadGitIgnore(_projectRoot));
+            string newline = variant == "CRLF" ? "\r\n" : variant == "CR" ? "\r" : "\n";
+            string contents = variant == "mixed" ? payload.Replace("\n#", "\r\n#") : payload.Replace("\n", newline);
+            File.WriteAllBytes(_target, _utf8.GetBytes(contents));
+            File.SetLastWriteTimeUtc(_target, new DateTime(2024, 1, 2, 3, 4, 6, DateTimeKind.Utc));
+            byte[] before = File.ReadAllBytes(_target);
+            DateTime timestamp = File.GetLastWriteTimeUtc(_target);
+
+            Assert.That(BuildForgeIntegration.IsGitIgnoreInstalled(_projectRoot), Is.True);
+            Assert.That(GitIgnoreInstaller.InstallWithConfirmation(_projectRoot,
+                _ => throw new Exception("Equivalent existing text needs no confirmation.")), Is.True);
+            Assert.That(File.ReadAllBytes(_target), Is.EqualTo(before));
+            Assert.That(File.GetLastWriteTimeUtc(_target), Is.EqualTo(timestamp));
+        }
+
+        [TestCase("rule")]
+        [TestCase("comment")]
+        [TestCase("order")]
+        [TestCase("whitespace")]
+        [TestCase("missing-terminal-newline")]
+        [TestCase("extra-terminal-newline")]
+        [TestCase("bom")]
+        [TestCase("invalid-utf8")]
+        [TestCase("utf16")]
+        public void NewlineComparisonDoesNotAcceptOrRewriteOtherDifferences(string difference)
+        {
+            CopyDocumentationFixture();
+            string payload = _utf8.GetString(BuildForgeIntegration.LoadGitIgnore(_projectRoot));
+            string contents = payload;
+            switch (difference)
+            {
+                case "rule": contents = payload.Replace(".geurts/", "private/"); break;
+                case "comment": contents = payload.Replace("# Siegefall / Geurts Unity Project .gitignore", "# Custom rules"); break;
+                case "order": contents = payload.Replace(".utmp/\n/[Ll]ibrary/", "/[Ll]ibrary/\n.utmp/"); break;
+                case "whitespace": contents = payload.Replace(".geurts/", ".geurts/ "); break;
+                case "missing-terminal-newline": contents = payload.TrimEnd('\n'); break;
+                case "extra-terminal-newline": contents = payload + "\n"; break;
+                case "bom": contents = "\uFEFF" + payload; break;
+            }
+            byte[] before = difference == "invalid-utf8" ? new byte[] { 0xc3, 0x28 } :
+                difference == "utf16" ? Encoding.Unicode.GetBytes(contents) : _utf8.GetBytes(contents);
+            File.WriteAllBytes(_target, before);
+            File.SetLastWriteTimeUtc(_target, new DateTime(2024, 1, 2, 3, 4, 6, DateTimeKind.Utc));
+            DateTime timestamp = File.GetLastWriteTimeUtc(_target);
+
+            Assert.That(BuildForgeIntegration.IsGitIgnoreInstalled(_projectRoot), Is.False);
+            Assert.That(GitIgnoreInstaller.InstallWithConfirmation(_projectRoot,
+                _ => throw new Exception("Different existing content must be preserved without confirmation.")), Is.False);
+            Assert.That(File.ReadAllBytes(_target), Is.EqualTo(before));
+            Assert.That(File.GetLastWriteTimeUtc(_target), Is.EqualTo(timestamp));
         }
 
         [Test]

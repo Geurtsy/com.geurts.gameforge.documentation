@@ -49,6 +49,37 @@ namespace Geurts.GameForge.Documentation.Tests
             Assert.That(DependencyInstallation.Message("Odin Inspector"), Is.Empty);
         }
 
+        /// <summary>An optional host's package operation prevents either asset entry point from starting.</summary>
+        [Test]
+        public void HostOperationGuardBlocksPickerAndMyAssetsWithoutStartingAnImport()
+        {
+            DependencyInstallation.SelectFile = (_, __, ___) => { Assert.Fail("A blocked operation must not open the picker."); return null; };
+            DependencyInstallation.ExecuteMenu = _ => { Assert.Fail("A blocked operation must not open My Assets."); return false; };
+            using (DocumentationIntegration.RegisterOperationGuard(() => "Wait for the host package operation."))
+            {
+                DependencyInstallation.ImportLicensedCopy("Odin Inspector");
+                DependencyInstallation.OpenOwnedAssets("Quantum Console");
+                Assert.That(DependencyInstallation.Message("Odin Inspector"), Is.EqualTo("Wait for the host package operation."));
+                Assert.That(DependencyInstallation.Message("Quantum Console"), Is.EqualTo("Wait for the host package operation."));
+                Assert.That(DependencyInstallation.IsImporting, Is.False);
+            }
+        }
+
+        /// <summary>Actual vendor import events control activity; a readiness restriction alone never starts work.</summary>
+        [Test]
+        public void ImportActivityEndsAfterCancellationAndDoesNotIncludeReadiness()
+        {
+            Assert.That(DependencyInstallation.IsImporting, Is.False);
+            try
+            {
+                DependencyInstallation.ReportImport("Quantum Console", "Importing.", false, false);
+                Assert.That(DependencyInstallation.IsImporting, Is.True);
+                Assert.That(DocumentationIntegration.IsBusy, Is.True);
+            }
+            finally { DependencyInstallation.ReportImport("Quantum Console", "Cancelled.", false, true); }
+            Assert.That(DependencyInstallation.IsImporting, Is.False);
+        }
+
         [Test]
         public void LicensedFileImportAlwaysRequestsUnityReviewAndExplainsReplacement()
         {

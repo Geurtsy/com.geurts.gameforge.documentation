@@ -12,7 +12,7 @@ In Unity, open **Window > Package Manager**, choose **Install package from git U
 https://github.com/Geurtsy/com.geurts.gameforge.documentation.git
 ```
 
-Package version 0.8.1 targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
+Package version 0.9.0 (unreleased) targets **Unity 6000.3 on Windows**. Import your licensed **Odin Inspector** and **Quantum Console**, including Quantum Console's Input System and TextMesh Pro dependencies, before compiling this package. Both commercial tools are required, used through their actual assembly references, and installed separately. Neither is bundled; downloads use Unity My Assets or your licensed vendor source. The repository is public, so the Git URL does not require package-specific credentials.
 
 Select **Geurts Game Forge Documentation** in Unity Package Manager to see **Required external dependencies**, with separate **Required** labels for Odin Inspector and Quantum Console. The package description also includes these labels before the scripts compile. These are separately imported assets, so the native resolver's Dependencies list remains reserved for Unity package dependencies.
 
@@ -104,3 +104,9 @@ Version **0.8.0** exposes `Geurts.GameForge.Documentation.BuildForgeIntegration`
 - `InstallCodexGuide(projectRoot, target)` requires a target explicitly selected through a folder picker, retains the cancel-default overwrite confirmation and returns true only after verifying the installed bytes.
 
 These methods never update documentation, run scripts, create the folder structure or access project game-design content. Build Forge owns its setup steps. The companion keeps its independent documentation Update workflow.
+
+## Optional Game Forge God interface
+
+God 0.8.0 can be installed first. Its **Game Forge God** window can then install this companion, update the companion package, and separately check or update the actual project documentation. Documentation 0.9.0 and God 0.8.0 are unreleased source versions until published with exact catalogue pins. This companion remains independently installable.
+
+`Geurts.GameForge.Documentation.DocumentationIntegration` exposes content `InstalledVersion`, `AvailableVersion`, `Availability`, `StatusMessage`, `Failed`, measured nullable `Progress`, actual-operation `IsBusy`, `ActionUnavailableReason`, and a `Changed` event. `CheckForUpdatesAsync` delegates to the existing content controller. `UpdateDocumentation` opens the same single cancel-default confirmation and uses the same updater; cancelling performs no acquisition or write. `OpenWindow` opens the existing companion dashboard. `RegisterOperationGuard(Func<string>)` allows an optional host to explain a conflicting operation without a reverse dependency; dispose its returned token on host unload. Hosts must unsubscribe from `Changed` when their UI closes.

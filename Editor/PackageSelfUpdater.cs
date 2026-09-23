@@ -47,7 +47,8 @@ namespace Geurts.GameForge.Documentation
         internal string GitReference => GetGitReference(Installed?.name, Installed?.source ?? PackageSource.Unknown,
             Installed != null && Installed.isDirectDependency, Installed?.packageId);
         internal bool CanUpdate => DocumentationDependencies.OdinInstalled && !EditorBusy &&
-                                   !DocumentationUpdaterController.IsBusy && !IsBusy && GitReference != null;
+                                   !DocumentationUpdaterController.IsBusy && !IsBusy && GitReference != null &&
+                                   DocumentationIntegration.ExternalOperationUnavailableReason == null;
         internal static bool EditorBusy => EditorApplication.isCompiling || EditorApplication.isUpdating ||
                                            EditorApplication.isPlayingOrWillChangePlaymode;
 
@@ -66,7 +67,7 @@ namespace Geurts.GameForge.Documentation
 
         internal async Task CheckForUpdatesAsync()
         {
-            if (IsBusy || DocumentationUpdaterController.IsInstalling) return;
+            if (IsBusy || DocumentationUpdaterController.IsBusy || DocumentationIntegration.ExternalOperationUnavailableReason != null) return;
             Status.InstalledVersion = InstalledVersion;
             Status.InstalledCommit = Installed?.git?.hash;
             Status.BeginCheck();

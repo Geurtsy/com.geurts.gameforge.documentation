@@ -1,6 +1,7 @@
 // IMPORTANT: This script must comply with GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsTechnicalTechnique.md and folder placement rules in GeurtsGameForgeDocumentation/GeurtsTechniques/GeurtsFolderStructureTechnique.md.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 
@@ -15,6 +16,8 @@ namespace Geurts.GameForge.Documentation
         internal static Func<string, string, string, string> SelectFile = EditorUtility.OpenFilePanel;
         internal static Action<string, bool> ImportFile = AssetDatabase.ImportPackage;
         internal static event Action Changed;
+        private static readonly HashSet<string> _activeImports = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        internal static bool IsImporting => _activeImports.Count > 0;
 
         static DependencyInstallation()
         {
@@ -24,7 +27,7 @@ namespace Geurts.GameForge.Documentation
             AssetDatabase.importPackageFailed += (name, error) => ReportImport(name, "Unity import failed: " + error, true, true);
         }
 
-        internal static bool IsBusy => EditorApplication.isCompiling || EditorApplication.isUpdating ||
+        internal static bool IsBusy => IsImporting || EditorApplication.isCompiling || EditorApplication.isUpdating ||
             EditorApplication.isPlayingOrWillChangePlaymode || DocumentationUpdaterController.IsBusy ||
             PackageSelfUpdater.instance.IsBusy;
 
@@ -73,6 +76,8 @@ namespace Geurts.GameForge.Documentation
         private static bool CanStart(string tool)
         {
             if (tool != "Odin Inspector" && tool != "Quantum Console") return false;
+            string externalReason = DocumentationIntegration.ExternalOperationUnavailableReason;
+            if (externalReason != null) { SetResult(tool, externalReason, false); return false; }
             if (!IsBusy) return true;
             SetResult(tool, "Wait for Unity to finish its current operation and leave Play mode, then try again.", false);
             return false;
@@ -98,6 +103,8 @@ namespace Geurts.GameForge.Documentation
                 else if (normalized.StartsWith("QuantumConsole", StringComparison.OrdinalIgnoreCase)) tool = "Quantum Console";
                 else return;
             }
+            if (finished) _activeImports.Remove(name ?? string.Empty);
+            else _activeImports.Add(name ?? string.Empty);
             SetResult(tool, message, failed);
             if (finished && string.Equals(name, expected, StringComparison.OrdinalIgnoreCase))
             {

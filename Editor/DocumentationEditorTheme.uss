@@ -1,0 +1,90 @@
+/* Geurts Game Forge Editor UI standard 1.0.0. Scoped to owned surfaces only. */
+.geurts-forge {
+    background-color: #0A1012;
+    color: #DEECE7;
+    font-size: 12px;
+    flex-grow: 1;
+}
+.geurts-forge .unity-label { color: #DEECE7; }
+.geurts-forge .forge-eyebrow {
+    color: #6EF29D;
+    font-size: 10px;
+    -unity-font-style: bold;
+    margin-bottom: 6px;
+}
+.geurts-forge .forge-title {
+    font-size: 26px;
+    -unity-font-style: bold;
+    white-space: normal;
+    margin-bottom: 8px;
+}
+.geurts-forge .forge-header {
+    background-color: #121C1E;
+    border-left-width: 4px;
+    border-left-color: #6EF29D;
+    border-bottom-width: 1px;
+    border-bottom-color: #2B433F;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+.geurts-forge .forge-card {
+    background-color: #121C1E;
+    border-width: 1px;
+    border-color: #2B433F;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.geurts-forge .forge-secondary { color: #8FA8A1; }
+.geurts-forge .unity-button {
+    color: #DEECE7;
+    background-color: #172425;
+    border-color: #2B433F;
+    border-width: 1px;
+    border-radius: 0;
+    min-height: 28px;
+    padding: 6px 12px;
+    margin: 2px;
+    white-space: normal;
+    -unity-font-style: bold;
+}
+.geurts-forge .unity-button:hover {
+    color: #6EF29D;
+    background-color: #1F3A2E;
+    border-color: #6EF29D;
+}
+.geurts-forge .unity-button:focus {
+    border-color: #6EF29D;
+    border-width: 2px;
+}
+.geurts-forge .unity-button:active { background-color: #305B40; color: white; }
+.geurts-forge .forge-primary { background-color: #1F412E; border-color: #6EF29D; color: #6EF29D; }
+.geurts-forge .unity-button:disabled { color: #8FA8A1; background-color: #121C1E; border-color: #2B433F; }
+.geurts-forge .unity-button.forge-danger { border-color: #FF6B6B; }
+.geurts-forge .unity-help-box {
+    background-color: #121C1E;
+    border-color: #2B433F;
+    border-left-color: #6EF29D;
+    border-left-width: 3px;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+}
+.geurts-forge .unity-help-box--warning { border-left-color: #FFE66D; }
+.geurts-forge .unity-help-box--error { border-left-color: #FF6B6B; }
+.geurts-forge .unity-help-box__label { color: #DEECE7; white-space: normal; }
+.geurts-forge .unity-base-field__label { color: #DEECE7; }
+.geurts-forge .unity-base-text-field__input {
+    color: #DEECE7;
+    background-color: #172425;
+    border-color: #2B433F;
+}
+.geurts-forge .unity-base-field__input { color: #DEECE7; }
+.geurts-forge .unity-toggle__label { color: #DEECE7; white-space: normal; }
+.geurts-forge .unity-foldout__toggle { color: #DEECE7; }
+.geurts-forge .unity-toggle__checkmark { -unity-background-image-tint-color: #6EF29D; }
+.geurts-forge .forge-card:disabled { opacity: 0.75; }
+.geurts-forge .forge-complete { border-color: #6EF29D; }
+.geurts-forge .forge-warning { border-left-color: #FFE66D; }
+.geurts-forge .forge-error { border-left-color: #FF6B6B; }
+.geurts-forge .unity-scroller { background-color: #0A1012; }
+.geurts-forge .unity-base-slider__dragger { background-color: #2B433F; }

@@ -141,7 +141,7 @@ namespace Geurts.GameForge.Documentation.Tests
             {
                 Assert.That(status.text, Does.Contain("Installed and ready"));
                 Assert.That(status.parent.style.borderLeftColor.value, Is.EqualTo(DashboardColours.Ready));
-                Assert.That(status.parent.style.backgroundColor.value, Is.EqualTo(DashboardColours.Tint(DashboardColours.Ready)));
+                Assert.That(status.parent.style.backgroundColor.value, Is.EqualTo(DocumentationEditorTheme.Panel));
                 Assert.That(status.parent.Query<Button>().ToList(), Has.Count.EqualTo(2));
             }
             Assert.That(root.Query<Button>().ToList(), Has.Count.EqualTo(4));

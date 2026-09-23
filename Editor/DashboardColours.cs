@@ -7,11 +7,11 @@ namespace Geurts.GameForge.Documentation
     /// <summary>One status palette for update cards and required dependencies.</summary>
     internal static class DashboardColours
     {
-        internal static readonly Color Ready = new Color(.35f, .76f, .57f);
-        internal static readonly Color Attention = new Color(1f, .57f, .18f);
-        internal static readonly Color Working = new Color(.35f, .68f, 1f);
-        internal static readonly Color Failed = new Color(1f, .4f, .36f);
-        internal static readonly Color Unknown = new Color(.6f, .65f, .7f);
+        internal static readonly Color Ready = DocumentationEditorTheme.Green;
+        internal static readonly Color Attention = DocumentationEditorTheme.Warning;
+        internal static readonly Color Working = DocumentationEditorTheme.Green;
+        internal static readonly Color Failed = DocumentationEditorTheme.Error;
+        internal static readonly Color Unknown = DocumentationEditorTheme.Muted;
         internal static Color Tint(Color accent) => new Color(accent.r, accent.g, accent.b, .09f);
     }
 }

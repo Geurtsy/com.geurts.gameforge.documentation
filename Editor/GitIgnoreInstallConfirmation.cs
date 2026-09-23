@@ -24,20 +24,29 @@ namespace Geurts.GameForge.Documentation
         private void CreateGUI()
         {
             VisualElement root = rootVisualElement;
+            DocumentationEditorTheme.ApplyToolkit(root);
             root.style.paddingTop = root.style.paddingBottom = 12f;
             root.style.paddingLeft = root.style.paddingRight = 12f;
-            root.Add(new HelpBox(_message, HelpBoxMessageType.Warning));
+            var heading = new Label("Install Git ignore rules");
+            heading.AddToClassList("forge-header");
+            root.Add(heading);
+            var message = new ScrollView();
+            message.style.flexGrow = 1f;
+            message.Add(new HelpBox(_message, HelpBoxMessageType.Warning));
+            root.Add(message);
 
             VisualElement buttons = new VisualElement();
             buttons.style.flexDirection = FlexDirection.Row;
             buttons.style.justifyContent = Justify.FlexEnd;
             buttons.style.marginTop = 12f;
+            buttons.style.flexShrink = 0f;
             Button cancel = new Button(Close) { text = "Cancel", name = "cancel-install" };
             Button install = new Button(() =>
             {
                 _confirmed = true;
                 Close();
             }) { text = "Install", name = "confirm-install" };
+            install.AddToClassList("forge-primary");
             cancel.style.minWidth = 100f;
             install.style.minWidth = 170f;
             buttons.Add(cancel);

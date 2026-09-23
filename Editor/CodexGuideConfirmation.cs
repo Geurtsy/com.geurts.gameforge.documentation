@@ -26,8 +26,12 @@ namespace Geurts.GameForge.Documentation
         private void CreateGUI()
         {
             VisualElement root = rootVisualElement;
+            DocumentationEditorTheme.ApplyToolkit(root);
             root.style.paddingTop = root.style.paddingBottom = 12f;
             root.style.paddingLeft = root.style.paddingRight = 12f;
+            var heading = new Label("Install Codex guide");
+            heading.AddToClassList("forge-header");
+            root.Add(heading);
             // Long user-selected paths can scroll while the confirmation buttons remain visible.
             ScrollView message = new ScrollView();
             message.style.flexGrow = 1f;
@@ -45,6 +49,7 @@ namespace Geurts.GameForge.Documentation
                 _confirmed = true;
                 Close();
             }) { text = "Install and Overwrite", name = "confirm-install" };
+            install.AddToClassList("forge-danger");
             cancel.style.minWidth = 100f;
             install.style.minWidth = 170f;
             buttons.Add(cancel);

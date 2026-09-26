@@ -57,9 +57,9 @@ namespace Geurts.GameForge.Documentation
         [MenuItem(MenuPath)]
         internal static void ShowWindow()
         {
-            DocumentationUpdaterWindow window = GetWindow<DocumentationUpdaterWindow>();
+            DocumentationUpdaterWindow window = DocumentationEditorTheme.OpenWindow<DocumentationUpdaterWindow>(
+                new Vector2(540f, 560f), "Geurts Documentation");
             window.titleContent = new GUIContent("Geurts Documentation", EditorGUIUtility.IconContent("TextAsset Icon").image);
-            window.minSize = new Vector2(540f, 560f);
             window.Show();
         }
 

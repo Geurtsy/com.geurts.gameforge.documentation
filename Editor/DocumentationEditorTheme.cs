@@ -15,7 +15,7 @@ namespace Geurts.GameForge.Documentation
     internal sealed class DocumentationEditorTheme : IDisposable
     {
         /// <summary>Revision of the shared visual contract, independent of package version.</summary>
-        public const string StandardVersion = "1.0.0";
+        public const string StandardVersion = "1.2.0";
         private const string StyleSheetPath = "Packages/com.geurts.gameforge.documentation/Editor/DocumentationEditorTheme.uss";
         /// <summary>Root class that confines UI Toolkit styling to the owning Forge surface.</summary>
         public const string RootClass = "geurts-forge";
@@ -52,6 +52,26 @@ namespace Geurts.GameForge.Documentation
         private Color[] _savedControlColors;
         private RectOffset[] _savedBorders;
         private readonly RectOffset _thinBorder = new RectOffset(1, 1, 1, 1);
+
+        /// <summary>Opens a resizable Forge window with a spacious initial size; an existing window keeps its layout.</summary>
+        /// <param name="minimumSize">The window's smallest supported content size, in Editor points.</param>
+        /// <param name="title">Optional title for a newly created window.</param>
+        /// <returns>The existing or newly opened window.</returns>
+        public static T OpenWindow<T>(Vector2 minimumSize, string title = null) where T : EditorWindow
+        {
+            bool alreadyOpen = EditorWindow.HasOpenInstances<T>();
+            T window = EditorWindow.GetWindow<T>(title);
+            if (alreadyOpen || window.docked || window.maximized) return window;
+
+            window.minSize = minimumSize;
+            // Fit the preferred size to the main Editor area while retaining the window's supported minimum.
+            Rect editor = EditorGUIUtility.GetMainWindowPosition();
+            var size = new Vector2(
+                Mathf.Max(minimumSize.x, Mathf.Min(1000f, editor.width - 40f)),
+                Mathf.Max(minimumSize.y, Mathf.Min(760f, editor.height - 80f)));
+            window.position = new Rect(editor.center - size * 0.5f, size);
+            return window;
+        }
 
         /// <summary>Creates cached styles and window-owned textures in an active IMGUI context.</summary>
         public DocumentationEditorTheme()

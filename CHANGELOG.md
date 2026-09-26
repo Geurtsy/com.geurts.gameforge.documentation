@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.2] - 2026-09-26
+
+- Open a new Documentation dashboard at a larger, resizable initial size, preferring 1000 × 760 Editor points fitted to the main Editor area where space permits, with its 540 × 560 supported minimum taking precedence.
+- Preserve the geometry and constraints of an already open or docked dashboard when opening it again.
+- Regenerate the shared theme from God's canonical source without adding a God dependency or changing documentation checks, updates or confirmation behavior.
+
 ## [0.9.1] - 2026-09-23
 
 - Apply the shared dark sci-fi and green Editor theme to the Odin dashboard, dependency guidance, Package Manager extension and all three confirmation windows.
